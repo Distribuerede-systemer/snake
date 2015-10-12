@@ -8,7 +8,7 @@ public class Main {
         String depardieu = "whatever";
         Security encrypt = new Security();
         System.out.println(depardieu);
-        System.out.println(encrypt.crypt(depardieu));
+        System.out.println(encrypt.hashing(depardieu));
 
     }
 

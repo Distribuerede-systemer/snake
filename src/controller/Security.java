@@ -3,12 +3,22 @@ package controller;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * This class contains methods which returns either a hashed or
+ * encrypted/decrypted string from a string argument
+ * @author Team Depardieu
+ */
 public class Security {
 
-
-    public  String crypt(String input) {
+    /**
+     * This method returns a hashed (SHA-256) String
+     * @param input
+     * @return String
+     */
+    public String hashing(String input) {
 
         MessageDigest digester = null;
+        //TODO: Replace with Config.
         String salt = "123456";
         String inputhash = input+salt;
         try {
