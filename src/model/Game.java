@@ -15,11 +15,10 @@ public class Game {
         private String host;
         private String opponent;
         private String status;
-        private String validate;
 
         //Creating the constructor and initiating the variables
         public Game( int gameId, int result, String controls,int newGame, int endGame, String host, String
-        opponent, String status, String validate){
+        opponent, String status){
             this.gameId = gameId;
             this.result = result;
             this.controls = controls;
@@ -28,7 +27,6 @@ public class Game {
             this.host = host;
             this.opponent = opponent;
             this.status = status;
-            this.validate = validate;
         }
 
 
