@@ -9,9 +9,9 @@ public class Game {
     //naming the variables needed for the game
     private int gameId;
     private int result;
-    private String controls;
     private int newGame;
     private int endGame;
+    private String controls;
     private String host;
     private String opponent;
     private String status;
@@ -35,7 +35,6 @@ public class Game {
 
         return "test";
     }
-
     //making get/set method for all the variables, so they can be used by other classes
     public int getGameId(){
         return gameId;
