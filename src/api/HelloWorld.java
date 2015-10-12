@@ -20,6 +20,8 @@ public class HelloWorld {
     public String getClichedMessage() {
         // Return some cliched textual content
         return "Hello World";
+
+        //Vi lavede en kommentar
     }
 
     public static void main(String[] args) throws IOException {
