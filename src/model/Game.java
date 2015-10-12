@@ -16,7 +16,6 @@ public class Game {
     private String opponent;
     private String status;
 
-
     //Creating the constructor and initiating the variables
     public Game (int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status) {
         this.gameId = gameId;
@@ -31,7 +30,7 @@ public class Game {
 
 
     //methods that the API can use
-    public String getResultForGame(){
+    public int getResultForGame(){
         return result;
     }
 
@@ -41,7 +40,7 @@ public class Game {
     }
 
     public void setGameId(int gameId){
-        this.gameId = gameId
+        this.gameId = gameId;
     }
 
     public int getResult() {

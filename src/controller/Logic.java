@@ -36,7 +36,8 @@ public class Logic {
 
 	public Game getGame(String gameName) {
 
-		Game game = new Game();
+		//int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
+		Game game = new Game(1, 1, "ASD", 1, 1, "localhost", "abcd", "HEJ");
 
 		return game;
 	}
