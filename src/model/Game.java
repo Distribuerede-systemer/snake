@@ -10,6 +10,9 @@ public class Game {
     private String controls;
     private int newGame;
     private int endGame;
+    private String host;
+    private String opponent;
+
 
     //making the constructor and initiating the variables
     public Game (int newResult, String newContols, int newNewGame, int newEndGame) {
@@ -18,7 +21,8 @@ public class Game {
         this.newGame = newGame;
         this.endGame = endGame;
     }
-
+    
+    //making get/set method for all the variables, so they can be used by other classes
     public int getResult() {
         return result;
     }
