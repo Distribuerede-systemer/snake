@@ -81,11 +81,11 @@ public class User {
     }
 
     public String getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(String status) {
-        this.Status = status;
+        this.status = status;
     }
 
 //creating a scanner with the scannername newScanner
