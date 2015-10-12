@@ -2,10 +2,13 @@ package model;
 
 import com.google.gson.Gson;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.concurrent.ExecutionException;
 
@@ -16,12 +19,29 @@ import java.util.concurrent.ExecutionException;
 // Create inner class Json
 public class Config{
 
+
+    public static void main(String [] args){
+
+        Config.init();
+    }
+
+
+    public Config(){
+    }
+
     public static void init() {
 
         try {
-            FileReader json = new FileReader("src/config.json.dist");
+            BufferedReader br = new BufferedReader(new FileReader(
+                    "C:\\Users\\Oscar\\Documents\\GitHub\\snake\\src\\config.json.dist"));
 
-            
+           // File file = new File("sample.txt");
+            //System.out.println(file.getAbsolutePath());
+
+
+            Config con = new Gson().fromJson(br, Config.class);
+
+            System.out.print(con.getDbname());
         }
         catch (Exception e){
             e.printStackTrace();
@@ -52,3 +72,4 @@ public class Config{
         return username;
     }
 }
+
