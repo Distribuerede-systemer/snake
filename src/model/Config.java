@@ -2,6 +2,11 @@ package model;
 
 import com.google.gson.Gson;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+
 /**
  * Created by Oscar on 12-10-2015.
  */
@@ -12,13 +17,26 @@ public class Config {
         Gson gson = new Gson();
     }
 
-    
+    @GET
+    @Path("/snake/src/config.json.dist")
+    @Produces("application/json")
+    public Response getJson(String json) {
+
+
+
+        JsonConfig test = new Gson().fromJson(json, JsonConfig.class);
+
+
+
+
+        return null;
+    }
 
 
 }
 
 // Create inner class Json
-class Json{
+class JsonConfig{
 
     //Create variables for each of the JSON objects.
     private String host;
