@@ -1,7 +1,5 @@
 package model;
 
-import com.google.gson.Gson;
-
 /**
  * Created by nicolaiostergaard on 12/10/15.
  */

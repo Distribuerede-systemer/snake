@@ -33,7 +33,7 @@ public class Game {
     //methods that the API can use
     public String getResultForGame(){
 
-        return result;
+        return "test";
     }
 
     //making get/set method for all the variables, so they can be used by other classes
@@ -42,7 +42,7 @@ public class Game {
     }
 
     public void setGameId(int gameId){
-        this.gameId = gameId
+        this.gameId = gameId;
     }
 
     public int getResult() {

@@ -1,15 +1,11 @@
 package model;
 
-import com.google.gson.Gson;
-
 import javax.swing.plaf.synth.SynthTextAreaUI;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -22,29 +18,44 @@ public class Config{
 
     public static void main(String [] args){
 
-        Config.init();
+        try {
+
+            Config.init();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public Config(){
     }
 
-    public static void init() {
+    public static void init() throws IOException {
 
+        BufferedReader br = new BufferedReader(new FileReader("src/config.json.dist"));
         try {
-            BufferedReader br = new BufferedReader(new FileReader(
-                    "C:\\Users\\Oscar\\Documents\\GitHub\\snake\\src\\config.json.dist"));
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
 
-           // File file = new File("sample.txt");
-            //System.out.println(file.getAbsolutePath());
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
 
 
-            Config con = new Gson().fromJson(br, Config.class);
+            String everything = sb.toString();
+            System.out.println(everything);
 
-            System.out.print(con.getDbname());
-        }
-        catch (Exception e){
+
+
+        } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            br.close();
         }
     }
 
