@@ -15,7 +15,14 @@ import java.util.concurrent.ExecutionException;
 // Create inner class Json
 public class Config{
 
+    //Create variables for each of the JSON objects.
+    private static String host;
+    private static String port;
+    private static String username;
+    private static String password;
+    private static String dbname;
 
+    //TODO: Needs comment!
     public static void main(String [] args){
 
         try {
@@ -29,14 +36,9 @@ public class Config{
         }
     }
 
-    //TODO: Needs comment
-    public Config(){
-	
-    }
-
     public static void init() throws IOException {
-
-        BufferedReader br = new BufferedReader(new FileReader("src/config.json.dist"));
+	//Read config.json with all the settings
+        BufferedReader br = new BufferedReader(new FileReader("src/config.json"));
         try {
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
@@ -47,11 +49,8 @@ public class Config{
                 line = br.readLine();
             }
 
-
             String everything = sb.toString();
             System.out.println(everything);
-
-
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,13 +58,6 @@ public class Config{
             br.close();
         }
     }
-
-    //Create variables for each of the JSON objects.
-    private static String host;
-    private static String port;
-    private static String username;
-    private static String password;
-    private static String dbname;
 
     //Created getters and setters for each of the variables.
     public String getDbname() {
