@@ -8,8 +8,12 @@ import java.util.Scanner;
  */
 public class User {
 
+<<<<<<< HEAD
 
     //creating variables
+=======
+    //defining variables
+>>>>>>> origin/model
 
     private int id;
     private String firstName;
@@ -103,11 +107,8 @@ public class User {
     //checking if userName and the inputted username is alike - checking if password and inputted password is alike
     private void authentication() {
 
-    if(getUserName()==  userNameInput || getPassword() == passwordInput){
-      auth = true;
+        if (getUserName() == userNameInput || getPassword() == passwordInput) {
+            auth = true;
+        }
     }
-
-}
-
-//end of User class
 }
