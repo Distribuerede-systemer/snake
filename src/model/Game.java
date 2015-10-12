@@ -16,7 +16,6 @@ public class Game {
     private String opponent;
     private String status;
 
-
     //Creating the constructor and initiating the variables
     public Game (int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status) {
         this.gameId = gameId;
