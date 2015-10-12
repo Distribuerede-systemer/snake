@@ -156,13 +156,7 @@ public class Logic {
 					break;
 			}
 
-			if (user.getPassword.equals(password) && user.getUserName().equals(username)) {
-				System.out.println("Login Succeeded");
-			} else if (user.getPassword != (password) && user.getUserName().equals(username)) {
-				System.out.println("Wrong password");
-			} else {
-				System.out.print("User doesn't exist");
-			}
+		
 		}
 
 		//Return status code for further use
