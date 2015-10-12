@@ -7,16 +7,18 @@ package model;
 public class Game {
 
     //naming the variables needed for the game
+    private int gameId;
     private int result;
     private String controls;
     private int newGame;
     private int endGame;
     private String host;
-    private String opponent;
+    private String opponent;    
 
 
     //making the constructor and initiating the variables
-    public Game (int result, String controls, int newGame, int endGame, String host, String opponent) {
+    public Game (int gameId, int result, String controls, int newGame, int endGame, String host, String opponent) {
+        this.gameId = gameId;
         this.result = result;
         this.controls = controls;
         this.newGame = newGame;
@@ -28,10 +30,19 @@ public class Game {
 
     //methods that the API can use
     public String getResultForGame(){
-        
+
+        return result;
     }
 
     //making get/set method for all the variables, so they can be used by other classes
+    public int getGameId(){
+        return gameId;
+    }
+
+    public void setGameId(int gameId){
+        this.gameId = gameId
+    }
+
     public int getResult() {
         return result;
     }
