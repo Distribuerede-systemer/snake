@@ -6,19 +6,19 @@ package model;
 
 public class Game {
 
-    //naming the variables needed for the game
+    //creating the variables
     private int gameId;
     private int result;
-    private String controls;
     private int newGame;
     private int endGame;
+    private String controls;
     private String host;
     private String opponent;
-    private String status;
+    private String gameStatus;
 
 
-    //making the constructor and initiating the variables
-    public Game (int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status) {
+    //creating the constructor and initiating the variables
+    public Game (int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String gameStatus) {
         this.gameId = gameId;
         this.result = result;
         this.controls = controls;
@@ -26,17 +26,19 @@ public class Game {
         this.endGame = endGame;
         this.host = host;
         this.opponent = opponent;
-        this.status = status;
+        this.gameStatus = gameStatus;
     }
-
 
     //methods that the API can use
     public String getResultForGame(){
-
         return result;
     }
 
-    //making get/set method for all the variables, so they can be used by other classes
+    public void validate() {
+        
+    }
+
+    //creating get/set method for all the variables, so they can be used by other classes
     public int getGameId(){
         return gameId;
     }
@@ -93,12 +95,12 @@ public class Game {
         this.opponent = opponent;
     }
 
-    public String status(){
-        return status;
+    public String gameStatus(){
+        return gameStatus;
     }
 
-    public void setStatus(String status){
-        this.status = status;
+    public void setGameStatus(String gameStatus){
+        this.gameStatus = gameStatus;
     }
 
 

@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class User {
 
 
-    //defining variables
+    //creating variables
 
     private int id;
     private String firstName;
@@ -18,7 +18,6 @@ public class User {
     private String password;
     private String created;
     private String status;
-
 
 
   //Create constructor and initiating the variables
@@ -34,7 +33,7 @@ public class User {
     
     
     
-    //making get and set method for all the variables, so they can be used by other classes
+    //creating get and set method for all the variables, so they can be used by other classes
 
     public int getId() {
         return id;
