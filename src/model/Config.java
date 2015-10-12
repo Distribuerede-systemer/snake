@@ -1,4 +1,5 @@
-// klasse modellerer data fra klienter og mapper JSON til java objekter
+// klassen anvendes som mellemled mellem serveren og config.json.dist
+// Json er udvekslingsformatet og Gson mapper disse til Java objekter
 // klassen skal kunne importeres fra DB-wrapper klassen
 package model;
 /**
