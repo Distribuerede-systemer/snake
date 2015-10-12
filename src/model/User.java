@@ -74,5 +74,5 @@ public class User {
 
 
 
-//end of User calls
+//end of User class
 }
