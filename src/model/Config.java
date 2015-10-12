@@ -13,14 +13,17 @@ public class Config {
 
 }
 
+// Create inner class Json
 class Json{
 
+    //Create variables for each of the JSON objects.
     private String host;
     private String port;
     private String username;
     private String password;
     private String dbname;
 
+    //Created getters and setters for each of the variables.
     public String getDbname() {
         return dbname;
     }
