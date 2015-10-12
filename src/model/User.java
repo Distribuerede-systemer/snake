@@ -101,7 +101,7 @@ public class User {
     //checking if userName and the inputted username is alike - checking if password and inputted password is alike
     private void authentication() {
 
-        if (getUserName() == userNameInput || getPassword() == passwordInput) {
+        if (getUserName() == userNameInput && getPassword() == passwordInput) {
             auth = true;
         }
     }
