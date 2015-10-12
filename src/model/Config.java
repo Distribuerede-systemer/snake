@@ -55,26 +55,24 @@ public class Config{
     }
 
     //Created getters and setters for each of the variables.
-    public String getDbname() {
+    public static String getDbname() {
         return dbname;
     }
-    public String getHost() {
+    public static String getHost() {
         return host;
     }
-    public String getPassword() {
+    public static String getPassword() {
         return password;
     }
-    public String getPort() {
+    public static String getPort() {
         return port;
     }
-    public String getUsername() {
+    public static String getUsername() {
         return username;
     }
-
     public static String getEncryptionkey() {
         return encryptionkey;
     }
-
     public static String getHashingalt() {
         return hashingalt;
     }
