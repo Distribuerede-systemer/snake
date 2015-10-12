@@ -55,5 +55,19 @@ public class Logic {
 
 		//Return status code for further use
 		return code;
+	}
+
+	//Deletes a game from the database
+	public boolean deleteGame(int Id){
+		boolean status = false;
+
+		return status;
+	}
+	
+	//Deletes a user from the database
+	public boolean deleteUser(int Id){
+		boolean status = false;
+
+		return status;
 	}	
 }
