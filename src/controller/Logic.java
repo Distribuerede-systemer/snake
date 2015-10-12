@@ -141,6 +141,20 @@ public class Logic {
 
 		for (User user : getUser()) {
 
+			switch (code){
+				case 1:
+					user.getUserName().equals(username);
+					user.getPassword().equals(password);
+					System.out.println("Succes!");
+					break;
+				case 2:
+					user.getPassword().!equals(password);
+					System.out.println("Wrong password");
+					break;
+				default:
+					System.out.println("User doesn't exist");
+					break;
+			}
 
 			if (user.getPassword.equals(password) && user.getUserName().equals(username)) {
 				System.out.println("Login Succeeded");
