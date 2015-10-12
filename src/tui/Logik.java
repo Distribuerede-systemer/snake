@@ -7,11 +7,9 @@ import java.util.*;
  */
 public class Logik {
 
-    User usr = new User("Mads", "123");
-    User usr1 = new User("Jens", "321");
+   private ArrayList<User> userList = new ArrayList<User>();
 
-   private List<User> userList = Arrays.asList(usr,usr1);
-
+    
 
     public User login(String username, String password){
 
@@ -23,9 +21,14 @@ public class Logik {
         }
         return null;
     }
-    public List<User> getUsers(){
+    public ArrayList<User> getUsers(){
 
         return userList;
+    }
+
+    public void createUser(String username, String password){
+
+        userList.add(new User(username, password));
     }
 
 }

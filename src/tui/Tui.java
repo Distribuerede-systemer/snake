@@ -6,14 +6,27 @@ import java.util.*;
 public class Tui {
 
     private Scanner input;
+    boolean isAuthenticated;
+    private User usr;
+    private Logik lg;
 
     public Tui(){
         input = new Scanner(System.in);
+        lg = new Logik();
+    }
+
+    public void start(){
+
+        while (true) {
+            isAuthenticated = login();
+
+            if(isAuthenticated){
+                userMenu();
+            }
+        }
     }
 
     public void userMenu(){
-
-        boolean isAuthenticated = true;
 
         while(isAuthenticated) {
 
@@ -30,6 +43,7 @@ public class Tui {
                     break;
                 case 3:
                     System.out.println("Du har valgt at oprette en bruger");
+                    createUser();
                     break;
                 case 4:
                     System.out.println("Du har valgt at slette en bruger");
@@ -45,10 +59,30 @@ public class Tui {
             }
         }
     }
+
+    public boolean login() {
+
+        System.out.print("Please type your username: "); // Brugeren bliver spurgt om username
+        String username = input.next();
+        System.out.print("Please type your password: "); // Brugeren bliver spurgt om password
+        String password = input.next();
+
+        try {
+            usr = lg.login(username, password);
+
+            if (usr.getUsername() != null)
+                return true;
+            else
+                return false;
+        } catch (NullPointerException n) {
+           System.out.println("Invalid login");
+        }
+        return false;
+    }
 /*
     public void listUsers(){
 
-        List<User> userList = Logic.getUsers();
+        ArrayList<User> userList = Logic.getUsers();
 
         for(User usr : userList){
             System.out.println("User: " + usr.getUsername());
@@ -58,7 +92,7 @@ public class Tui {
 
     public void listGames(){
 
-        List<Game> gameList = Logic.getGames();
+        ArrayList<Game> gameList = Logic.getGames();
 
         for(Game gm : gameList){
             System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
@@ -66,6 +100,14 @@ public class Tui {
         System.out.print("\n");
     }
     */
+
+    public void createUser(){
+
+        String username = enterUsername();
+        String password = enterPassword();
+
+        lg.createUser(username, password);
+    }
 
     public int userMenuScreen(){
 
