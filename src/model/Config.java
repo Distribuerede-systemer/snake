@@ -10,40 +10,21 @@ import javax.ws.rs.core.Response;
 /**
  * Created by Oscar on 12-10-2015.
  */
-public class Config {
-
-    public Config(){
-
-        Gson gson = new Gson();
-    }
-
-    @GET
-    @Path("/snake/src/config.json.dist")
-    @Produces("application/json")
-    public Response getJson(String json) {
-
-
-
-        JsonConfig test = new Gson().fromJson(json, JsonConfig.class);
-
-
-
-
-        return null;
-    }
-
-
-}
 
 // Create inner class Json
-class JsonConfig{
+public class Config{
+
+    public static void init(){
+
+
+    }
 
     //Create variables for each of the JSON objects.
-    private String host;
-    private String port;
-    private String username;
-    private String password;
-    private String dbname;
+    private static String host;
+    private static String port;
+    private static String username;
+    private static String password;
+    private static String dbname;
 
     //Created getters and setters for each of the variables.
     public String getDbname() {
@@ -55,7 +36,6 @@ class JsonConfig{
     public String getPassword() {
         return password;
     }
-
     public String getPort() {
         return port;
     }
