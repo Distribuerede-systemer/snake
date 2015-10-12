@@ -75,9 +75,10 @@ public class Logic {
 	}
 
 	//return object of User.
-	public String getUser(String _userName)
+	public User getUser(User userName)
 	{
-		return _userName;
+
+		return userName;
 	}
 
 	
@@ -108,14 +109,15 @@ public class Logic {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
 		return games;
 
 	}
 
 	//Returns object of game
-	public String getGame(String _game){
-		return _game;
+	public Game getGame(Game gameName){
+
+		return gameName;
 	}
 
 	//Return an istance of a game
@@ -133,10 +135,11 @@ public class Logic {
 	// 2 || USER DOES NOT EXIST
 	// 3 || WRONG PASSWORD
 	public int userLogin(String username, String password){
+
 		int code = 0;
 
 
-		for (User user : db.getUsers) {
+		for (User user : getUser()) {
 
 
 			if (user.getPassword.equals(password) && user.getUserName().equals(username)) {
