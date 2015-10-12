@@ -43,6 +43,8 @@ public class Config{
         BufferedReader br = new BufferedReader(new FileReader("src/config.json"));
 
         try {
+
+
             //Initialize Java class Stringbuilder as sb
             StringBuilder sb = new StringBuilder();
 
@@ -52,6 +54,8 @@ public class Config{
 
             // Use while-loop to continue while line does not equal 0.
             while (line != null) {
+
+                line = br.readLine();
 
                 //Reads content on current line in the document
                 sb.append(line);
@@ -67,7 +71,11 @@ public class Config{
             //Instantiates String everything with the contents of the  StringBuilder object
             //and uses toString method to parse into a String.
             String everything = sb.toString();
+
+            everything = everything.replaceAll("\r|\n|\t", "");
             System.out.println(everything);
+
+
 
             Config config = new Gson().fromJson(everything, Config.class);
 
@@ -76,7 +84,6 @@ public class Config{
             Config.setPort(config.getPort());
             Config.setPassword(config.getPassword());
             Config.setUsername(config.getUsername());
-
 
             System.out.print(config.getDbname());
         } catch (IOException e) {
