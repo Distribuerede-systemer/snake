@@ -2,10 +2,12 @@ package api;
 
 import com.sun.net.httpserver.HttpServer;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 
 /**
  * Created by jesperbruun on 12/10/15.
@@ -69,9 +71,13 @@ public class HelloWorld {
     @Produces("application/json")
     public String getGame(@PathParam("gameid") String gameid) {
 
+        Game game1 = new Game();
+        game1.setGamename("Diablo");
+        game1.setResult(100);
+
         System.out.println(gameid);
 
-        return "gameid " + gameid;
+        return new Gson().toJson(game1);
 
     }
 
@@ -86,11 +92,24 @@ public class HelloWorld {
 
     @POST
     @Path("/controls/")
-    @Produces("text/plain")
-    public String controls(String data)  {
+    @Produces("application/json")
 
-        System.out.println(data);
-        return "OK" ;
+    public Response controls (String json) {
+            // public String controls(String data)  {
+
+        Control control1 = new Gson().fromJson(json, Control.class);
+
+        System.out.println(control1.getMovement());
+
+        if (control1.getMovement().equals("d"))
+        return Response.status(201).entity("Success").build();
+        else { return Response.status(500).entity("Fail").build();
+
+        }
+
+
+       // System.out.println(data);
+        //return "OK" ;
     }
 
     @POST
@@ -151,4 +170,46 @@ public class HelloWorld {
         server.stop(0);
         System.out.println("Server stopped");
     }
+
+    class Game {
+
+        private String gamename;
+        private int result;
+
+        public void setGamename(String gamename) {
+            this.gamename = gamename;
+        }
+
+        public void setResult(int result) {
+            this.result = result;
+        }
+
+        public String getGamename() {
+            return gamename;
+        }
+
+        public int getResult() {
+            return result;
+        }
+
+    }
+
+    class Control {
+
+        private String movement;
+
+
+        public void setMovement(String movement) {
+            this.movement = movement;
+        }
+
+
+        public String getMovement() {
+            return movement;
+        }
+
+
+
+    }
+
 }
