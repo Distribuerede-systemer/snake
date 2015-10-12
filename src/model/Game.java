@@ -3,6 +3,7 @@ package model;
 /**
  * Created by Peter on 12-10-2015.
  */
+
 public class Game {
 
     //naming the variables needed for the game
@@ -22,6 +23,12 @@ public class Game {
         this.endGame = endGame;
         this.host = host;
         this.opponent = opponent;
+    }
+
+
+    //methods that the API can use
+    public String getResultForGame(){
+        
     }
 
     //making get/set method for all the variables, so they can be used by other classes
