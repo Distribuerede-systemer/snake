@@ -15,11 +15,10 @@ public class Game {
         private String host;
         private String opponent;
         private String status;
-        private String validate;
 
         //Creating the constructor and initiating the variables
         public Game( int gameId, int result, String controls,int newGame, int endGame, String host, String
-        opponent, String status, String validate){
+        opponent, String status){
             this.gameId = gameId;
             this.result = result;
             this.controls = controls;
@@ -28,12 +27,10 @@ public class Game {
             this.host = host;
             this.opponent = opponent;
             this.status = status;
-            this.validate = validate;
         }
 
 
-        //methods that the API can use
-
+    //methods that the API can use
     //Creating get/set method for all the variables, so they can be used by other classes
     public int getGameId() {
         return gameId;
@@ -91,7 +88,7 @@ public class Game {
         this.opponent = opponent;
     }
 
-    public String status() {
+    public String getStatus() {
         return status;
     }
 
@@ -99,4 +96,4 @@ public class Game {
         this.status = status;
     }
 
-}
+} //end of class
