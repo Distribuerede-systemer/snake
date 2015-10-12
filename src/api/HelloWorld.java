@@ -1,11 +1,11 @@
 package api;
+
 import com.sun.net.httpserver.HttpServer;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
+
 import java.io.IOException;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 
 /**
  * Created by jesperbruun on 12/10/15.
@@ -21,6 +21,36 @@ public class HelloWorld {
         // Return some cliched textual content
         return "Hello World";
     }
+
+    @GET
+    @Path("/user/")
+    @Produces("application/json")
+    public String getAllUsers() {
+
+        //TODO; Hent brugere fra DB
+        return "users";
+    }
+
+    @GET
+    @Path("/users/{userid}")
+    @Produces("text/plain")
+    public String getUser(@PathParam("userid") String userid) {
+
+        System.out.println(userid);
+
+        return "userid " + userid;
+
+    }
+
+    @POST
+    @Path("/create_user/{userid}")
+    @Produces("application/json")
+    public String createUser(@PathParam("userid") String userid) {
+
+
+        return "userid " + userid;
+}
+
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
