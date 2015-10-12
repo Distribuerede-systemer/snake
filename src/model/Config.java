@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.Gson;
+
 /**
  * Created by Oscar on 12-10-2015.
  */
@@ -7,8 +9,10 @@ public class Config {
 
     public Config(){
 
-
+        Gson gson = new Gson();
     }
+
+    
 
 
 }
