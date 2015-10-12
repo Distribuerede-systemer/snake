@@ -13,11 +13,12 @@ public class Game {
     private int newGame;
     private int endGame;
     private String host;
-    private String opponent;    
+    private String opponent;
+    private String status;
 
 
     //making the constructor and initiating the variables
-    public Game (int gameId, int result, String controls, int newGame, int endGame, String host, String opponent) {
+    public Game (int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status) {
         this.gameId = gameId;
         this.result = result;
         this.controls = controls;
@@ -25,6 +26,7 @@ public class Game {
         this.endGame = endGame;
         this.host = host;
         this.opponent = opponent;
+        this.status = status;
     }
 
 
@@ -91,6 +93,13 @@ public class Game {
         this.opponent = opponent;
     }
 
+    public String status(){
+        return status;
+    }
+
+    public void setStatus(String status){
+        this.status = status;
+    }
 
 
 }
