@@ -34,6 +34,10 @@ public class Game {
         return result;
     }
 
+    public void validate(){
+        
+    }
+
     //Creating get/set method for all the variables, so they can be used by other classes
     public int getGameId(){
         return gameId;
