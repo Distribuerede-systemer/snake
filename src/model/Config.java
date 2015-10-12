@@ -6,6 +6,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.io.FileReader;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Oscar on 12-10-2015.
@@ -14,9 +16,16 @@ import javax.ws.rs.core.Response;
 // Create inner class Json
 public class Config{
 
-    public static void init(){
+    public static void init() {
 
+        try {
+            FileReader json = new FileReader("src/config.json.dist");
 
+            
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     //Create variables for each of the JSON objects.
