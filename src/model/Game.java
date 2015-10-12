@@ -30,8 +30,7 @@ public class Game {
         }
 
 
-        //methods that the API can use
-
+    //methods that the API can use
     //Creating get/set method for all the variables, so they can be used by other classes
     public int getGameId() {
         return gameId;
@@ -89,7 +88,7 @@ public class Game {
         this.opponent = opponent;
     }
 
-    public String status() {
+    public String getStatus() {
         return status;
     }
 
