@@ -88,27 +88,27 @@ public class User {
         this.status = status;
     }
 
-//creating a scanner with the scannername newScanner
+    //creating a scanner with the scannername newScanner
     Scanner newScanner = new Scanner(System.in);
 
-//the scanner saves the input in the varible scannerInput
+    //the scanner saves the input in the varible scannerInput
     String scannerInput = newScanner.nextLine();
 
-//userNameInput and passwordInput is defined by the input from newScanner
+    //userNameInput and passwordInput is defined by the input from newScanner
     String userNameInput = scannerInput;
     String passwordInput = scannerInput;
-//auth is always false, unless authentication is accepted.
+    
+    //auth is always false, unless authentication is accepted.
     boolean auth = false;
 
-//checking if userName and the inputted username is alike - checking if password and inputted password is alike
-private void authentication() {
+    //checking if userName and the inputted username is alike - checking if password and inputted password is alike
+    private void authentication() {
 
     if(getUserName()==  userNameInput || getPassword() == passwordInput){
       auth = true;
     }
 
 }
-
 
 //end of User class
 }
