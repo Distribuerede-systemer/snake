@@ -32,7 +32,6 @@ public class Game {
 
     //methods that the API can use
     public String getResultForGame(){
-
         return result;
     }
 
