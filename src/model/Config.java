@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
+import sun.org.mozilla.javascript.internal.json.JsonParser;
 
 import javax.swing.plaf.synth.SynthTextAreaUI;
 import javax.ws.rs.GET;
@@ -10,6 +11,10 @@ import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.concurrent.ExecutionException;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 /**
  * Created by Oscar on 12-10-2015.
  */
@@ -17,23 +22,12 @@ import java.util.concurrent.ExecutionException;
 // Create inner class Json
 public class Config{
 
-
-    public static void main(String [] args){
-
-        try {
-            Config.init();
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public Config(){
-    }
+    //Create variables for each of the JSON objects.
+    private static String host;
+    private static String port;
+    private static String username;
+    private static String password;
+    private static String dbname;
 
     // Create init-method to read from the config.json.dist file
     // and parse it to the variables in the class.
@@ -42,61 +36,27 @@ public class Config{
         //Use BufferedReader to read file from FileReader with a filepath.
         BufferedReader br = new BufferedReader(new FileReader("src/config.json"));
 
+        JSONParser jsonParser = new JSONParser();
+
         try {
+            FileReader json = new FileReader("src/config.json");
 
+            Object obj = jsonParser.parse(json);
 
-            //Initialize Java class Stringbuilder as sb
-            StringBuilder sb = new StringBuilder();
+            JSONObject jsonObject = (JSONObject) obj;
 
-            // Instantiate String variable line
-            //to read the number of lines in the document
-            String line = br.readLine();
+            setHost((String) jsonObject.get("host"));
+            setPort((String) jsonObject.get("port"));
+            setUsername((String) jsonObject.get("username"));
+            setDbname((String) jsonObject.get("dbname"));
+            setPassword((String) jsonObject.get("password"));
 
-            // Use while-loop to continue while line does not equal 0.
-            while (line != null) {
-
-                //Reads content on current line in the document
-                sb.append(line);
-
-                //Changes the line after the last character
-                sb.append(System.lineSeparator());
-
-                //Instantiates the line variable with the next line in the document
-                //and runs while-loop again.
-                line = br.readLine();
-            }
-
-            //Instantiates String everything with the contents of the  StringBuilder object
-            //and uses toString method to parse into a String.
-            String everything = sb.toString();
-
-            everything = everything.replaceAll("\r|\n|\t", "");
-            System.out.println(everything);
-
-
-
-            Config config = new Gson().fromJson(everything, Config.class);
-
-            Config.setDbname(config.getDbname());
-            Config.setHost(config.getHost());
-            Config.setPort(config.getPort());
-            Config.setPassword(config.getPassword());
-            Config.setUsername(config.getUsername());
-
-            System.out.print(config.getDbname());
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            br.close();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
-
-    //Create variables for each of the JSON objects.
-    private static String host;
-    private static String port;
-    private static String username;
-    private static String password;
-    private static String dbname;
 
     //Created getters and setters for each of the variables.
     public String getDbname() {
