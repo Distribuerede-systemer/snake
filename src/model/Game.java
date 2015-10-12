@@ -31,8 +31,12 @@ public class Game {
 
 
     //methods that the API can use
-    public String getResultForGame(){
+    public int getResultForGame(){
         return result;
+    }
+
+    public void validate(){
+        
     }
 
     //Creating get/set method for all the variables, so they can be used by other classes
@@ -41,7 +45,7 @@ public class Game {
     }
 
     public void setGameId(int gameId){
-        this.gameId = gameId
+        this.gameId = gameId;
     }
 
     public int getResult() {
