@@ -1,7 +1,14 @@
 package controller;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+
+import model.Config;
 import model.Game;
+// imports information about password and username from the User class in the model package
 import model.User;
 
 /**
@@ -9,6 +16,25 @@ import model.User;
  * @author Henrik Thorn
  */
 public class Logic {
+
+	private Connection connection = null;
+	private PreparedStatement users = null;
+	private PreparedStatement games = null;
+	private PreparedStatement createUser = null;
+	private PreparedStatement deleteUser = null;
+	private PreparedStatement createGame = null;
+	private PreparedStatement delteGame = null;
+
+
+	public Logic(){
+
+		Config config = new Config();
+		connection = DriverManager.getConnection(config.getDbname(), config.getUsername(), config.getPassword());
+
+		users = DB.getRecords('user');
+		games = DB.getRecords('games');
+
+	}
 
 	//TODO: Delete this main method. 
 	public static void main(String[] args) {
@@ -19,23 +45,77 @@ public class Logic {
 	public ArrayList getUsers(){
 
 		// Define ArrayList to be used to add users and return them. 
-		ArrayList user = new ArrayList();
-		
+		ArrayList <User> uj = null;
+
+		ResultSet resultSet = null;
+
+		try {
+			resultSet = users.executeQuery();
+
+			uj = new ArrayList<User>();
+
+			while (resultSet.next()){
+
+				uj.add(new User(resultSet.getInt("ID"),
+						resultSet.getString("Firstname"),
+						resultSet.getString("Lastname"),
+						 resultSet.getString("Username"),
+						resultSet.getString("Password"),
+						resultSet.getString("Created"),
+						resultSet.getString("Status")));
+			}
+
+		}catch(Exception e){
+			e.printStackTrace();}
 		// Return Users
-		return user;
+
+		return uj;
 
 
+	}
+
+	//return object of User.
+	public String getUser(String _userName)
+	{
+		return _userName;
 	}
 
 	
 	//Gets a list of all games and return these as an ArrayList of Game objects
 	public ArrayList getGames(String type){
 
-		// Define ArrayList to be used to add games and return them. 
-		ArrayList games = new ArrayList();	
+		ArrayList <Game> games = null;
+
+		ResultSet resultSet = null;
+
+		try {
+			resultSet = users.executeQuery();
+
+			games = new ArrayList<Game>();
+
+			while (resultSet.next()){
+
+				games.add(new Game(resultSet.getInt("ID"),
+						resultSet.getInt("Result"),
+						resultSet.getString("Controls"),
+						resultSet.getInt("NewGame"),
+						resultSet.getInt("EndGame"),
+						resultSet.getString("Host"),
+						resultSet.getString("Opponent"),
+						resultSet.getString("Status")));
+			}
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
-		// Return Games
 		return games;
+
+	}
+
+	//Returns object of game
+	public String getGame(String _game){
+		return _game;
 	}
 
 	//Return an istance of a game
@@ -78,12 +158,22 @@ public class Logic {
 
 		return status;
 	}
+
+
 	
 	//Deletes a user from the database
 	public boolean deleteUser(int Id){
 		boolean status = false;
 
 		return status;
+	}
+
+	public void createUser(int id, String firstName, String lastName, String userName, String password,
+						   String created, String status){
+		User user = new User(id, firstName, lastName, userName, password, created, status);
+
+
+		String firstName = input.nextLine();
 	}
 
 }
