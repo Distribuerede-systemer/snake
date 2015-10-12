@@ -55,8 +55,6 @@ public class Config{
             // Use while-loop to continue while line does not equal 0.
             while (line != null) {
 
-                line = br.readLine();
-
                 //Reads content on current line in the document
                 sb.append(line);
 
