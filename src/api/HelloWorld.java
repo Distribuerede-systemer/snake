@@ -32,8 +32,8 @@ public class HelloWorld {
     }
 
     @GET
-    @Path("/users/{userid}")
-    @Produces("text/plain")
+    @Path("/user/{userid}")
+    @Produces("application/json")
     public String getUser(@PathParam("userid") String userid) {
 
         System.out.println(userid);
@@ -43,12 +43,12 @@ public class HelloWorld {
     }
 
     @POST
-    @Path("/create_user/{userid}")
-    @Produces("application/json")
-    public String createUser(@PathParam("userid") String userid) {
+    @Path("/user/")
+    @Produces("text/plain")
+    public String createUser(String data)  {
 
-
-        return "userid " + userid;
+        System.out.println(data);
+        return "OK" ;
 }
 
 
