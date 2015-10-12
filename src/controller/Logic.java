@@ -34,6 +34,7 @@ public class Logic {
 		return games;
 	}
 
+	//Return an istance of a game
 	public Game getGame(String gameName) {
 
 		//int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
@@ -41,5 +42,18 @@ public class Logic {
 
 		return game;
 	}
-	
+
+	// Authenticates a user and returns a status code according to the result. 
+	// CODES:
+	// 1 || SUCCESS
+	// 2 || USER DOES NOT EXIST
+	// 3 || WRONG PASSWORD
+	public int userLogin(String username, String password){
+		int code = 0;
+
+		//authenticate user with some function
+
+		//Return status code for further use
+		return code;
+	}	
 }
