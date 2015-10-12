@@ -6,27 +6,14 @@ import java.util.*;
 public class Tui {
 
     private Scanner input;
-    private Logik db;
-    private User usr;
-    boolean isAuthenticated;
 
     public Tui(){
         input = new Scanner(System.in);
-        db = new Logik();
-    }
-
-    public void start(){
-
-        while (true) {
-            isAuthenticated = loginAuth();
-
-            if(isAuthenticated){
-                userMenu();
-            }
-        }
     }
 
     public void userMenu(){
+
+        boolean isAuthenticated = true;
 
         while(isAuthenticated) {
 
@@ -35,16 +22,17 @@ public class Tui {
             switch (menu) {
 
                 case 1:
-                    listUsers();
+                    // listUsers();
+                    System.out.println("Du har valgt at se alle spil");
                     break;
                 case 2:
-                    System.out.println("Du har valgt at oprette en bruger");
+                    System.out.println("Du har valgt at se alle brugere");
                     break;
                 case 3:
-                    System.out.println("Du har valgt at slette en bruger");
+                    System.out.println("Du har valgt at oprette en bruger");
                     break;
                 case 4:
-                    System.out.println("Du har valgt at se alle spil");
+                    System.out.println("Du har valgt at slette en bruger");
                     break;
                 case 5:
                     System.out.println("Du har valgt at logge ud");
@@ -57,51 +45,83 @@ public class Tui {
             }
         }
     }
-
-
+/*
     public void listUsers(){
 
-        List<User> userList = db.getUsers();
+        List<User> userList = Logic.getUsers();
 
         for(User usr : userList){
-            System.out.println("User: " + usr.getUsername() + " " + usr.getPassword());
+            System.out.println("User: " + usr.getUsername());
         }
         System.out.print("\n");
     }
-/*
+
     public void listGames(){
-        List<Game> gameList = db.getGames();
+
+        List<Game> gameList = Logic.getGames();
 
         for(Game gm : gameList){
-            System.out.println("Game " + usr.getFirstName() + " " + usr.getLastName());
+            System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
         }
-
+        System.out.print("\n");
     }
-*/
-
-    public boolean loginAuth(){
-
-        System.out.print("Please type your username: "); // Brugeren bliver spurgt om username
-        String username = input.next();
-        System.out.print("Please type your password: "); // Brugeren bliver spurgt om password
-        String password = input.next();
-
-
-        usr = db.login(username, password);
-        if(usr.getUsername() != null)
-        return true;
-        else
-            return false;
-    }
+    */
 
     public int userMenuScreen(){
 
-        System.out.println("1: Show all users");
-        System.out.println("2: Add user");
-        System.out.println("3: Delete user");
-        System.out.println("4: Show all games");
-        System.out.println("5: Log off");
+        System.out.println("1: List all games");
+        System.out.println("2: List all users");
+        System.out.println("3: Create user");
+        System.out.println("4: Delete user");
+        System.out.println("5: Log out");
 
         return input.nextInt();
+    }
+
+    public String deleteUserScreen(){
+        // listUsers();
+
+        System.out.println("Type username you wish to delete: ");
+        String username = input.next();
+
+        return username;
+    }
+
+
+    public String enterUsername(){
+
+        System.out.print("Please enter username: "); // Brugeren bliver spurgt om username
+        String username = input.next();
+
+        return username;
+    }
+
+    public String enterPassword(){
+
+        System.out.print("Please enter password: "); // Brugeren bliver spurgt om password
+        String password = input.next();
+
+        return password;
+    }
+
+    public String enterFirstName(){
+        System.out.print("Please enter first name: "); // Brugeren bliver spurgt om password
+        String firstName = input.next();
+
+        return firstName;
+    }
+
+    public String enterLastName(){
+        System.out.print("Please enter last name: "); // Brugeren bliver spurgt om password
+        String lastName = input.next();
+
+        return lastName;
+    }
+
+    public String enterEmail(){
+        System.out.print("Please enter email: "); // Brugeren bliver spurgt om password
+        String email = input.next();
+
+        return email;
     }
 }
