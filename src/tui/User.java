@@ -5,27 +5,27 @@ package tui;
  */
 public class User {
 
-    private String username;
-    private String password;
+    private String _username;
+    private String _password;
 
-    public User(String usrname, String pass){
-        username = usrname;
-        password = pass;
+    public User(String username, String pass){
+        _username = username;
+        _password = pass;
     }
 
     public String getUsername() {
-        return username;
+        return _username;
     }
 
     public String getPassword() {
-        return password;
+        return _password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        _password = password;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        _username = username;
     }
 }
