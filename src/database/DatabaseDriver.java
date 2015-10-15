@@ -16,7 +16,7 @@ public class DatabaseDriver {
     /**
      * Bruges til at oprette forbindelse til databasen og indeholder preparedStatements.
      */
-
+//
     public DatabaseDriver()
     {
         try

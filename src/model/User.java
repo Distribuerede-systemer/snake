@@ -7,6 +7,7 @@ import java.util.Scanner;
 /**
  * Created by Oscar on 12-10-2015.
  */
+//
 public class User {
 
     //creating variables
