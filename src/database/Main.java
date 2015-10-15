@@ -17,6 +17,17 @@ public class Main {
         user.setFirstName("Tobias");
         db.updateUser(user);
 
+        Game game = db.getGame(1);
+        game.setHostControls("sadasas");
+        db.updateGame(game);
+        Score score = db.getScore(1);
+
+        db.deleteGame(1);
+        db.createUser(user);
+
+        db.createGame(game);
+        db.createScore(score);
+
 //        System.out.println(db.getUser("Users", 1).getFirstName());
 
     }

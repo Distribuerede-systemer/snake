@@ -7,6 +7,7 @@ import model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * This class contains methods which use prepared statements from the DatabaseDriver class to retrieve data from the database.
@@ -306,19 +307,116 @@ public class DatabaseWrapper {
         }
     }
 
+
     public void updateGame(Game game)
     {
         try
         {
-            PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlUser());
+            PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlGame());
 
-            ps.setString(1, user.getFirstName());
-            ps.setString(2, user.getLastName());
-            ps.setString(3, user.getEmail());
-            ps.setString(4, user.getPassword());
-            ps.setString(5, user.getStatus());
-            ps.setString(6, user.getType());
-            ps.setInt(7, user.getId());
+            ps.setString(1, game.getGameName());
+            ps.setString(2, game.getStatus());
+            ps.setInt(3, game.getResult());
+            ps.setString(4, game.getHostControls());
+            ps.setInt(5, game.getEndGame());
+            ps.setString(6, game.getOpponentControls());
+            ps.setInt(7, game.getGameId());
+
+            ps.executeUpdate();
+        } catch (SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+            dbDriver.close();
+        }
+    }
+
+    public void createUser(User user){
+
+//        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime()
+//                .getTime());
+
+        try
+        {
+            // Prepared statement til at tilfoeje en bruger
+            PreparedStatement createUser = connection.prepareStatement(dbDriver.createSqlUser());
+
+                createUser.setString(1, user.getFirstName());
+                createUser.setString(2, user.getLastName());
+                createUser.setString(3, user.getEmail());
+                createUser.setString(4, user.getUserName());
+                createUser.setString(5, user.getPassword());
+                createUser.setString(6, user.getStatus());
+                createUser.setString(7, user.getType());
+
+
+                createUser.executeUpdate();
+        } catch (SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+            dbDriver.close();
+        }
+    }
+
+    public void createGame(Game game){
+
+        try
+        {
+            // Prepared statement til at tilfoeje en bruger
+            PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame());
+
+            createGame.setString(1, game.getHost());
+            createGame.setString(2, game.getOpponent());
+            createGame.setString(3, game.getGameName());
+            createGame.setString(4, game.getStatus());
+            createGame.setInt(5, game.getResult());
+            createGame.setString(6, game.getHostControls());
+            createGame.setInt(7, game.getNewGame());
+            createGame.setInt(8, game.getEndGame());
+            createGame.setString(9, game.getOpponentControls());
+
+
+            createGame.executeUpdate();
+        } catch (SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+            dbDriver.close();
+        }
+    }
+
+    public String createSqlScore(){
+        return "INSERT INTO Scores ( user_id, game_id, host_id, score) " +
+                "VALUES ( ?, ?, ?, ? )";
+    }
+
+    public void createScore(Gamer host, Gamer opponent){
+
+        try
+        {
+            // Prepared statement til at tilfoeje en brugera
+            PreparedStatement createScore = connection.prepareStatement(dbDriver.createSqlScore());
+
+            createScore.setInt(1, score.getUserId());
+            createScore.setInt(2, score.getGameId());
+            createScore.setInt(3, score.getHostId());
+            createScore.setInt(4, score.getHighScore());
+
+            createScore.executeUpdate();
+        } catch (SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+            dbDriver.close();
+        }
+    }
+
+
+    public void deleteUser(int id)
+    {
+        try
+        {
+            PreparedStatement ps = connection.prepareStatement(dbDriver.deleteSqlUser());
+
+            ps.setString(1, "deleted");
+            ps.setInt(2, id);
 
 
             ps.executeUpdate();
@@ -329,4 +427,22 @@ public class DatabaseWrapper {
         }
     }
 
+
+    public void deleteGame(int id)
+    {
+        try
+        {
+            PreparedStatement ps = connection.prepareStatement(dbDriver.deleteSqlGame());
+
+            ps.setString(1, "deleted");
+            ps.setInt(2, id);
+
+
+            ps.executeUpdate();
+        } catch (SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+            dbDriver.close();
+        }
+    }
 }
