@@ -1,9 +1,9 @@
 package database;
 
-import com.sun.rowset.CachedRowSetImpl;
-
-import javax.xml.transform.Result;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Team Depardieu
@@ -39,6 +39,49 @@ public class DatabaseDriver {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public static void checkConnection() {
+
+        try {
+            connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
+
+            if (connection.isValid(1000)) {
+                System.out.println("You are connected");
+
+            } else {
+                System.out.println("Connection lost");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+
+
+    /**
+     * Checks if the database exists or not
+     * @return bool
+     * @throws SQLException
+     */
+
+    public static boolean DbExist() throws SQLException {
+
+        ResultSet resultSet = connection.getMetaData().getCatalogs();
+        while (resultSet.next()) {
+            String databaseName = resultSet.getString(1);
+
+            if (databaseName.equals(dbName)) {
+                return true;
+
+            } else {
+                doQuery("Indsæt SQL dump");
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -1,14 +1,11 @@
 package database;
 
-import com.sun.rowset.CachedRowSetImpl;
 import model.Game;
-import model.Gamer;
 import model.Score;
 import model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * This class contains methods which use prepared statements from the DatabaseDriver class to retrieve data from the database.
@@ -441,4 +438,5 @@ public class DatabaseWrapper {
             dbDriver.close();
         }
     }
+
 }
