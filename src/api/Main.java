@@ -84,6 +84,6 @@ public class Main {
      * This method starts the program
      */
 
-    //new tui();
+    new tui();
 }
 
