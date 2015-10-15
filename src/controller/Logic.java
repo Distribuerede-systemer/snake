@@ -2,9 +2,13 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
+import model.Score;
 import model.User;
+import tui.Tui;
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
@@ -79,7 +83,7 @@ public class Logic {
      * @param userId
      * @return User object
      */
-    public User getUser(int userId) {
+    public static User getUser(int userId) {
 
         //TODO: Get specific user from DB via DB-wrapper
         User user = new User();
@@ -89,24 +93,55 @@ public class Logic {
 
     /**
      * Authenticates user
+     *The int uses 2 parameters: username and password which it authenticates as the correct credentials of an existing user.
      *
      * @param username
      * @param password
-     * @return 1 if auth successful, 0 if failed
+     * @return 2 if auth successful, 1 if user exists but password is incorrect, 0 if failed
      */
-    public static int userLogin(String username, String password) {
 
-        ArrayList<User> allUsers = getUsers();
-        for (User user : allUsers){
-            if(user.getUserName().equals(username) && user.getPassword().equals(password)){
-                isAuthenticated = true;
+
+    public static int userLogin(String username, String password) {
+        User user;
+        DatabaseWrapper db = new DatabaseWrapper();
+        user = db.authenticatedUser(username);
+        if (user ==  null) {
+            // User does not exists.
+           return 0;
+        }else {
+            if(password.equals(user.getPassword())){
+                // Return 2 if user exists and password is correct. Success.
+                return 2;
+
+            }else {
+                //Return 1 if user exists but password is wrong.
                 return 1;
             }
         }
-
-        return 0;
-
     }
+
+    /**
+     * Get all highscores from the game
+     * @return ArrayList of highscores
+     */
+    public static ArrayList<Score> getHighscores(){
+        //TODO: Get all highscores
+        ArrayList<Score> highScores = null;
+        return highScores;
+    }
+
+    /**
+     * Get a highscore from a specified user
+     * @param userId
+     * @return Score
+     */
+    public static Score getHighscore(int userId){
+        //TODO: Get highscore from user
+
+        Score score = new Score();
+        return score;
+    }
+
 
     /**
      * Get all games
@@ -192,7 +227,7 @@ public class Logic {
         //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
         Game game = new Game();
         game.setName(gameName);
-        game.setHost(host);
+        game.setHost();
         game.setStatus(1); //1 is pending, 0 is done
 
         //TODO: Write game to db, and return game-id and set object before returning
@@ -205,7 +240,7 @@ public class Logic {
      * @param gameId
      * @return true if success, false if failure
      */
-    public boolean deleteGame(int gameId) {
+    public static boolean deleteGame(int gameId) {
 
         //TODO: Delete specific game from DB via DB-wrapper;
 

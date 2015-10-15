@@ -95,4 +95,8 @@ public class DatabaseDriver {
         return "UPDATE Games SET game_name = ?, status = ?, result = ?, hostcontrols = ?, " +
                 "endgame = ?, opponentcontrols = ? WHERE id = ?";
     }
+
+    public String authenticatedSql() {
+        return "Select * from users where username = ?";
+    }
 }
