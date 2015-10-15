@@ -76,7 +76,7 @@ public class HelloWorld {
         ResultSet resultSet = connection.getMetaData().getCatalogs();
 
         while (resultSet.next()) {
-            
+
             String databaseName = resultSet.getString(1);
 
             if (databaseName.equals(dbName)) {
@@ -92,14 +92,16 @@ public class HelloWorld {
 
             }
         }
+        return false;
     }
+
+    //Start the program
+    new Tui();
 }
 
 
-//Start the program
-// new Tui();
 
-        }
+
 
 
 /*
