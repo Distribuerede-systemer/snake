@@ -1,12 +1,7 @@
 package model;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
+
 import java.io.*;
-import java.util.concurrent.ExecutionException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,27 +16,36 @@ public class Config{
     private static String username;
     private static String password;
     private static String dbname;
+    private static String hashingalt;
+    private static String encryptionkey;
 
     // Create init-method to read from the config.json.dist file
     // and parse it to the variables in the class.
     public static void init() throws IOException {
-	//Read config.json with all the settings
-        BufferedReader br = new BufferedReader(new FileReader("src/config.json"));
 
+        //Initialize imported Java-class JSONParser as jsonParser object.
         JSONParser jsonParser = new JSONParser();
 
         try {
+
+            //Initialize imported Java-class FileReader as json object
+            //with the specific path to the .json file.
             FileReader json = new FileReader("src/config.json");
 
+            //Initialize Object class as json, parsed by jsonParsed.
             Object obj = jsonParser.parse(json);
 
+            //Instantiate JSONObject class as jsonObject equal to obj object.
             JSONObject jsonObject = (JSONObject) obj;
 
+            //Use set-methods for defifing static variables from json-file.
             setHost((String) jsonObject.get("host"));
             setPort((String) jsonObject.get("port"));
             setUsername((String) jsonObject.get("username"));
             setDbname((String) jsonObject.get("dbname"));
             setPassword((String) jsonObject.get("password"));
+            setEncryptionkey((String) jsonObject.get("encryptionkey"));
+            setHashingalt((String) jsonObject.get("hashingalt"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,20 +55,26 @@ public class Config{
     }
 
     //Created getters and setters for each of the variables.
-    public String getDbname() {
+    public static String getDbname() {
         return dbname;
     }
-    public String getHost() {
+    public static String getHost() {
         return host;
     }
-    public String getPassword() {
+    public static String getPassword() {
         return password;
     }
-    public String getPort() {
+    public static String getPort() {
         return port;
     }
-    public String getUsername() {
+    public static String getUsername() {
         return username;
+    }
+    public static String getEncryptionkey() {
+        return encryptionkey;
+    }
+    public static String getHashingalt() {
+        return hashingalt;
     }
 
     public static void setDbname(String dbname) {
@@ -85,5 +95,13 @@ public class Config{
 
     public static void setUsername(String username) {
         Config.username = username;
+    }
+
+    public static void setEncryptionkey(String encryptionkey) {
+        Config.encryptionkey = encryptionkey;
+    }
+
+    public static void setHashingalt(String hashingalt) {
+        Config.hashingalt = hashingalt;
     }
 }
