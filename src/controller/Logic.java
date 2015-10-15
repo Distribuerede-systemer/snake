@@ -52,6 +52,9 @@ public class Logic {
 		users = DB.getRecords('user');
 		games = DB.getRecords('games');
 
+		//Initialize tui class
+		//Initialize ArrayLists of type User and Game
+		//Set isAuthenticated false.
 		tui = new Tui();
 		userList = new ArrayList<User>();
 		gameList = new ArrayList<Game>();
@@ -59,8 +62,11 @@ public class Logic {
 
 	}
 
+
 	public void start(){
 
+		//infinite while-loop if login-method returns 1.
+		//Run userMenu method, if isAuthenticated is true.
 		while (true) {
 			if(login() == 1)
 				isAuthenticated = true;
@@ -75,8 +81,10 @@ public class Logic {
 
 		while(isAuthenticated) {
 
+			//Instantiate userMenuScreen method from tui as menu.
 			int menu = tui.userMenuScreen();
 
+			//Run switch, read input from tui.
 			switch (menu) {
 
 				case 1:
@@ -116,56 +124,71 @@ public class Logic {
 		// Define ArrayList to be used to add users and return them. 
 		ArrayList <User> uj = null;
 
+		//Try as long as resultSet returns data.
 		try(ResultSet resultSet = users.executeQuery()) {
 
+			//Instantiate ArrayList of type User as uj.
 			uj = new ArrayList<User>();
 
+			//While-loop to continue as long as resultSet contains data.
 			while (resultSet.next()){
 
+				//Add results from resultSet to a new object in ArrayList.
 				uj.add(new User(resultSet.getInt("ID"),
 							resultSet.getString("Firstname"),
 							resultSet.getString("Lastname"),
+							resultSet.getString("Email"),
 							resultSet.getString("Username"),
 							resultSet.getString("Password"),
-							resultSet.getString("Created"),
-							resultSet.getString("Status")));
+							resultSet.getDate("Created"),
+							resultSet.getString("Status"),
+							resultSet.getString("Type")));
 			}
 		}catch(Exception e){
-			e.printStackTrace();}
+			e.printStackTrace();
+		}
+
 		// Return Users
-
 		return uj;
-
-
 	}
-
+	//CreateUser-method.
 	public void createUser(){
 
 		addUser(tui.enterFirstName(), tui.enterLastName(),tui.enterUsername(), tui.enterPassword());
 	}
 
+	//DeleteUser-method.
 	public boolean deleteUser(){
 
+		//Reads input from tui.
 		String username = tui.deleteUserScreen();
 
+		//If-statement uses remove-method.
 		if(removeUser(getUserFromUsername(username))) {
+
+			//Prints out to user which user was deleted.
 			tui.miscOut(username + " was deleted.");
+
+			//if user was deleted, run start-method.
 			if(username.equals(usr.getUserName()))
 				start();
 			else
 				return true;
 		}
+		//Else print out that user was not found to the admin.
 		else
 			tui.miscOut(username + " was not found.");
 		return false;
-
 	}
 
+	//Add user to the ArrayList of type user. take parameters.
 	public void addUser(String firstName, String lastName, String username, String password){
 
+		//Adds a new user to ArrayList.
 		userList.add(new User(firstName, lastName, username, password));
 	}
 
+	//Remove user from ArrayList type User. Takes one parameter of user.
 	public boolean removeUser(User u){
 		try {
 			if (userList.remove(u))
@@ -178,6 +201,7 @@ public class Logic {
 
 
 	//Gets a list of all games and return these as an ArrayList of Game objects
+	//Same method as getUser method.
 	public ArrayList<Game> getGames(){
 
 		ArrayList <Game> games = null;
@@ -191,12 +215,13 @@ public class Logic {
 
 				games.add(new Game(resultSet.getInt("ID"),
 							resultSet.getInt("Result"),
-							resultSet.getString("Controls"),
 							resultSet.getInt("NewGame"),
 							resultSet.getInt("EndGame"),
 							resultSet.getString("Host"),
 							resultSet.getString("Opponent"),
-							resultSet.getString("Status")));
+							resultSet.getString("Status"),
+							resultSet.getString("HostControls"),
+							resultSet.getString("OpponentControls")));
 			}
 
 		}catch(Exception e){
@@ -214,6 +239,7 @@ public class Logic {
 	}
 
 	//Return an istance of a game
+	//TODO: Finish createGame method.
 	public Game createGame(String gameName) {
 
 		//int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
@@ -234,10 +260,11 @@ public class Logic {
 		try {
 
 			username =  tui.enterUsername();
+			User user = getUserFromUsername(username);
+
 			password = tui.enterPassword();
 
-			for (User usr : userList) {
-				if (usr.getUserName().equals(username))
+				if (user.getUserName().equals(username))
 				{
 					if(usr.getPassword().equals(password)) {
 						tui.miscOut("Success.");
@@ -252,12 +279,29 @@ public class Logic {
 					tui.miscOut("User does not exist.");
 					return 2;
 				}
-			}
+
 		} catch (NullPointerException n) {
 			tui.miscOut("Invalid login");
 		}
 		return 2;
 	}
+
+
+	public User getUserFromLogin(String username, String password) {
+
+		User user = null;
+		try {
+
+			for (User usr : userList) {
+				if (usr.getUserName().equals(username) && usr.getPassword().equals(password))
+					user = usr;
+			}
+		}catch(NullPointerException e) {
+			System.out.println("User not found");
+		}
+		return user;
+	}
+
 
 	public User getUserFromUsername(String username){
 
