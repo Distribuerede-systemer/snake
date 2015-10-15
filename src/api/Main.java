@@ -2,7 +2,6 @@ package api;
 
 import java.io.IOException;
 import java.sql.*;
-
 import Config.Config;
 import logic.Tui;
 
@@ -21,6 +20,11 @@ public class Main {
     private static Connection connection = null;
     private static PreparedStatement sqlStatement;
 
+    /**
+     *
+     *
+     * @param sql
+     */
 
     public static void doQuery(String sql) {
 
@@ -33,9 +37,16 @@ public class Main {
 
     }
 
+
+    /**
+     * This methode check connection if there is a connection to the database
+     *
+     * @param args
+     * @throws IOException
+     */
+
     public static void main(String[] args) throws IOException {
 
-        //Check connection if there is a connection to the database
         try {
 
             connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
@@ -54,8 +65,11 @@ public class Main {
         }
     }
 
+
+
     /**
      * Checks if the databse exists or not
+     *
      * @return bool
      * @throws SQLException
      */
@@ -82,7 +96,10 @@ public class Main {
         return false;
     }
 
-    //Create a object of Start the program
+    /**
+     * 
+     */
+    //Create a object of tui class. This method starts the program
     new tui();
 }
 
