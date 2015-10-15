@@ -3,9 +3,9 @@ package model;
 
 import java.io.*;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+//import org.json.simple.JSONObject;
+//import org.json.simple.parser.JSONParser;
+//import org.json.simple.parser.ParseException;
 
 // Create inner class Json
 public class Config{
@@ -21,38 +21,38 @@ public class Config{
 
     // Create init-method to read from the config.json.dist file
     // and parse it to the variables in the class.
-    public static void init() throws IOException {
-
-        //Initialize imported Java-class JSONParser as jsonParser object.
-        JSONParser jsonParser = new JSONParser();
-
-        try {
-
-            //Initialize imported Java-class FileReader as json object
-            //with the specific path to the .json file.
-            FileReader json = new FileReader("src/config.json");
-
-            //Initialize Object class as json, parsed by jsonParsed.
-            Object obj = jsonParser.parse(json);
-
-            //Instantiate JSONObject class as jsonObject equal to obj object.
-            JSONObject jsonObject = (JSONObject) obj;
-
-            //Use set-methods for defifing static variables from json-file.
-            setHost((String) jsonObject.get("host"));
-            setPort((String) jsonObject.get("port"));
-            setUsername((String) jsonObject.get("username"));
-            setDbname((String) jsonObject.get("dbname"));
-            setPassword((String) jsonObject.get("password"));
-            setEncryptionkey((String) jsonObject.get("encryptionkey"));
-            setHashingalt((String) jsonObject.get("hashingalt"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void init() throws IOException {
+//
+//        //Initialize imported Java-class JSONParser as jsonParser object.
+//        JSONParser jsonParser = new JSONParser();
+//
+//        try {
+//
+//            //Initialize imported Java-class FileReader as json object
+//            //with the specific path to the .json file.
+//            FileReader json = new FileReader("src/config.json");
+//
+//            //Initialize Object class as json, parsed by jsonParsed.
+//            Object obj = jsonParser.parse(json);
+//
+//            //Instantiate JSONObject class as jsonObject equal to obj object.
+//            JSONObject jsonObject = (JSONObject) obj;
+//
+//            //Use set-methods for defifing static variables from json-file.
+//            setHost((String) jsonObject.get("host"));
+//            setPort((String) jsonObject.get("port"));
+//            setUsername((String) jsonObject.get("username"));
+//            setDbname((String) jsonObject.get("dbname"));
+//            setPassword((String) jsonObject.get("password"));
+//            setEncryptionkey((String) jsonObject.get("encryptionkey"));
+//            setHashingalt((String) jsonObject.get("hashingalt"));
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     //Created getters and setters for each of the variables.
     public static String getDbname() {
