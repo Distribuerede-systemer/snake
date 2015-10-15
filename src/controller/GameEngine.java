@@ -11,8 +11,8 @@ import model.Gamer;
 public class GameEngine {
 
 
-    public static Pair<Gamer, Gamer> playGame(int mapSize, Gamer host, Gamer opponent){
-
+    public static Map playGame(int mapSize, Gamer host, Gamer opponent){
+        Map gamers = new HashMap();
         String hostControls = host.getControls();
         String opponentControls = opponent.getControls();
 
@@ -130,9 +130,11 @@ public class GameEngine {
         if(hostScore < opponentScore){
             opponent.setWinner(true);
         }
+        gamers.put('h', host);
+        gamers.put('o', opponent);
 
         // Return the gamers back to the logic layer, who will now have access to see score, winner etc.
-        return new Pair <Gamer, Gamer> (host, opponent);
+        return gamers;
 
     }
 
