@@ -11,14 +11,15 @@ import java.sql.*;
 
 public class Main {
 
-    private static String sqlUrl = "jdbc:mysql://localhost:3306//"+ Config.getHost() + ":" + Config.getPort();
+    private static String sqlUrl = "jdbc:mysql://localhost:3306//" + Config.getHost() + ":" + Config.getPort();
     private static String sqlUser = Config.getUsername();
-    private static String sqlPassword =Config.getPassword();
-    private static String dbName =Config.getDbname();
+    private static String sqlPassword = Config.getPassword();
+    private static String dbName = Config.getDbname();
     private static Connection connection = null;
 
     /**
-     *Use a preparedstatment to run SQL on the database
+     * Use a preparedstatment to run SQL on the database
+     *
      * @param sql
      */
 
@@ -33,7 +34,8 @@ public class Main {
     }
 
     /**
-     * This methode check connection if there is a connection to the database
+     * This method checks if there is a connection to the database
+     *
      * @param args
      * @throws IOException
      */
@@ -53,13 +55,15 @@ public class Main {
             e.printStackTrace();
             System.exit(1);
         }
+
     }
 
-    /**
-     * Checks if the databse exists or not
-     * @return bool
-     * @throws SQLException
-     */
+
+        /**
+         * Checks if the database exists or not
+         * @return bool
+         * @throws SQLException
+         */
 
     public static boolean DbExist() throws SQLException {
 
@@ -83,6 +87,6 @@ public class Main {
      * This method starts the program
      */
 
-    new tui();
+    new tui().run();
 }
 
