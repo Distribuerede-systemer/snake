@@ -11,17 +11,17 @@ public class Score {
     // Declare highScore
     private int id;
     private int userId;
-    private int hostId;
+    private int opponentId;
     private int gameId;
     private int score;
 
     // Creates constructor
-    public Score(int id, int userId, int gameId, int hostId, int score)
+    public Score(int id, int userId, int gameId, int opponentId, int score)
     {
         this.id = id;
         this.userId = userId;
         this.gameId = gameId;
-        this.hostId = hostId;
+        this.opponentId = opponentId;
         this.score = score;
     }
 

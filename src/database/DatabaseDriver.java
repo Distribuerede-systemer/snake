@@ -107,6 +107,8 @@ public class DatabaseDriver {
     }
 
     public String createSqlScore() {
+        return "Insert into scores (user_id, game_id, score, opponent_id) " +
+                "values (?, ?, ?, ?, ?)";
     }
 
 

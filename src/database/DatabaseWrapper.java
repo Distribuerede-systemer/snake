@@ -371,25 +371,25 @@ public class DatabaseWrapper {
         }
     }
 
-//    public void createScore(Gamer host, Gamer opponent){
-//
-//        try
-//        {
-//            // Prepared statement til at tilfoeje en brugera
-//            PreparedStatement createScore = connection.prepareStatement(dbDriver.createSqlScore());
-//
-//            createScore.setInt(1, score.getUserId());
-//            createScore.setInt(2, score.getGameId());
-//            createScore.setInt(3, score.getHostId());
-//            createScore.setInt(4, score.getHighScore());
-//
-//            createScore.executeUpdate();
-//        } catch (SQLException sqlException)
-//        {
-//            sqlException.printStackTrace();
-//            dbDriver.close();
-//        }
-//    }
+    public void createScore(int id, Gamer host, Gamer opponent){
+
+        try
+        {
+            // Prepared statement til at tilfoeje en brugera
+            PreparedStatement createScore = connection.prepareStatement(dbDriver.createSqlScore());
+
+            createScore.setInt(1, host.getId());
+            createScore.setInt(2, host.);
+            createScore.setInt(3, score.getHostId());
+            createScore.setInt(4, score.getHighScore());
+
+            createScore.executeUpdate();
+        } catch (SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+            dbDriver.close();
+        }
+    }
 
 
     public void deleteUser(int id)
