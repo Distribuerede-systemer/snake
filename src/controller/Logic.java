@@ -1,19 +1,10 @@
 package controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Map;
-
-
-import model.Config;
 import model.Game;
-// imports information about password and username from the User class in the model package
 import model.Gamer;
 import model.User;
-import tui.Tui;
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
