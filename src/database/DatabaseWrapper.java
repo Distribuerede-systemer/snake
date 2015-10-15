@@ -1,84 +1,68 @@
 package database;
 
 import com.sun.rowset.CachedRowSetImpl;
+import model.User;
 
 import java.sql.*;
-
+//
 public class DatabaseWrapper {
 
-    private static String sqlUrl = "jdbc:mysql://localhost:3306/testdb";
-    private static String sqlUser = "root";
-    private static String sqlPassword = "root";
-
-    private Connection connection = null;
 
     private ResultSet resultSet = null;
-
+    private Connection connection;
     DatabaseDriver dbDriver = new DatabaseDriver();
 
-    /**
-     * Bruges til at oprette forbindelse til databasen og indeholder preparedStatements.
-     */
-    public DatabaseWrapper()
-    {
-        try
-        {
-            connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
 
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            System.exit(1);
-        }
+    public DatabaseWrapper() {
+
+        connection = dbDriver.getConnection();
     }
 
-    /**
-     * Bruges til at lukke forbindelsen til databasen.
-     */
-    public void close()
-    {
-        try{
-            connection.close();
-        }
-        catch(SQLException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-
-    public CachedRowSetImpl readDatabase(String table)
-    {
+    public User getUser(int id) {
+        User user = null;
         ResultSet resultSet = null;
-        CachedRowSetImpl cachedResult = null;
         PreparedStatement ps;
 
-        try{
-            ps = connection.prepareStatement(dbDriver.read(table));
-            cachedResult = new CachedRowSetImpl();
+        try {
+            ps = connection.prepareStatement(dbDriver.getSqlUser());
+            ps.setInt(1, id);
             resultSet = ps.executeQuery();
-//            while(resultSet.next()){
-//
+
+//            while (resultSet.next())
+//            {
+////                user = new User(resultSet.getString("userName"), resultSet.getString("Password"),
+////                        resultSet.getBoolean("AdminRights"), resultSet.getDouble("Balance"));
 //            }
 
-            cachedResult.populate(resultSet);
-        } catch (SQLException e)
-        {
+
+            while (resultSet.next()) {
+                user = new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstname"),
+                        resultSet.getString("lastname"),
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getDate("created"),
+                        resultSet.getString("status"),
+                        resultSet.getString("type")
+                        );
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally{
-            try{
+        } finally {
+            try {
                 resultSet.close();
-            }
-            catch(SQLException ex)
-            {
+            } catch (SQLException ex) {
                 ex.printStackTrace();
-                close();
+                dbDriver.close();
             }
         }
-        return cachedResult;
+
+        return user;
     }
 
-    
+
+
 }
