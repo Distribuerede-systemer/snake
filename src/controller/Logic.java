@@ -11,6 +11,7 @@ import java.util.Map;
 import model.Config;
 import model.Game;
 // imports information about password and username from the User class in the model package
+import model.Gamer;
 import model.User;
 import tui.Tui;
 
@@ -178,6 +179,14 @@ public class Logic {
      * @return returns game results
      */
     public static Map startGame(int gameId){
+
+        //TODO: Get specific game from DB via DB-wrapper
+        //TODO: Get host and opponent associated to game
+
+        Gamer host = null;
+        Gamer opponent = null;
+
+        return GameEngine.playGame(10, host, opponent);
 
     }
 
