@@ -23,7 +23,10 @@ public class Logic {
     private static boolean isAuthenticated = false;
 
 
-    //Gets a list of all active users and return these as a ArrayList of User objects
+    /**
+     * Get all users
+     * @return ArrayList of users
+     */
     public static ArrayList<User> getUsers() {
 
         // Define ArrayList to be used to add users and return them.
@@ -34,9 +37,20 @@ public class Logic {
 
 
     }
+
+    /**
+     * Is user authenticated?
+     * @return true if yes, false if no
+     */
     public boolean isUserAuthenticated() {
         return isAuthenticated;
     }
+
+    /**
+     * Create user
+     * @param user
+     * @return true if success, false if failure
+     */
     public static boolean createUser(User user) {
 
         //TODO: Create user with DB-wrapper. If creation succeeded return true, if not return false
@@ -44,17 +58,34 @@ public class Logic {
         return true;
 
     }
+
+    /**
+     * Delete user
+     * @param id
+     * @return true success, false if failure
+     */
     public static boolean deleteUser(int id) {
 
         //TODO: Delete user via DB-wrapper
         return false;
 
     }
+
+    /**
+     * Add user
+     * @param user
+     */
     public static void addUser(User user) {
 
         //TODO: Add user to DB via DB-wrapper
 
     }
+
+    /**
+     * Get specific user
+     * @param userId
+     * @return User object
+     */
     public User getUser(int userId) {
 
         //TODO: Get specific user from DB via DB-wrapper
@@ -62,11 +93,14 @@ public class Logic {
         return user;
 
     }
-    // Authenticates a user and returns a status code according to the result.
-    // CODES:
-    // 1 || SUCCESS
-    // 2 || USER DOES NOT EXIST
-    // 3 || WRONG PASSWORD
+
+    /**
+     * Authenticates user
+     *
+     * @param username
+     * @param password
+     * @return 1 if auth successful, 0 if failed
+     */
     public static int userLogin(String username, String password) {
 
         ArrayList<User> allUsers = getUsers();
@@ -81,7 +115,10 @@ public class Logic {
 
     }
 
-    //Gets a list of all games and return these as an ArrayList of Game objects
+    /**
+     * Get all games
+     * @return ArrayList of games
+     */
     public static ArrayList<Game> getGames() {
 
         //TODO: Get ALL games via DB-wrapper
@@ -90,6 +127,12 @@ public class Logic {
         return games;
 
     }
+
+    /**
+     * Get specific game created by user
+     * @param userId
+     * @return ArrayList of matched games
+     */
     public static ArrayList<Game> getGames(int userId) {
 
         //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
@@ -98,14 +141,25 @@ public class Logic {
         return games;
 
     }
-    //Returns object of game
+
+    /***
+     * Get specific game
+     * @param gameId
+     * @return Game object
+     */
     public static Game getGame(int gameId) {
 
         //TODO: Get specific game via DB-wrapper
 
         return null;
     }
-    //Return an istance of a game
+
+    /**
+     * Create a game
+     * @param gameName
+     * @param host
+     * @return returns inriched game object
+     */
     public static Game createGame(String gameName, User host) {
 
         //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
@@ -118,7 +172,12 @@ public class Logic {
 
         return game;
     }
-    //Deletes a game from the database
+
+    /**
+     * Delete game
+     * @param gameId
+     * @return true if success, false if failure
+     */
     public boolean deleteGame(int gameId) {
 
         //TODO: Delete specific game from DB via DB-wrapper;
