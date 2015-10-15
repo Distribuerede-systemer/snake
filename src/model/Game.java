@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Date;
+
 /**
  * Created by Peter on 12-10-2015.
  */
@@ -17,12 +19,14 @@ public class Game {
         private String opponentControls;
         private int status;
         private Date created;
+        private int mapSize;
 
 
 
     //Creating the constructor and initiating the variables
         public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, User host, User
-        opponent, int status){
+        opponent, int status, int mapSize){
+            this.mapSize = mapSize;
             this.gameId = gameId;
             this.result = result;
             this.created = created;
@@ -36,6 +40,14 @@ public class Game {
         }
 
     public Game(){}
+
+    public int getMapSize() {
+        return mapSize;
+    }
+
+    public void setMapSize(int mapSize) {
+        this.mapSize = mapSize;
+    }
 
     public String getName() {
         return name;
@@ -71,12 +83,12 @@ public class Game {
         this.result = result;
     }
 
-    public String getControls() {
-        return controls;
+    public String getHostControls() {
+        return hostControls;
     }
 
-    public void setControls(String controls) {
-        this.controls = controls;
+    public void setHostControls(String controls) {
+        this.hostControls = controls;
     }
 
     public int getNewGame() {

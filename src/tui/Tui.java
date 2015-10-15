@@ -52,7 +52,7 @@ public class Tui {
                     break;
                 case 4:
                     miscOut("Delete User: ");
-                    Logic.deleteUser(deleteUserScreen());
+                    Logic.deleteUser(Integer.parseInt(deleteUserScreen()));
                     break;
                 case 5:
                     miscOut("You Logged Out.");
