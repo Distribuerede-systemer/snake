@@ -162,12 +162,19 @@ public class Logic {
         //TODO: Find game by id
         //TODO: Add opponent, with provided controls
 
+        //Initializes DatabaseWrapper as dbWrap object.
 		DatabaseWrapper dbWrap = new DatabaseWrapper();
 
+        //Instantiates game of type game and sets equal to game received from getGame.
 		Game game = dbWrap.getGame(gameId);
 
+        //Sets opponent equal to parameter opponent.
 		game.setOpponent(opponent);
+        //Sets opponentcontrols equal to parameter controls.
 		game.setOpponentControls(controls);
+
+        //Uses updateGame method to update Game in database.
+        dbWrap.updateGame(game);
 
         return true;
 
