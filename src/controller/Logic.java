@@ -38,8 +38,12 @@ public class Logic {
      * Is user authenticated?
      * @return true if yes, false if no
      */
-    public boolean isUserAuthenticated() {
+    public static boolean isUserAuthenticated() {
         return isAuthenticated;
+    }
+
+    public static void setIsUserAuthenticated(boolean auth){
+        isAuthenticated = auth;
     }
 
     /**

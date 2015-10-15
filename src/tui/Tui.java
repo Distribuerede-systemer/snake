@@ -1,5 +1,7 @@
 package tui;
 import java.util.*;
+
+import controller.Logic;
 import model.User;
 
 public class Tui {
@@ -10,6 +12,7 @@ public class Tui {
     public Tui(){
 
         input = new Scanner(System.in);
+        usr = null;
     }
 
     public void listUsers(ArrayList<User> userList){
@@ -30,32 +33,32 @@ public class Tui {
 
     public void userMenu(){
 
-        while(isAuthenticated) {
+        while(Logic.isUserAuthenticated()) {
 
             int menu = userMenuScreen();
 
             switch (menu) {
 
                 case 1:
-                    // listUsers();
                     miscOut("Game List: ");
+                    Logic.getGames();
                     break;
                 case 2:
                     miscOut("User List: ");
-                    ArrayList<User> userList = getUsers();
+                    ArrayList<User> userList = Logic.getUsers();
                     listUsers(userList);
                     break;
                 case 3:
                     miscOut("Create User: ");
-                    createUser();
+                   // Logic.createUser(); TODO: param efter db-wrap
                     break;
                 case 4:
                     miscOut("Delete User: ");
-                    deleteUser();
+                    Logic.deleteUser(deleteUserScreen());
                     break;
                 case 5:
                     miscOut("You Logged Out.");
-                    isAuthenticated = false;
+                    Logic.setIsUserAuthenticated(false);
                     break;
                 default:
                     miscOut("Unassigned key.");
@@ -76,7 +79,7 @@ public class Tui {
     }
 
     public String deleteUserScreen(){
-        // listUsers();
+       // listUsers();
 
         System.out.print("Type username you wish to delete: ");
         String username = input.next();
@@ -101,24 +104,44 @@ public class Tui {
     }
 
     public String enterFirstName(){
-        System.out.print("Please enter first name: "); // Brugeren bliver spurgt om password
+        System.out.print("Please enter first name: "); // Brugeren bliver spurgt om fornavn
         String firstName = input.next();
 
         return firstName;
     }
 
     public String enterLastName(){
-        System.out.print("Please enter last name: "); // Brugeren bliver spurgt om password
+        System.out.print("Please enter last name: "); // Brugeren bliver spurgt om efternavn
         String lastName = input.next();
 
         return lastName;
     }
 
     public String enterEmail(){
-        System.out.print("Please enter email: "); // Brugeren bliver spurgt om password
+        System.out.print("Please enter email: "); // Brugeren bliver spurgt om email
         String email = input.next();
 
         return email;
+    }
+
+    public String enterUserType(){
+        System.out.print("Please enter user type. can be api/server");
+        String userType = input.next();
+
+        if(!userType.equals("api") && !userType.equals("server")){
+
+            System.out.println("Type must be either api or server. please try again");
+            enterUsername();
+        }
+
+        return userType;
+    }
+
+    public User createUser(){
+
+        User usr = new User(enterFirstName(), enterLastName(), enterEmail(), enterUsername(), enterPassword(),enterUserType() );
+
+        return usr;
     }
 
     public void miscOut(String s){
