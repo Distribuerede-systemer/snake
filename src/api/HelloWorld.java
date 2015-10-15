@@ -72,7 +72,7 @@ public class HelloWorld {
     @Produces("application/json")
     public String getGame(@PathParam("userid") int userid) {
 
-        gameid = Logic.getGame();
+        userid = Logic.getGame();
         return new Gson().toJson(gameid);
 
     }
@@ -177,8 +177,10 @@ public class HelloWorld {
     @Produces("text/plain")
     public String createUser(String data) {
 
-        System.out.println(data);
-        return "OK";
+        createUser = Logic.createUser();
+
+        return new Gson().toJson(createUser);
+
     }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
@@ -186,8 +188,8 @@ public class HelloWorld {
     @Produces("text/plain")
     public String createGame(String data) {
 
-        System.out.println(data);
-        return "OK";
+        createGame = Logic.createGame();
+        return new Gson().toJson(createGame);
     }
 
     @POST //POST-request: Opstart af nyt spil
@@ -195,8 +197,8 @@ public class HelloWorld {
     @Produces("text/plain")
     public String startGame(String data) {
 
-        System.out.println(data);
-        return "OK";
+        startGame = Logic.startGame();
+        return new Gson().toJson(startGame);
     }
 
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
@@ -204,8 +206,8 @@ public class HelloWorld {
     @Produces("text/plain")
     public String deleteUser(String data) {
 
-        System.out.println(data);
-        return data + " has been deleted";
+        deleteUser = Logic.deleteUser();
+        return new Gson().toJson(deleteUser);
     }
 
     @DELETE //DELETE-request fjernelse af data(spillet slettes)
@@ -213,8 +215,8 @@ public class HelloWorld {
     @Produces("text/plain")
     public String deleteGame(String data) {
 
-        System.out.println(data);
-        return data + " has been deleted";
+        deleteGame = Logic.deleteUser();
+        return new Gson().toJson(deleteGame)
     }
 
     /**
