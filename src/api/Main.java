@@ -17,30 +17,27 @@ public class Main {
     private static String dbName = Config.getDbname();
     private static Connection connection = null;
 
+
     /**
-     * Use a preparedstatment to run SQL on the database
-     *
-     * @param sql
+     * Create an object of tui class.
+     * This method starts the program
      */
 
-    public static void doQuery(String sql) {
+    public static void main(String[] args) {
 
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        new tui().run();
+
     }
+
+
+
+
 
     /**
      * This method checks if there is a connection to the database
-     *
-     * @param args
-     * @throws IOException
      */
 
-    public static void main(String[] args) throws IOException {
+    public static void checkConnection() {
 
         try {
             connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
@@ -57,6 +54,7 @@ public class Main {
         }
 
     }
+}
 
 
         /**
@@ -83,10 +81,20 @@ public class Main {
     }
 
     /**
-     * Create an object of tui class.
-     * This method starts the program
+     * Use a preparedstatment to run SQL on the database
+     *
+     * @param sql
      */
 
-    new tui().run();
-}
+    public static void doQuery(String sql) {
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
