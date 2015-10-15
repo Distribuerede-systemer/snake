@@ -95,4 +95,29 @@ public class DatabaseDriver {
         return "UPDATE Games SET game_name = ?, status = ?, result = ?, hostcontrols = ?, " +
                 "endgame = ?, opponentcontrols = ? WHERE id = ?";
     }
+
+    public String createSqlUser() {
+        return "Insert into users () values ()";
+    }
+
+    createUser.setString(1, user.getFirstName());
+    createUser.setString(2, user.getLastName());
+    createUser.setString(3, user.getEmail());
+    createUser.setString(4, user.getUserName());
+    createUser.setString(5, user.getPassword());
+    createUser.setString(6, user.getStatus());
+    createUser.setString(7, user.getType());
+
+    public String createSqlGame() {
+    }
+
+    public String createSqlScore() {
+    }
+
+
+    public String deleteSqlUser() {
+    }
+
+    public String deleteSqlGame() {
+    }
 }
