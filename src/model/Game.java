@@ -14,7 +14,7 @@ public class Game {
         private int endGame;
         private String name;
         private String hostControls;
-        private User host;
+        private String host;
         private String opponent;
         private String opponentControls;
         private int status;
@@ -23,7 +23,7 @@ public class Game {
 
 
     //Creating the constructor and initiating the variables
-        public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, User host, String
+        public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, String host, String
         opponent, int status){
             this.gameId = gameId;
             this.result = result;
@@ -97,11 +97,11 @@ public class Game {
         this.endGame = endGame;
     }
 
-    public User getHost(){
+    public String getHost(){
         return host;
     }
 
-    public void setHost(User host){
+    public void setHost(String host){
         this.host = host;
     }
 
