@@ -8,12 +8,13 @@ import java.util.Date;
 
 public class Game {
 
+
     //Creating the variables needed for the game
     private int gameId;
     private int result;
     private int newGame;
     private int endGame;
-    private String gameName;
+    private String name;
     private String hostControls;
     private String host;
     private String opponent;
@@ -24,13 +25,13 @@ public class Game {
 
 
     //Creating the constructor and initiating the variables
-    public Game( int gameId, int result, String hostControls, Date created, String gameName, int newGame, int endGame, String host, String
+    public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, String host, String
             opponent, String status){
         this.gameId = gameId;
         this.result = result;
         this.created = created;
         this.hostControls = hostControls;
-        this.gameName = gameName;
+        this.name = name;
         this.newGame = newGame;
         this.endGame = endGame;
         this.host = host;
@@ -38,12 +39,14 @@ public class Game {
         this.status = status;
     }
 
-    public String getGameName() {
-        return gameName;
+    public Game(){}
+
+    public String getName() {
+        return name;
     }
 
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     //methods that the API can use
@@ -108,7 +111,7 @@ public class Game {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status){
         this.status = status;
     }
 
