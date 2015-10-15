@@ -1,4 +1,5 @@
 package api;
+import com.sun.jersey.api.client.Client;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import java.io.IOException;
@@ -23,6 +24,9 @@ public class HelloWorld {
     }
 
     public static void main(String[] args) throws IOException {
+
+       //Config.init();
+
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
 
