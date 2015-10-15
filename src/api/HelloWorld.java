@@ -3,18 +3,17 @@ package api;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.google.gson.Gson;
-
 import java.io.IOException;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 
+
 // The Java class will be hosted at the URI path "/helloworld more comment"
-@Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
+@Path("/api") // Creates an api Path, which annotates the URI Path, for every single method.
 public class HelloWorld {
     // The Java method will process HTTP GET requests
-    @GET //"GET-Request" gør at vi kan forspørge en specifik data
+    @GET //"GET-Request" Requesting specific data set.
     // The Java method will produce content identified by the MIME Media type "text/plain"
     @Produces("text/plain")
     public String getClichedMessage() {
@@ -22,8 +21,8 @@ public class HelloWorld {
         return "Hello World!";
     }
 
-    @GET //"GET-request"
-    @Path("/user/") //USER-path - identifice det inden for metoden
+    @GET //"GET-request"  Requesting specific data set.
+    @Path("/user/") //Creates an USER-path - annotation to the URI-path.
     @Produces("application/json")
     public String getAllUsers() {
 
@@ -31,43 +30,62 @@ public class HelloWorld {
         return "users";
     }
 
-    @GET //"GET-request"
-    @Path("/user/{userid}")
+    /**
+     *
+     * @param userid the user's username
+     * @return - Returning the username
+     */
+
+    @GET //"GET-request"  Requesting specific data set.
     @Produces("application/json")
     public String getUser(@PathParam("userid") String userid) {
 
         System.out.println(userid);
-        //udprint/hent/identificer af data omkring spillere
+        //Printing/Identifying data among users
         return "userid " + userid;
-
+        //returning the userid if correct
     }
 
-    @GET //"GET-request"
-    @Path("/highscore")
+    /**
+     *
+     * @param data - Receives data of the user's highscore
+     * @return - Returns data highscore
+     */
+
+    @GET //"GET-request"  Requesting specific data set.
+    @Path("/highscore") //Creates a highscore-path - annotation to the URI-path.
     @Produces("application/json")
     public String getScore(String data) {
 
         System.out.println(data);
-        //udprintning/hent af data omkring highscore
+        //Printing/identifying highscore data
 
         return data;
 
     }
 
-    @GET //"GET-request"
-    @Path("/games")
+    /**
+     *
+     * @param data - Receives game data
+     * @return all games
+     */
+    @GET //"GET-request"  Requesting specific data set.
+    @Path("/games") //Creates a games-path - annotation to the URI-path.
     @Produces("application/json")
     public String getGames(String data) {
 
         System.out.println(data);
-        //Udprintning/hent af data omkring spillet
-
+        //Printing/identifying game data
         return data;
-
     }
 
-    @GET //"GET-request"
-    @Path("/result/{gameid}")
+    /**
+     *
+     * @param gameid requesting the specific gameid
+     * @return the gameid
+     */
+    @GET //"GET-request"  Requesting specific data set.
+    @Path("/result/{gameid}") //Creates a gameid-path - annotation to the URI-path.
     @Produces("application/json")
     public String getGame(@PathParam("gameid") String gameid) {
 
@@ -81,28 +99,36 @@ public class HelloWorld {
 
     }
 
-    @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
-    @Path("/login/")
+    /**
+     *
+     * @param data login with data
+     * @return OK if connected
+     */
+    @POST //"POST-request" new data - in this case to log-in
+    @Path("/login/") //Creates a login-path - annotation to the URI-path.
     @Produces("application/json")
     public String login(String data)  {
 
         System.out.println(data);
         return "OK" ;
 
-        //såfremt der er overenstemmelse med brugernavn og password = godkendelse
+        //If username & password correct = acceptance.
     }
 
-    @POST //"POST-request" er ny "data", der skal indtastes, for at styre spillet.
-    @Path("/controls/")
-    @Produces("application/json")
+    /**
+     *
+     * @param json response control via json
+     * @return response status
+     */
 
+    @POST //"POST-request" new data - in this case to input controls, to control the game
+    @Path("/controls/") //Creates a control-path - annotation to the URI-path.
+    @Produces("application/json")
     public Response controls (String json) {
         // public String controls(String data)  {
 
-
         Control control1 = new Gson().fromJson(json, Control.class);
-        /* Vi laver her et json til gson statement, denne linje gør at vores json kode bliver konventeret
-         javascript kode */
+        //  JSON to GSON statement, the line makes our JSON script to Javascript code
         System.out.println(control1.getMovement());
 
         if (control1.getMovement().equals("w"))
@@ -119,25 +145,35 @@ public class HelloWorld {
 
         }
         else { return Response.status(500).entity("Fail").build();
-            //If-else statement, for de forskellige indtast muligheder, såfremt værdien er ugyldig udprintes en fejlkode.
-
-
+            //An If-else statement, for the single inputs, as if the value(s) gets denied, an error will be printed.
         }
 
        // System.out.println(data);
         //return "OK" ;
     }
 
-    @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
-    @Path("/user/")
+    /**
+     *
+     * @param data creates user
+     * @return OK if created
+     */
+
+    @POST //POST-request: New data; Creates a new user.
+    @Path("/user/") //Creates/ In the user-path - annotation to the URI-path.
     @Produces("text/plain")
     public String createUser(String data)  {
 
         System.out.println(data);
         return "OK" ;
 }
-    @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/create")
+
+    /**
+     *
+     * @param data creates game makes it to data
+     * @return ok if created
+     */
+    @POST //POST-request: New data; creates game.
+    @Path("/create") //Creates a create-path - annotation to the URI-path.
     @Produces("text/plain")
     public String createGame(String data)  {
 
@@ -145,8 +181,14 @@ public class HelloWorld {
         return "OK" ;
     }
 
-    @POST //POST-request: Opstart af nyt spil
-    @Path("/start")
+
+    /**
+     *
+     * @param data starting game
+     * @return OK if started
+     */
+    @POST //POST-request: New data; Starting a new game.
+    @Path("/start") //Creates a start-path - annotation to the URI-path.
     @Produces("text/plain")
     public String startGame(String data)  {
 
@@ -154,8 +196,13 @@ public class HelloWorld {
         return "OK" ;
     }
 
-    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
-    @Path("/user/")
+    /**
+     *
+     * @param data delete user data
+     * @return confirms deleted user
+     */
+    @DELETE //DELETE-request; Removes an user: Delete user
+    @Path("/user/") //Creates/In the user-path - annotation to the URI-path.
     @Produces("text/plain")
     public String deleteUser(String data)  {
 
@@ -163,8 +210,13 @@ public class HelloWorld {
         return data + " has been deleted" ;
     }
 
-    @DELETE //DELETE-request fjernelse af data(spillet slettes)
-    @Path("/game/")
+    /**
+     *
+     * @param data delete game data
+     * @return confirms deleted game
+     */
+    @DELETE //DELETE-request Removing data; delete game.
+    @Path("/game/") //Creates a game-path - annotation to the URI-path.
     @Produces("text/plain")
     public String deleteGame(String data)  {
 
@@ -185,6 +237,7 @@ public class HelloWorld {
         System.out.println("Stopping server");
         server.stop(0);
         System.out.println("Server stopped");
+        //Printing Server status
     }
 
     class Game {
