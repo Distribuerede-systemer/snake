@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Date;
-
 /**
  * Created by Peter on 12-10-2015.
  */
@@ -14,8 +12,8 @@ public class Game {
         private int endGame;
         private String name;
         private String hostControls;
-        private String host;
-        private String opponent;
+        private User host;
+        private User opponent;
         private String opponentControls;
         private int status;
         private Date created;
@@ -23,7 +21,7 @@ public class Game {
 
 
     //Creating the constructor and initiating the variables
-        public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, String host, String
+        public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, User host, User
         opponent, int status){
             this.gameId = gameId;
             this.result = result;
@@ -73,12 +71,12 @@ public class Game {
         this.result = result;
     }
 
-    public String getHostControls() {
-        return hostControls;
+    public String getControls() {
+        return controls;
     }
 
-    public void setHostControls(String hostControls) {
-        this.hostControls = hostControls;
+    public void setControls(String controls) {
+        this.controls = controls;
     }
 
     public int getNewGame() {
@@ -97,19 +95,19 @@ public class Game {
         this.endGame = endGame;
     }
 
-    public String getHost(){
+    public User getHost(){
         return host;
     }
 
-    public void setHost(String host){
+    public void setHost(User host){
         this.host = host;
     }
 
-    public String getOpponent(){
+    public User getOpponent(){
         return opponent;
     }
 
-    public void setOpponent(String opponent){
+    public void setOpponent(User opponent){
         this.opponent = opponent;
     }
 
