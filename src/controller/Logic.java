@@ -216,7 +216,7 @@ public class Logic {
         //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
         Game game = new Game();
         game.setName(gameName);
-        game.setHost();
+        game.setHost("asd");
         game.setStatus(1); //1 is pending, 0 is done
 
         //TODO: Write game to db, and return game-id and set object before returning
