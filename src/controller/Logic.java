@@ -1,9 +1,14 @@
 package controller;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+
+import database.DatabaseDriver;
+import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
 import model.User;
@@ -116,13 +121,22 @@ public class Logic {
      */
     public static ArrayList<Game> getGames() {
 
+
+
         ArrayList<Game> games = null;
         ResultSet resultSet = null;
-        try {
+        PreparedStatement ps;
 
-            resultSet = selectAllGames.executeQuery();
-            getGames() = new ArrayList<Game>();
-            
+        try {
+            Connection connection;
+            DatabaseDriver dbDriver = new DatabaseDriver();
+            connection = dbDriver.getConnection();
+
+
+
+            ps = connection.prepareStatement(dbDriver.getSqlRecords("games"));
+            games = new ArrayList<Game>();
+
             while (resultSet.next()) {
 
                 getGames().add(new Game (
