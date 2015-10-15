@@ -8,6 +8,10 @@ import model.User;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * This class contains methods which use prepared statements from the DatabaseDriver class to retrieve data from the database.
+ * The methods convert the data and return an object.
+ */
 //
 public class DatabaseWrapper {
 
@@ -16,12 +20,20 @@ public class DatabaseWrapper {
     private Connection connection;
     DatabaseDriver dbDriver = new DatabaseDriver();
 
-
+    /**
+     * The connection from DatabaseDriver is initialized in the class
+     */
     public DatabaseWrapper() {
 
         connection = dbDriver.getConnection();
     }
 
+    /**
+     * The following three methods(getUser(), getGame() & getScore()) return a specific user/score/game as an object of the type User/Score/Game.
+     * Which entry from the database is returned is defined by the parameter id.
+     * * @param id
+     * @return
+     */
     public User getUser(int id) {
         User user = null;
         ResultSet resultSet = null;
@@ -31,7 +43,6 @@ public class DatabaseWrapper {
             ps = connection.prepareStatement(dbDriver.getSqlRecord("users"));
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
-
 
             while (resultSet.next()) {
                 user = new User(
@@ -93,7 +104,6 @@ public class DatabaseWrapper {
             e.printStackTrace();
         }
 
-
         finally {
             try {
                 resultSet.close();
@@ -112,13 +122,11 @@ public class DatabaseWrapper {
         ResultSet resultSet = null;
         PreparedStatement ps;
 
-
         try {
             ps = connection.prepareStatement(dbDriver.getSqlRecord("scores"));
 
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
-
 
             while (resultSet.next()) {
                 score = new Score(
@@ -134,7 +142,6 @@ public class DatabaseWrapper {
             e.printStackTrace();
         }
 
-
         finally {
             try {
                 resultSet.close();
@@ -143,10 +150,14 @@ public class DatabaseWrapper {
                 dbDriver.close();
             }
         }
-
         return score;
     }
 
+    /**
+     * The following three methods (getUsers(), getGames() & getScores()) return an array of objects of the type User/Game/Score.
+     * The returned array contains all entries from the relevant table in the database.
+     * @return
+     */
     public ArrayList<User> getUsers() {
         ResultSet resultSet = null;
         PreparedStatement ps;
@@ -240,11 +251,8 @@ public class DatabaseWrapper {
         try {
             ps = connection.prepareStatement(dbDriver.getSqlRecords("scores"));
             resultSet = ps.executeQuery();
-
-
             result = new ArrayList<Score>();
 
-            // Indlaesser brugere i arrayListen
             while (resultSet.next())
             {
                 result.add(new Score(
@@ -270,6 +278,11 @@ public class DatabaseWrapper {
         return result;
     }
 
+    /**
+     * The following two methods update the values of a given record in the User/Game table of the database. All entries of the record will be updated with the latest value which is given as a method parameter.
+     * The record to be updated is identified by the method parameter: id.
+     * @param user
+     */
     public void updateUser(User user)
     {
         try
