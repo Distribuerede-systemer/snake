@@ -11,10 +11,10 @@ import java.sql.*;
 
 public class Main {
 
-    private static String sqlUrl = "jdbc:mysql://localhost:3306/"; //+ Config.getHost() + ":" + Config.getPort();
-    private static String sqlUser = "root";//Config.getUsername();
-    private static String sqlPassword = "";//Config.getPassword();
-    private static String dbName = "";//Config.getDbname();
+    private static String sqlUrl = "jdbc:mysql://localhost:3306//"+ Config.getHost() + ":" + Config.getPort();
+    private static String sqlUser = Config.getUsername();
+    private static String sqlPassword =Config.getPassword();
+    private static String dbName =Config.getDbname();
     private static Connection connection = null;
 
     /**
