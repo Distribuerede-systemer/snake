@@ -205,7 +205,7 @@ public class Logic {
      * @param gameId
      * @return true if success, false if failure
      */
-    public boolean deleteGame(int gameId) {
+    public static boolean deleteGame(int gameId) {
 
         //TODO: Delete specific game from DB via DB-wrapper;
 
