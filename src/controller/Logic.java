@@ -42,15 +42,12 @@ public class Logic {
 	}
 
 	//Gets a list of all active users and return these as a ArrayList of User objects 
-	public ArrayList getUsers(){
+	public ArrayList<User> getUsers(){
 
 		// Define ArrayList to be used to add users and return them. 
 		ArrayList <User> uj = null;
 
-		ResultSet resultSet = null;
-
-		try {
-			resultSet = users.executeQuery();
+		try(ResultSet resultSet = users.executeQuery()) {
 
 			uj = new ArrayList<User>();
 
