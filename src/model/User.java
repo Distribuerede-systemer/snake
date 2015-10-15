@@ -19,6 +19,8 @@ public class User {
     private String email;
     private String type;
 
+    public User(){}
+
     public User (int id, String firstName, String lastName, String email, String userName, String password, Date created, String status, String type ) {
         this.id = id;
         this.firstName = firstName;
@@ -30,9 +32,7 @@ public class User {
         this.status = status;
         this.type = type;
     }
-
-    public User(){}
-
+    
     //creating get and set method for all the variables, so they can be used by other classes
     public int getId() {
         return id;
