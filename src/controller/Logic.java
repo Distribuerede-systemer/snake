@@ -27,8 +27,9 @@ public class Logic {
     public static ArrayList<User> getUsers() {
 
         // Define ArrayList to be used to add users and return them.
-        ArrayList<User> uj = null;
-        //TODO: Get all users from DB-wrapper
+        DatabaseWrapper db = new DatabaseWrapper();
+
+        ArrayList<User> uj = db.getUsers();
 
         return uj;
 
@@ -39,8 +40,12 @@ public class Logic {
      * Is user authenticated?
      * @return true if yes, false if no
      */
-    public boolean isUserAuthenticated() {
+    public static boolean isUserAuthenticated() {
         return isAuthenticated;
+    }
+
+    public static void setIsUserAuthenticated(boolean auth){
+        isAuthenticated = auth;
     }
 
     /**
