@@ -20,6 +20,8 @@ public class Main {
 
     public static void main(String[] args) {
 
+        Config.init();
+
         new DatabaseDriver.dbExist();
 
         new DatabaseDriver.checkConnection();
@@ -28,7 +30,6 @@ public class Main {
         tui.getuserMenu();
 
 
-        Config.init();
 
 
     }
