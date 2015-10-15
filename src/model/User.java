@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Date;
 import java.util.Scanner;
 
 
@@ -14,12 +15,12 @@ public class User {
     private String lastName;
     private String userName;
     private String password;
-    private String created;
+    private Date created;
     private String status;
 
 
   //Create constructor and initiating the variables
-    public User (int id, String firstName, String lastName, String userName, String password, String created, String status) {
+    public User (int id, String firstName, String lastName, String userName, String password, Date created, String status) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,7 +30,9 @@ public class User {
         this.status = status;
     }
     
-    
+    public User() {
+
+    }
     
     //creating get and set method for all the variables, so they can be used by other classes
 
@@ -37,7 +40,9 @@ public class User {
         return id;
     }
 
-      public String getFirstName() {
+    public void setId(int id) { this.id = id; }
+
+    public String getFirstName() {
         return firstName;
     }
 
@@ -69,11 +74,11 @@ public class User {
         this.password = password;
     }
 
-    public String getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
