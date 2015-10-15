@@ -63,4 +63,14 @@ public class DatabaseDriver {
 
         return "select * from " + table;
     }
+
+    public String updateSqlUser(){
+        return "UPDATE Users SET FirstName = ?, LastName = ?, Email = ?, password = ?, " +
+                "status = ?, type = ? WHERE id = ?";
+    }
+
+    public String updateSqlGame(){
+        return "UPDATE Games SET game_name = ?, status = ?, result = ?, hostcontrols = ?, " +
+                "endgame = ?, opponentcontrols = ? WHERE id = ?";
+    }
 }

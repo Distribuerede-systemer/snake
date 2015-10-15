@@ -270,4 +270,50 @@ public class DatabaseWrapper {
         return result;
     }
 
+    public void updateUser(User user)
+    {
+        try
+        {
+            PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlUser());
+
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getStatus());
+            ps.setString(6, user.getType());
+            ps.setInt(7, user.getId());
+
+
+            ps.executeUpdate();
+        } catch (SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+            dbDriver.close();
+        }
+    }
+
+    public void updateGame(Game game)
+    {
+        try
+        {
+            PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlUser());
+
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getStatus());
+            ps.setString(6, user.getType());
+            ps.setInt(7, user.getId());
+
+
+            ps.executeUpdate();
+        } catch (SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+            dbDriver.close();
+        }
+    }
+
 }
