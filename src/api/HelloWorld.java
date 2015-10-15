@@ -4,10 +4,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
+import Config.Config;
 import logic.Tui;
 
 /**
@@ -26,64 +25,77 @@ public class HelloWorld {
         return "Hello World";
     }
 
-    //DELETE and replace with config
-
-    private static final String sqlUrl = "jdbc:mysql://localhost:10321/";
-    private static final String sqlUser = "root";
-    private static final String sqlPassword = "";
-
-    private static Connection connection = null;
-
-    public static void main(String[] args) throws IOException {
+/**
+ * Created by Tobias on 15/10/15.
+ */
 
 
-        /**
-         * Check if the connection to the Database is valid.
-         *
-         */
+        private static String sqlUrl = "jdbc:mysql://" + Config.getHost() + ":" + Config.getPort();
+        private static String sqlUser = Config.getUsername();
+        private static String sqlPassword = Config.getPassword();
+        private static String dbName = Config.getDbname();
 
-        try {
+        private static Connection connection = null;
+        private static PreparedStatement sqlStatement;
 
-            connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
 
-            //Returns true if the connection has not been closed and is still valid.
-            // The driver shall submit a query on the connection or use some other mechanism that
-            // positively verifies the connection is still valid when this method is called.
+        public static void doQuery(String sql) {
 
-            if (connection.isValid(1000)) {
+            try {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
-                //If the database is valid, print "DB ok"
-                System.out.println("DB is running! cool");
+        }
 
-            } else {
+        public static void main(String[] args) throws IOException {
 
-                try {
+            //Check connection
+            try {
 
-                    CSVLoader loader = new CSVLoader(getCon());
+                connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
 
-                    loader.loadCSV("C:\\employee.sql", "CUSTOMER", true);
+                if (connection.isValid(1000)) {
+                    System.out.println("You are connected");
+                } else {
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println("Connection lost");
+                }
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
+
+        public static boolean DbExist() throws SQLException {
+
+            ResultSet resultSet = connection.getMetaData().getCatalogs();
+
+            while (resultSet.next()) {
+                String databaseName = resultSet.getString(1);
+
+                if (databaseName.equals(dbName)) {
+
+                    return true;
+
+                } else {
+
+                    doQuery("Indsæt SQL dump");
+
+
                 }
             }
-
-            }
-
-
-        } catch (SQLException e) {
-
-            //handle the exception
-            e.printStackTrace();
-
-            System.exit(1);
         }
     }
+
+//Start the program
+// new Tui();
+
 }
-
-
-
-
 
 
 /*
@@ -103,8 +115,7 @@ public class HelloWorld {
 
 */
 
-    //Start the program
-     // new Tui();
+
 
 
 /*    Tui tui = new Tui();
