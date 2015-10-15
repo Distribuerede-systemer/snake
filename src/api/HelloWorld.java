@@ -29,19 +29,21 @@ public class HelloWorld {
     @Produces("application/json")
     public String getAllUsers() {
 
+        Logic logic = new Logic();
+
         //TODO; Hent brugere fra DB
-        return "users";
+        return new Gson().toJson(logic.getUsers());
     }
 
     @GET //"GET-request"
-    @Path("/user/{userid}")
+    @Path("/user/{username}")
     @Produces("application/json")
-    public String getUser(@PathParam("userid") String userid) {
+    public String getUser(@PathParam("username") String username) {
 
-        System.out.println(userid);
+        Logic logic = new Logic();
         //udprint/hent/identificer af data omkring spillere
-        return "userid " + userid;
 
+        return new Gson().toJson(logic.getUserFromUsername(username));
     }
 
     @GET //"GET-request"
@@ -49,6 +51,7 @@ public class HelloWorld {
     @Produces("application/json")
     public String getScore(String data) {
 
+        //TODO: Get method from logic to return highscore.
         System.out.println(data);
         //udprintning/hent af data omkring highscore
 
@@ -59,12 +62,11 @@ public class HelloWorld {
     @GET //"GET-request"
     @Path("/games")
     @Produces("application/json")
-    public String getGames(String data) {
+    public String getGames() {
 
-        System.out.println(data);
-        //Udprintning/hent af data omkring spillet
+        Logic logic = new Logic();
 
-        return data;
+        return new Gson().toJson(logic.getGames());
 
     }
 
@@ -85,7 +87,9 @@ public class HelloWorld {
     @Produces("application/json")
     public String login(String data)  {
 
-        System.out.println(data);
+        Logic logic = new Logic();
+
+        logic = new Gson().fromJson()
         return "OK" ;
 
         //såfremt der er overenstemmelse med brugernavn og password = godkendelse

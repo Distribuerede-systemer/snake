@@ -1,9 +1,11 @@
 package model;
 
+import java.util.Date;
 
 /**
  * Created by Oscar on 12-10-2015.
  */
+//
 public class User {
 
     //creating variables
@@ -12,30 +14,34 @@ public class User {
     private String lastName;
     private String userName;
     private String password;
-    private String created;
+    private Date created;
     private String status;
+    private String email;
+    private String type;
 
 
-  //Create constructor and initiating the variables
-  public User (int id,String firstName, String lastName, String username, String password,  String created, String status) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.userName = username;
-      this.password = password;
-      this.id = id;
-      this.created = created;
-      this.status = status;
-  }
-    
-    
+    public User (int id, String firstName, String lastName, String email, String userName, String password, Date created, String status, String type ) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+        this.created = created;
+        this.status = status;
+        this.type = type;
+    }
     
     //creating get and set method for all the variables, so they can be used by other classes
-
     public int getId() {
         return id;
     }
 
-      public String getFirstName() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
         return firstName;
     }
 
@@ -67,11 +73,11 @@ public class User {
         this.password = password;
     }
 
-    public String getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -82,5 +88,4 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
-
 }
