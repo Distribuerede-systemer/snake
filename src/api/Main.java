@@ -18,10 +18,10 @@ public class Main {
     private static String dbName = Config.getDbname();
 
     private static Connection connection = null;
-    private static PreparedStatement sqlStatement;
+
 
     /**
-     *
+     *Use a preparedstatment to run SQL on the database
      *
      * @param sql
      */
@@ -96,41 +96,12 @@ public class Main {
         return false;
     }
 
+
     /**
-     * 
+     * Create a object of tui class.
+     * This method starts the program
      */
-    //Create a object of tui class. This method starts the program
+
     new tui();
 }
-
-
-
-
-
-
-/*
-//tere
-
-        HttpServer server = HttpServerFactory.create("http://localhost:9998/");
-        server.start();
-
-        System.out.println("Server running");
-        System.out.println("Visit: http://localhost:9998/helloworld");
-        System.out.println("Hit return to stop...");
-        System.in.read();
-        System.out.println("Stopping server");
-        server.stop(0);
-        System.out.println("Server stopped");
-    }
-
-*/
-
-
-
-
-/*    Tui tui = new Tui();
-    tui.start();*/
-
-
-//TEST  (  .  Y   .  )
 
