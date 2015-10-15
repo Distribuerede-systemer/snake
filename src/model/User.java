@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Scanner;
-
 
 /**
  * Created by Oscar on 12-10-2015.
@@ -19,15 +17,12 @@ public class User {
 
 
   //Create constructor and initiating the variables
-    public User (int id, String firstName, String lastName, String userName, String password, String created, String status) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userName = userName;
-        this.password = password;
-        this.created = created;
-        this.status = status;
-    }
+  public User (String firstName, String lastName, String username, String password) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.userName = username;
+      this.password = password;
+  }
     
     
     
@@ -84,5 +79,5 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
 }
