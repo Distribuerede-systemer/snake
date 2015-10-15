@@ -356,16 +356,25 @@ public class DatabaseWrapper {
         try
         {
             // Prepared statement til at tilfoeje en bruger
-            PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame());
+            PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame(),Statement.RETURN_GENERATED_KEYS );
 
             createGame.setInt(1, 22);
 //            createGame.setInt(1, game.getHost().getId());
             createGame.setInt(2, 33);
+//            createGame.setInt(2, game.getOpponent.getId());
             createGame.setString(3, game.getName());
             createGame.setString(4, game.getStatus());
             createGame.setString(5, game.getHostControls());
 
-            id = createGame.executeUpdate();
+            createGame.executeUpdate();
+
+            ResultSet rs = createGame.getGeneratedKeys();
+            if(rs.next())
+            {
+                id = rs.getInt(1);
+            }
+
+
 
         } catch (SQLException sqlException)
         {
