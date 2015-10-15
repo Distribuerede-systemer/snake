@@ -87,11 +87,9 @@ public class HelloWorld {
 
                 doQuery("Indsæt SQL dump");
 
-                return false;
-
-
             }
         }
+
         return false;
     }
 
