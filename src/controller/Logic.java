@@ -112,23 +112,6 @@ public class Logic {
 		// Define ArrayList to be used to add users and return them. 
 		ArrayList <User> uj = null;
 
-		try(ResultSet resultSet = users.executeQuery()) {
-
-			uj = new ArrayList<User>();
-
-			while (resultSet.next()){
-
-				uj.add(new User(resultSet.getInt("ID"),
-						resultSet.getString("Firstname"),
-						resultSet.getString("Lastname"),
-						 resultSet.getString("Username"),
-						resultSet.getString("Password"),
-						resultSet.getString("Created"),
-						resultSet.getString("Status")));
-			}
-		}catch(Exception e){
-			e.printStackTrace();}
-		// Return Users
 
 		return uj;
 
