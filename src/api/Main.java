@@ -5,7 +5,7 @@ import java.sql.*;
 //import config.config;
 //import tui.Logik;
 //import database.DatabaseDriver;
-
+//import Config.init
 
 /**
  * Created by Tobias on 15/10/15.
@@ -24,7 +24,8 @@ public class Main {
 
         new DatabaseDriver.checkConnection();
 
-        new Logik.Start();
+        Config.init();
+
 
     }
 }
