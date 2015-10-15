@@ -10,6 +10,7 @@
 *.ear
 
 config.json
+/out
 /lib
 /.idea
 *.iml
