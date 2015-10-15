@@ -1,10 +1,12 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Map;
+import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
 import model.User;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
@@ -159,6 +161,13 @@ public class Logic {
 
         //TODO: Find game by id
         //TODO: Add opponent, with provided controls
+
+		DatabaseWrapper dbWrap = new DatabaseWrapper();
+
+		Game game = dbWrap.getGame(gameId);
+
+		game.setOpponent(opponent);
+		game.setOpponentControls(controls);
 
         return true;
 
