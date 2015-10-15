@@ -2,6 +2,7 @@ package tui;
 import java.util.*;
 
 import controller.Logic;
+import model.Game;
 import model.User;
 
 public class Tui {
@@ -19,15 +20,13 @@ public class Tui {
             System.out.println("User: " + usr.getUserName());
         }
     }
-/*
+
     public void listGames(ArrayList<Game> gameList){
 
         for(Game gm : gameList){
             System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
         }
-        System.out.print("\n");
     }
-*/
 
     public void userMenu(){
 
@@ -39,7 +38,8 @@ public class Tui {
 
                 case 1:
                     miscOut("Game List: ");
-                    Logic.getGames();
+                    ArrayList<Game> gameList = Logic.getGames();
+                    listGames(gameList);
                     break;
                 case 2:
                     miscOut("User List: ");
