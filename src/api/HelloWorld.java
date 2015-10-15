@@ -25,77 +25,81 @@ public class HelloWorld {
         return "Hello World";
     }
 
-/**
- * Created by Tobias on 15/10/15.
- */
+    /**
+     * Created by Tobias on 15/10/15.
+     */
 
 
-        private static String sqlUrl = "jdbc:mysql://" + Config.getHost() + ":" + Config.getPort();
-        private static String sqlUser = Config.getUsername();
-        private static String sqlPassword = Config.getPassword();
-        private static String dbName = Config.getDbname();
+    private static String sqlUrl = "jdbc:mysql://" + Config.getHost() + ":" + Config.getPort();
+    private static String sqlUser = Config.getUsername();
+    private static String sqlPassword = Config.getPassword();
+    private static String dbName = Config.getDbname();
 
-        private static Connection connection = null;
-        private static PreparedStatement sqlStatement;
+    private static Connection connection = null;
+    private static PreparedStatement sqlStatement;
 
 
-        public static void doQuery(String sql) {
+    public static void doQuery(String sql) {
 
-            try {
-                PreparedStatement ps = connection.prepareStatement(sql);
-                ps.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        public static void main(String[] args) throws IOException {
+    }
 
-            //Check connection
-            try {
+    public static void main(String[] args) throws IOException {
 
-                connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
+        //Check connection
+        try {
 
-                if (connection.isValid(1000)) {
-                    System.out.println("You are connected");
-                } else {
+            connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
 
-                    System.out.println("Connection lost");
-                }
+            if (connection.isValid(1000)) {
+                System.out.println("You are connected");
+            } else {
 
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-                System.exit(1);
+                System.out.println("Connection lost");
             }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            System.exit(1);
         }
+    }
 
-        public static boolean DbExist() throws SQLException {
+    public static boolean DbExist() throws SQLException {
 
-            ResultSet resultSet = connection.getMetaData().getCatalogs();
+        ResultSet resultSet = connection.getMetaData().getCatalogs();
 
-            while (resultSet.next()) {
-                String databaseName = resultSet.getString(1);
+        while (resultSet.next()) {
+            
+            String databaseName = resultSet.getString(1);
 
-                if (databaseName.equals(dbName)) {
+            if (databaseName.equals(dbName)) {
 
-                    return true;
+                return true;
 
-                } else {
+            } else {
 
-                    doQuery("Indsæt SQL dump");
+                doQuery("Indsæt SQL dump");
+
+                return false;
 
 
-                }
             }
         }
     }
+}
+
 
 //Start the program
 // new Tui();
 
-}
+        }
 
 
 /*
@@ -120,9 +124,6 @@ public class HelloWorld {
 
 /*    Tui tui = new Tui();
     tui.start();*/
-
-
-
 
 
 //TEST !"#!"€!"
