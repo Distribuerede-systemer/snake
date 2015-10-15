@@ -45,7 +45,7 @@ public class HelloWorld {
         Logic logic = new Logic();
         //udprint/hent/identificer af data omkring spillere
 
-        return new Gson().toJson(logic.getUserFromUsername(username));
+        return new Gson().toJson(logic.getUser(username));
     }
 
     @GET //"GET-request"
@@ -199,6 +199,35 @@ public class HelloWorld {
         System.out.println(data);
         return data + " has been deleted";
     }
+
+    /**
+     * Login method
+     *
+     * Request example:
+     * {"userName":"killerxp2000", "password":"abc123"}
+     * @param data
+     * @return
+     */
+    @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
+    @Path("/login/")
+    @Produces("application/json")
+    public Response login(String data)  {
+
+        try {
+            User user = new Gson().fromJson(data, User.class);
+
+            Logic logic = new Logic();
+            int result = logic.login(user.getUserName(), user.getPassword());
+
+            System.out.println(result);
+            return Response.status(200).entity("{\"success\":\"true\"}").build();
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return Response.status(400).entity("{\"success\":\"false\", \"message\":\"bad authentication\"}").build();
+        }
+
 
 
     public static void main(String[] args) throws IOException {
