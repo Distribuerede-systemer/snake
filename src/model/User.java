@@ -19,6 +19,7 @@ public class User {
     private String email;
     private String type;
 
+    public User(){}
 
     public User(String firstName, String lastName, String email, String userName) {
         this.id = id;
