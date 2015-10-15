@@ -16,7 +16,7 @@ import java.util.Map;
 
 // The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
-public class api {
+public class Api {
 
     // The Java method will process HTTP GET requests
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
@@ -69,7 +69,7 @@ public class api {
     public String getScore(@PathParam("userid") int userid) {
 
         Score score = Logic.getHighscore(userid);
-        return new Gson().toJson(userid);
+        return new Gson().toJson(score);
 
     }
 
@@ -89,7 +89,7 @@ public class api {
     public String getGame(@PathParam("gameid") int gameid) {
 
         Game game = Logic.getGame(gameid);
-        return new Gson().toJson(gameid);
+        return new Gson().toJson(game);
 
     }
 
@@ -98,79 +98,24 @@ public class api {
     @Produces("application/json")
     public Response login(String data) {
 
-//        Logic logic = new Logic();
-  //      Logic.userLogin();
-
         try{
 
             User user = new Gson().fromJson(data, User.class);
 
             int result = Logic.userLogin(user.getUserName(), user.getPassword());
 
-            System.out.print(result);
+            //TODO: Use result to see if it is a success or not.
             return Response.status(200).entity("{\"success\":\"true\"}").build();
         }catch (Exception e) {
             return  Response.status(400).entity("{\"Bad\"request\"true\"}").build();
-            System.out.print("");
         }
-        //// Authenticates a user and returns a status code according to the result.
-        // CODES:
-        // 1 || SUCCESS
-        // 2 || USER DOES NOT EXIST
-        // 3 || WRONG PASSWORD
-        // logic.login();
-
-
-        //return "OK";
-
-        //såfremt der er overenstemmelse med brugernavn og password = godkendelse
-    }
-
-    @POST //"POST-request" er ny "data", der skal indtastes, for at styre spillet.
-    @Path("/controls/")
-    @Produces("application/json")
-
-    public Response controls(String json) {
-        // public String controls(String data)  {
-
-
-        //    Control control1 = new Gson().fromJson(json, Control.class);
-        /* Vi laver her et json til gson statement, denne linje gør at vores json kode bliver konventeret
-         javascript kode */
-        //System.out.println(control1.getMovement());
-
-        Logic
-
-        if (control1.getMovement().equals("w"))
-            return Response.status(201).entity("Success").build();
-
-        if (control1.getMovement().equals("a")) {
-            return Response.status(201).entity("Success").build();
-
-        }
-        if (control1.getMovement().equals("s")) {
-            return Response.status(201).entity("Success").build();
-
-        }
-        if (control1.getMovement().equals("d")) {
-            return Response.status(201).entity("Success").build();
-
-        } else {
-            return Response.status(500).entity("Fail").build();
-            //If-else statement, for de forskellige indtast muligheder, såfremt værdien er ugyldig udprintes en fejlkode.
-
-
-        }
-
-        // System.out.println(data);
-        //return "OK" ;
     }
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
     @Path("/user/")
     @Produces("text/plain")
     public String createUser(String data) {
-
+        //TODO: Needs to be fixed.
         User user = null;
 
         boolean createdUser = Logic.createUser(user);
@@ -181,7 +126,7 @@ public class api {
 
         }
 
-
+        return "";
         //return new Gson().toJson(createUser);
 
     }
@@ -189,17 +134,20 @@ public class api {
     @POST //POST-request: Nyt data; nyt spil oprettes
     @Path("/create")
     @Produces("text/plain")
-    public String createGame(String gameName, int userId) {
+    public String createGame(String json) {
 
-        User host = Logic.getUser(userId);
-        createGame = Logic.createGame(gameName, host);
-        return new Gson().toJson(createGame);
+
+        //TODO: Parse json and get userId and gameName.
+        //User host = Logic.getUser(userId);
+        //Game createGame = Logic.createGame(gameName, host);
+        //return new Gson().toJson(createGame);
+        return "";
     }
 
-    @POST //POST-request: Opstart af nyt spil
-    @Path("/gameId")
+    @GET //GET-request: Opstart af nyt spil
+    @Path("/startgame/{gameid}")
     @Produces("text/plain")
-    public String startGame(int gameId) {
+    public String startGame(@PathParam("gameid") int gameId) {
 
         Map startGame = Logic.startGame(gameId);
         return new Gson().toJson(startGame);
@@ -215,44 +163,14 @@ public class api {
         return new Gson().toJson(deleteUser);
     }
 
-    @DELETE //DELETE-request fjernelse af data(spillet slettes)
-    @Path("/gameId/")
+    @GET //DELETE-request fjernelse af data(spillet slettes)
+    @Path("/deleteGame/{gameid}")
     @Produces("text/plain")
-    public String deleteGame(int gameId) {
+    public String deleteGame(@PathParam("gameid") int gameId) {
 
         boolean deleteGame = Logic.deleteUser(gameId);
         return new Gson().toJson(deleteGame);
     }
-
-    /**
-     * Login method
-     *
-     * Request example:
-     * {"userName":"killerxp2000", "password":"abc123"}
-     * @param data
-     * @return
-     */
-    @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
-    @Path("/login/")
-    @Produces("application/json")
-    public Response login(String data)  {
-
-        try {
-            User user = new Gson().fromJson(data, User.class);
-
-            Logic logic = new Logic();
-            int result = Logic.login(user.getUserName(), user.getPassword());
-
-            System.out.println(result);
-            return Response.status(200).entity("{\"success\":\"true\"}").build();
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return Response.status(400).entity("{\"success\":\"false\", \"message\":\"bad authentication\"}").build();
-        }
-
-
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
