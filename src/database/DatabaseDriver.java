@@ -86,7 +86,7 @@ public class DatabaseDriver {
         return "UPDATE Users SET FirstName = ?, LastName = ?, Email = ?, password = ?, " +
                 "status = ?, type = ? WHERE id = ?";
     }
-
+ //
     /**
      * Querybuilder with seven parameters, which, when specified will update the value of the shown columns in the 'games' table
      * @return SqlStatement
