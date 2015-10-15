@@ -8,8 +8,8 @@ import java.sql.*;
 public class DatabaseDriver {
 
     private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
-    private static String sqlUser = "root";
-    private static String sqlPassword = "root";
+    private static String sqlUser = "dataguy";
+    private static String sqlPassword = "QjcUayHA3axeGLns";
 
     private Connection connection = null;
 
@@ -54,10 +54,23 @@ public class DatabaseDriver {
 //
 //    }
 
-    public String getSqlUser() {
+    public String getSqlRecord(String table) {
 
-        String sqlStatement = "select * from users WHERE id = ?";
+        return "select * from " + table + " WHERE id = ?";
+    }
 
-        return sqlStatement;
+    public String getSqlRecords(String table) {
+
+        return "select * from " + table;
+    }
+
+    public String updateSqlUser(){
+        return "UPDATE Users SET FirstName = ?, LastName = ?, Email = ?, password = ?, " +
+                "status = ?, type = ? WHERE id = ?";
+    }
+
+    public String updateSqlGame(){
+        return "UPDATE Games SET game_name = ?, status = ?, result = ?, hostcontrols = ?, " +
+                "endgame = ?, opponentcontrols = ? WHERE id = ?";
     }
 }
