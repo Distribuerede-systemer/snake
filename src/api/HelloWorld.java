@@ -5,11 +5,13 @@ import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import controller.Logic;
+import model.Game;
 import sun.rmi.runtime.Log;
 import model.User;
 
@@ -31,10 +33,11 @@ public class HelloWorld {
     @Produces("application/json")
     public String getAllUsers() {
 
-        Logic logic = new Logic();
+        ArrayList<model.User> users = Logic.getUsers();
+
 
         //TODO; Hent brugere fra DB
-        return new Gson().toJson(logic.getUsers());
+        return new Gson().toJson(users);
     }
 
     @GET //"GET-request"
@@ -42,10 +45,10 @@ public class HelloWorld {
     @Produces("application/json")
     public String getUser(@PathParam("username") String username) {
 
-        Logic logic = new Logic();
+        username = Logic.getUser();
         //udprint/hent/identificer af data omkring spillere
 
-        return new Gson().toJson(logic.getUserFromUsername(username));
+        return new Gson().toJson(username);
     }
 
     @GET //"GET-request"
@@ -53,7 +56,10 @@ public class HelloWorld {
     @Produces("application/json")
     public String getScore(String data) {
 
-        //TODO: Get method from logic to return highscore.
+        //TODO: ();Get method from logic to return highscore.
+
+
+
         System.out.println(data);
         //udprintning/hent af data omkring highscore
 
@@ -62,13 +68,24 @@ public class HelloWorld {
     }
 
     @GET //"GET-request"
+    @Path("/result/{userid}")
+    @Produces("application/json")
+    public String getGame(@PathParam("userid") int userid) {
+
+        gameid = Logic.getGame();
+        return new Gson().toJson(gameid);
+
+    }
+
+
+
+    @GET //"GET-request"
     @Path("/games")
     @Produces("application/json")
     public String getGames() {
 
-        Logic logic = new Logic();
-
-        return new Gson().toJson(logic.getGames());
+        ArrayList<model.Game> games = Logic.getGames();
+        return new Gson().toJson(games);
 
     }
 
@@ -77,10 +94,8 @@ public class HelloWorld {
     @Produces("application/json")
     public String getGame(@PathParam("gameid") int gameid) {
 
-        Logic logic = new Logic();
-
-
-        return new Gson().toJson(logic.getGameFromGameId(gameid));
+        gameid = Logic.getGame();
+        return new Gson().toJson(gameid);
 
     }
 
@@ -129,6 +144,8 @@ public class HelloWorld {
         /* Vi laver her et json til gson statement, denne linje gør at vores json kode bliver konventeret
          javascript kode */
         //System.out.println(control1.getMovement());
+
+        Logic.
 
         if (control1.getMovement().equals("w"))
             return Response.status(201).entity("Success").build();
@@ -200,6 +217,35 @@ public class HelloWorld {
         return data + " has been deleted";
     }
 
+    /**
+     * Login method
+     *
+     * Request example:
+     * {"userName":"killerxp2000", "password":"abc123"}
+     * @param data
+     * @return
+     */
+    @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
+    @Path("/login/")
+    @Produces("application/json")
+    public Response login(String data)  {
+
+        try {
+            User user = new Gson().fromJson(data, User.class);
+
+            Logic logic = new Logic();
+            int result = logic.login(user.getUserName(), user.getPassword());
+
+            System.out.println(result);
+            return Response.status(200).entity("{\"success\":\"true\"}").build();
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return Response.status(400).entity("{\"success\":\"false\", \"message\":\"bad authentication\"}").build();
+        }
+
+
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
@@ -216,43 +262,4 @@ public class HelloWorld {
         System.out.println();
     }
 
-    class Game {
-
-        private String gamename;
-        private int result;
-
-        public void setGamename(String gamename) {
-            this.gamename = gamename;
-        }
-
-        public void setResult(int result) {
-            this.result = result;
-        }
-
-        public String getGamename() {
-            return gamename;
-        }
-
-        public int getResult() {
-            return result;
-        }
-
     }
-
-    class Control {
-
-        private String movement;
-
-
-        public void setMovement(String movement) {
-            this.movement = movement;
-        }
-
-
-        public String getMovement() {
-            return movement;
-        }
-
-
-    }
-}
