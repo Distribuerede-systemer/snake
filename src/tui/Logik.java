@@ -21,7 +21,8 @@ public class Logik {
     public void start(){
 
         while (true) {
-            isAuthenticated = login();
+            if(login() == 1)
+                isAuthenticated = true;
 
             if(isAuthenticated){
                 userMenu();
@@ -65,25 +66,39 @@ public class Logik {
         }
     }
 
-    public boolean login() {
+    public int login() {
 
-
+        String username;
+        String password;
         try {
-            usr = getUserLogin(tui.enterUsername(), tui.enterPassword());
 
-            if (usr.getUsername() != null)
-                return true;
-            else
-                return false;
+            username =  tui.enterUsername();
+            password = tui.enterPassword();
+
+            for (User usr : userList) {
+                if (usr.getUsername().equals(username))
+                {
+                    if(usr.getPassword().equals(password)) {
+                        tui.miscOut("Success.");
+                        return 1;
+                    }
+                    else {
+                        tui.miscOut("Wrong password.");
+                        return 3;
+                    }
+                }
+                else {
+                    tui.miscOut("User does not exist.");
+                    return 2;
+                }
+            }
         } catch (NullPointerException n) {
-            System.out.println("Invalid login");
+            tui.miscOut("Invalid login");
         }
-        return false;
+        return 2;
     }
 
-
-
-    public User getUserLogin(String username, String password){
+    /*public User getUserLogin(String username, String password){
 
         for (User usr : userList) {
             if (usr.getUsername().equals(username) && usr.getPassword().equals(password))
@@ -93,6 +108,7 @@ public class Logik {
         }
         return null;
     }
+    */
 
     public User getUserFromUsername(String username){
 
