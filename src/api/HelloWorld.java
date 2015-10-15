@@ -10,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import controller.Logic;
+import sun.rmi.runtime.Log;
 
 // The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
@@ -85,11 +86,19 @@ public class HelloWorld {
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
     @Path("/login/")
     @Produces("application/json")
-    public String login(String data)  {
+    public String login(String username, String password)  {
 
-        Logic logic = new Logic();
+        //Logic logic = new Logic();
 
-        logic = new Gson().fromJson()
+        //// Authenticates a user and returns a status code according to the result.
+        // CODES:
+        // 1 || SUCCESS
+        // 2 || USER DOES NOT EXIST
+        // 3 || WRONG PASSWORD
+        // logic.login();
+
+
+
         return "OK" ;
 
         //såfremt der er overenstemmelse med brugernavn og password = godkendelse
