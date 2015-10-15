@@ -88,7 +88,7 @@ public class DatabaseWrapper {
             while (resultSet.next()) {
                 game = new Game(
                         resultSet.getInt("id"),
-                        resultSet.getInt("winner"),
+                        getUser(resultSet.getInt("winner")),
                         resultSet.getString("host_controls"),
                         resultSet.getDate("created"),
                         resultSet.getString("name"),
@@ -214,7 +214,7 @@ public class DatabaseWrapper {
             {
                 result.add(new Game(
                         resultSet.getInt("id"),
-                        resultSet.getInt("result"),
+                        getUser(resultSet.getInt("winner")),
                         resultSet.getString("host_controls"),
                         resultSet.getDate("created"),
                         resultSet.getString("name"),
@@ -309,10 +309,10 @@ public class DatabaseWrapper {
 
             ps.setString(1, game.getName());
             ps.setString(2, game.getStatus());
-            ps.setInt(3, game.getWinner());
+            ps.setInt(3, game.getWinner().getId());
             ps.setString(4, game.getHostControls());
-            ps.setString(6, game.getOpponentControls());
-            ps.setInt(7, game.getId());
+            ps.setString(5, game.getOpponentControls());
+            ps.setInt(6, game.getId());
 
             ps.executeUpdate();
         } catch (SQLException sqlException)
@@ -395,6 +395,14 @@ public class DatabaseWrapper {
             createScore.setInt(4, opponent.getId());
 
             createScore.executeUpdate();
+
+            createScore.setInt(1, opponent.getId());
+            createScore.setInt(2, id);
+            createScore.setInt(3, opponent.getScore());
+            createScore.setInt(4, host.getId());
+
+            createScore.executeUpdate();
+
         } catch (SQLException sqlException)
         {
             sqlException.printStackTrace();

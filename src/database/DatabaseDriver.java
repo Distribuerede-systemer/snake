@@ -41,48 +41,48 @@ public class DatabaseDriver {
         return connection;
     }
 
-    public static void checkConnection() {
-
-        try {
-            connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
-
-            if (connection.isValid(1000)) {
-                System.out.println("You are connected");
-
-            } else {
-                System.out.println("Connection lost");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-    }
-
-
-
-    /**
-     * Checks if the database exists or not
-     * @return bool
-     * @throws SQLException
-     */
-
-    public static boolean DbExist() throws SQLException {
-
-        ResultSet resultSet = connection.getMetaData().getCatalogs();
-        while (resultSet.next()) {
-            String databaseName = resultSet.getString(1);
-
-            if (databaseName.equals(dbName)) {
-                return true;
-
-            } else {
-                doQuery("Indsæt SQL dump");
-            }
-        }
-
-        return false;
-    }
+//    public static void checkConnection() {
+//
+//        try {
+//            connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
+//
+//            if (connection.isValid(1000)) {
+//                System.out.println("You are connected");
+//
+//            } else {
+//                System.out.println("Connection lost");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            System.exit(1);
+//        }
+//
+//    }
+//
+//
+//
+//    /**
+//     * Checks if the database exists or not
+//     * @return bool
+//     * @throws SQLException
+//     */
+//
+//    public static boolean DbExist() throws SQLException {
+//
+//        ResultSet resultSet = connection.getMetaData().getCatalogs();
+//        while (resultSet.next()) {
+//            String databaseName = resultSet.getString(1);
+//
+//            if (databaseName.equals(dbName)) {
+//                return true;
+//
+//            } else {
+//                doQuery("Indsæt SQL dump");
+//            }
+//        }
+//
+//        return false;
+//    }
 
     /**
      * Method used to close to DB connection
@@ -135,7 +135,7 @@ public class DatabaseDriver {
      * @return SqlStatement
      */
     public String updateSqlGame(){
-        return "UPDATE Games SET game_name = ?, status = ?, result = ?, host_controls = ?, " +
+        return "UPDATE Games SET name = ?, status = ?, winner = ?, host_controls = ?, " +
                 "opponent_controls = ? WHERE id = ?";
     }
 
@@ -151,7 +151,7 @@ public class DatabaseDriver {
 
     public String createSqlScore() {
         return "Insert into scores (user_id, game_id, score, opponent_id) " +
-                "values (?, ?, ?, ?, ?)";
+                "values (?, ?, ?, ?)";
     }
 
 
