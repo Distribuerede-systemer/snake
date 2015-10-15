@@ -22,5 +22,5 @@ public class Score {
     {
         return highScore;
     }
-    
+
 }

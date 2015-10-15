@@ -11,10 +11,15 @@
 
 config.json
 /out
+out/
 /lib
+lib/
 /.idea
 *.iml
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-.thorn
+
+# Mac crap:
+*.DS_Store
+
 # Created by .ignore support plugin (hsz.mobi)
