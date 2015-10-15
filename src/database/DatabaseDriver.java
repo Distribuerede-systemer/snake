@@ -156,7 +156,7 @@ public class DatabaseDriver {
 
 
     public String deleteSqlUser() {
-        return "";
+        return "UPDATE Users SET status = ? WHERE id = ?";
     }
 
     public String deleteSqlGame() {

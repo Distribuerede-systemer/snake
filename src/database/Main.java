@@ -16,7 +16,7 @@ public class Main {
         Game game = db.getGame(1);
 
         int i = 0;
-
+        db.deleteUser(4);
         System.out.println(db.createGame(game));
 
 //        System.out.println(db.getUser("Users", 1).getFirstName());
