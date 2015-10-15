@@ -1,6 +1,7 @@
 package database;
 
 import model.Game;
+import model.Gamer;
 import model.Score;
 import model.User;
 
@@ -389,9 +390,9 @@ public class DatabaseWrapper {
             PreparedStatement createScore = connection.prepareStatement(dbDriver.createSqlScore());
 
             createScore.setInt(1, host.getId());
-            createScore.setInt(2, host.);
-            createScore.setInt(3, score.getHostId());
-            createScore.setInt(4, score.getHighScore());
+            createScore.setInt(2, id);
+            createScore.setInt(3, host.getScore());
+            createScore.setInt(4, opponent.getId());
 
             createScore.executeUpdate();
         } catch (SQLException sqlException)

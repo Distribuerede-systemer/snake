@@ -160,6 +160,6 @@ public class DatabaseDriver {
     }
 
     public String deleteSqlGame() {
-        return "";
+        return "UPDATE Games SET status = ? WHERE id = ?";
     }
 }
