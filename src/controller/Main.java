@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         Gamer gamer1 = new Gamer();
         gamer1.setControls("awdawdawd");
@@ -20,5 +20,5 @@ public class Main {
         Gamer opponent = (Gamer) gamers.get('o');
 
         System.out.println(host.getScore());
-    }
+    }*/
 }

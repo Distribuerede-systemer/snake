@@ -14,8 +14,8 @@ public class DatabaseDriver {
      * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
      */
     private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
-    private static String sqlUser = "root";
-    private static String sqlPassword = "root";
+    private static String sqlUser = "dataguy";
+    private static String sqlPassword = "QjcUayHA3axeGLns";
 
     private Connection connection = null;
 
@@ -113,8 +113,10 @@ public class DatabaseDriver {
 
 
     public String deleteSqlUser() {
+        return "";
     }
 
     public String deleteSqlGame() {
+        return "";
     }
 }

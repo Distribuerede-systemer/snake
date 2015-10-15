@@ -90,7 +90,7 @@ public class DatabaseWrapper {
             while (resultSet.next()) {
                 game = new Game(
                         resultSet.getInt("id"),
-                        resultSet.getInt("result"),
+                        resultSet.getInt("winner"),
                         resultSet.getString("host_controls"),
                         resultSet.getDate("created"),
                         resultSet.getString("name"),
@@ -350,46 +350,50 @@ public class DatabaseWrapper {
         }
     }
 
-    public void createGame(Game game){
+    public int createGame(Game game){
 
+        int id = 0;
         try
         {
             // Prepared statement til at tilfoeje en bruger
             PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame());
 
-            createGame.setInt(1, game.getHost().getId());
-            createGame.setInt(2, game.getOpponent().getId());
+            createGame.setInt(1, 22);
+//            createGame.setInt(1, game.getHost().getId());
+            createGame.setInt(2, 33);
             createGame.setString(3, game.getName());
             createGame.setString(4, game.getStatus());
             createGame.setString(5, game.getHostControls());
 
-            createGame.executeUpdate();
+            id = createGame.executeUpdate();
+
         } catch (SQLException sqlException)
         {
             sqlException.printStackTrace();
             dbDriver.close();
         }
+        return id;
     }
 
-    public void createScore(int id, Gamer host, Gamer opponent){
-
-        try
-        {
-            // Prepared statement til at tilfoeje en brugera
-            PreparedStatement createScore = connection.prepareStatement(dbDriver.createSqlScore());
-
-            createScore.setInt(1, host.getId());
-            createScore.setInt(2, host.);
-            createScore.setInt(3, score.getHostId());
-            createScore.setInt(4, score.getHighScore());
-
-            createScore.executeUpdate();
-        } catch (SQLException sqlException)
-        {
-            sqlException.printStackTrace();
-            dbDriver.close();
-        }
-    }
+//    public void createScore(int id, Gamer host, Gamer opponent){
+//
+//        try
+//        {
+//            // Prepared statement til at tilfoeje en brugera
+//            PreparedStatement createScore = connection.prepareStatement(dbDriver.createSqlScore());
+//
+//            createScore.setInt(1, host.getId());
+//            createScore.setInt(2, host.);
+//            createScore.setInt(3, score.getHostId());
+//            createScore.setInt(4, score.getHighScore());
+//
+//            createScore.executeUpdate();
+//        } catch (SQLException sqlException)
+//        {
+//            sqlException.printStackTrace();
+//            dbDriver.close();
+//        }
+//    }
 
 
     public void deleteUser(int id)

@@ -193,7 +193,7 @@ public class Logic {
         Game game = new Game();
         game.setName(gameName);
         game.setHost(host);
-        game.setStatus(1); //1 is pending, 0 is done
+        game.setStatus("123"); //1 is pending, 0 is done
 
         //TODO: Write game to db, and return game-id and set object before returning
 

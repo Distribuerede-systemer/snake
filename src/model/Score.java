@@ -52,13 +52,9 @@ public class Score {
         this.gameId = gameId;
     }
 
-    public int getHostId() {
-        return hostId;
-    }
 
-    public void setHostId(int hostId) {
-        this.hostId = hostId;
-    }
+
+
 
     public int getScore() {
         return score;
