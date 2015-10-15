@@ -130,6 +130,11 @@ public class Logik {
         addUser(tui.enterFirstName(), tui.enterLastName(),tui.enterUsername(), tui.enterPassword());
     }
 
+    public void addUser(String firstName, String lastName, String username, String password){ //Venter på DB
+
+        userList.add(new User(firstName, lastName, username, password));
+    }
+
     public boolean deleteUser(){
 
         String username = tui.deleteUserScreen();
@@ -147,12 +152,7 @@ public class Logik {
 
     }
 
-    public void addUser(String firstName, String lastName, String username, String password){
-
-        userList.add(new User(firstName, lastName, username, password));
-    }
-
-    public boolean removeUser(User u){
+    public boolean removeUser(User u){ // Venter på Db
         try {
             if (userList.remove(u))
                 return true;

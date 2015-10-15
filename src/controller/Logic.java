@@ -3,6 +3,7 @@ package controller;
 import java.sql.*;
 import java.util.ArrayList;
 
+
 import model.Config;
 import model.Game;
 // imports information about password and username from the User class in the model package
@@ -121,7 +122,6 @@ public class Logic {
 						resultSet.getString("Created"),
 						resultSet.getString("Status")));
 			}
-
 		}catch(Exception e){
 			e.printStackTrace();}
 		// Return Users
@@ -223,32 +223,34 @@ public class Logic {
 
 		String username;
 		String password;
-
-
 		try {
 
 			username =  tui.enterUsername();
 			password = tui.enterPassword();
-			usr = getUserLogin(username, password);
 
-			if(usr == null) {
-				tui.miscOut("User does not exist.");
-				return 2;
-			}
-			if (usr.getPassword().equals(password)) {
-				tui.miscOut("Success.");
-				return 1;
-			}
-			else {
-				tui.miscOut("Wrong password.");
-				return 3;
+			for (User usr : userList) {
+				if (usr.getUsername().equals(username))
+				{
+					if(usr.getPassword().equals(password)) {
+						tui.miscOut("Success.");
+						return 1;
+					}
+					else {
+						tui.miscOut("Wrong password.");
+						return 3;
+					}
+				}
+				else {
+					tui.miscOut("User does not exist.");
+					return 2;
+				}
 			}
 		} catch (NullPointerException n) {
 			tui.miscOut("Invalid login");
 		}
 		return 2;
 	}
-
+	/*
 	public User getUserLogin(String username, String password){
 
 		for (User usr : userList) {
@@ -259,7 +261,7 @@ public class Logic {
 		}
 		return null;
 	}
-
+	*/
 	public User getUserFromUsername(String username){
 
 		for (User usr : userList) {

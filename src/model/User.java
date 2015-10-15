@@ -1,29 +1,38 @@
 package model;
 
+
+/**
+ * Created by Oscar on 12-10-2015.
+ */
 public class User {
 
     //creating variables
+    private int id;
     private String firstName;
     private String lastName;
-    private String username;
+    private String userName;
     private String password;
     private String created;
     private String status;
 
 
-    //Create constructor and initiating the variables
-    public User (String firstName, String lastName, String username, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
-    }
-
-
-
+  //Create constructor and initiating the variables
+  public User (String firstName, String lastName, String username, String password) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.userName = username;
+      this.password = password;
+  }
+    
+    
+    
     //creating get and set method for all the variables, so they can be used by other classes
 
-    public String getFirstName() {
+    public int getId() {
+        return id;
+    }
+
+      public String getFirstName() {
         return firstName;
     }
 
@@ -39,12 +48,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String userName) {
-        this.username = userName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -70,4 +79,5 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }
