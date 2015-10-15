@@ -172,7 +172,11 @@ public class Logic {
 
     }
 
-
+    /**
+     * Starts a game
+     * @param gameId
+     * @return returns game results
+     */
     public static Map startGame(int gameId){
 
     }
