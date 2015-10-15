@@ -24,11 +24,18 @@ public class Main {
 
         new DatabaseDriver.checkConnection();
 
+        Tui tui = new Tui();
+        tui.getuserMenu();
+
+
         Config.init();
 
 
     }
 }
+
+
+// Slet nedenstående !!!!
 
 
 
