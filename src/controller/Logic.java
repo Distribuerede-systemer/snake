@@ -19,6 +19,7 @@ import tui.Tui;
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application. 
  * @author Henrik Thorn
  */
+
 public class Logic {
 
 	private Connection connection = null;
@@ -53,6 +54,8 @@ public class Logic {
 		//Uses statements received from db-wrapper.
 		users = DB.getRecords('user');
 		games = DB.getRecords('games');
+		createUser = DB.getRecords('createUser');
+		deleteUser = DB.getRecords('deleteUser');
 
 		//Initialize tui class
 		//Initialize ArrayLists of type User and Game
@@ -154,11 +157,34 @@ public class Logic {
 		return uj;
 	}
 	//CreateUser-method.
-	public void createUser(){
+	public void createUser(String firstname, String lastname, String email, String username, String password){
 
-		addUser(tui.enterFirstName(), tui.enterLastName(),tui.enterUsername(), tui.enterPassword());
+		firstname = tui.enterFirstName();
+		lastname = tui.enterLastName();
+		email = tui.enterUsername();
+		username = tui.enterUsername();
+		password = tui.enterPassword();
+
+		//addUser(firstname, lastname,email ,username,password);
+
+
+		try {
+
+			createUser.setString(1, firstname);
+			createUser.setString(2, lastname);
+			createUser.setString(3, email);
+			createUser.setString(4, username);
+			createUser.setString(5, password);
+
+			createUser.executeUpdate();
+
+		}catch(Exception e){
+			System.out.print(e.getStackTrace());
+			tui.miscOut("Failed.");
+		}
 	}
 
+	/*
 	//DeleteUser-method.
 	public boolean deleteUser(){
 
@@ -182,12 +208,29 @@ public class Logic {
 			tui.miscOut(username + " was not found.");
 		return false;
 	}
+*/
 
+	public void deleteUser(String username){
+
+		username = tui.deleteUserScreen();
+
+		try{
+
+			deleteUser.setString(1, username);
+
+			deleteUser.executeUpdate();
+
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			tui.miscOut("User doesn't exist");
+		}
+	}
 	//Add user to the ArrayList of type user. take parameters.
-	public void addUser(String firstName, String lastName, String username, String password){
+	public void addUser(String firstName, String lastName, String email, String username, String password){
 
 		//Adds a new user to ArrayList.
-		userList.add(new User(firstName, lastName, username, password));
+		userList.add(new User(firstName, lastName, email, username, password));
 	}
 
 	//Remove user from ArrayList type User. Takes one parameter of user.
@@ -244,8 +287,10 @@ public class Logic {
 	//TODO: Finish createGame method.
 	public Game createGame(String gameName) {
 
-		//int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
-		Game game = new Game(1, 1, "ASD", 1, 1, "localhost", "abcd", "HEJ");
+		//int gameId, int result, String controls, int newGame,
+		// int endGame, String host, String opponent, String status
+		//Game game = new Game(1, 1, "ASD", 1, 1, "localhost", "abcd", "HEJ");
+
 
 		return game;
 	}
@@ -281,6 +326,37 @@ public class Logic {
 					tui.miscOut("User does not exist.");
 					return 2;
 				}
+
+		} catch (NullPointerException n) {
+			tui.miscOut("Invalid login");
+		}
+		return 2;
+	}
+
+	public int login(String _username, String _password){
+
+		try {
+
+			String username = _username;
+			User user = getUserFromUsername(_username);
+
+			String password = _password;
+
+			if (user.getUserName().equals(username))
+			{
+				if(usr.getPassword().equals(password)) {
+					tui.miscOut("Success.");
+					return 1;
+				}
+				else {
+					tui.miscOut("Wrong password.");
+					return 3;
+				}
+			}
+			else {
+				tui.miscOut("User does not exist.");
+				return 2;
+			}
 
 		} catch (NullPointerException n) {
 			tui.miscOut("Invalid login");
