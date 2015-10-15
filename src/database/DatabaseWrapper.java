@@ -346,4 +346,19 @@ public class DatabaseWrapper {
     return user;
     }
 
+    public boolean deleteGame(int id){
+        PreparedStatement ps;
+
+        try {
+            ps = connection.prepareStatement(dbDriver.deleteGame());
+            ps.setInt(1, id );
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            dbDriver.close();
+            return false;
+        }
+        return true;
+    }
+
 }

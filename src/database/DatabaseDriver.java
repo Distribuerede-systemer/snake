@@ -99,4 +99,8 @@ public class DatabaseDriver {
     public String authenticatedSql() {
         return "Select * from users where username = ?";
     }
+
+    public String deleteGame() {
+        return"UPDATE games SET status = Deleted WHERE id = ?";
+    }
 }

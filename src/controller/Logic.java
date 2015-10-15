@@ -241,10 +241,13 @@ public class Logic {
      * @return true if success, false if failure
      */
     public static boolean deleteGame(int gameId) {
+        DatabaseWrapper db = new DatabaseWrapper();
+        if(db.deleteGame(gameId))
+        return true;
+        else{
+            return false;
+        }
 
-        //TODO: Delete specific game from DB via DB-wrapper;
-
-        return false;
     }
 
 
