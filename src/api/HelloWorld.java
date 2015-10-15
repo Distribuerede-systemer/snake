@@ -9,10 +9,13 @@ import java.io.IOException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+import controller.Logic;
+import sun.rmi.runtime.Log;
 
 // The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
 public class HelloWorld {
+
     // The Java method will process HTTP GET requests
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
     // The Java method will produce content identified by the MIME Media type "text/plain"
@@ -27,19 +30,21 @@ public class HelloWorld {
     @Produces("application/json")
     public String getAllUsers() {
 
+        Logic logic = new Logic();
+
         //TODO; Hent brugere fra DB
-        return "users";
+        return new Gson().toJson(logic.getUsers());
     }
 
     @GET //"GET-request"
-    @Path("/user/{userid}")
+    @Path("/user/{username}")
     @Produces("application/json")
-    public String getUser(@PathParam("userid") String userid) {
+    public String getUser(@PathParam("username") String username) {
 
-        System.out.println(userid);
+        Logic logic = new Logic();
         //udprint/hent/identificer af data omkring spillere
-        return "userid " + userid;
 
+        return new Gson().toJson(logic.getUserFromUsername(username));
     }
 
     @GET //"GET-request"
@@ -47,6 +52,7 @@ public class HelloWorld {
     @Produces("application/json")
     public String getScore(String data) {
 
+        //TODO: Get method from logic to return highscore.
         System.out.println(data);
         //udprintning/hent af data omkring highscore
 
@@ -57,36 +63,42 @@ public class HelloWorld {
     @GET //"GET-request"
     @Path("/games")
     @Produces("application/json")
-    public String getGames(String data) {
+    public String getGames() {
 
-        System.out.println(data);
-        //Udprintning/hent af data omkring spillet
+        Logic logic = new Logic();
 
-        return data;
+        return new Gson().toJson(logic.getGames());
 
     }
 
     @GET //"GET-request"
     @Path("/result/{gameid}")
     @Produces("application/json")
-    public String getGame(@PathParam("gameid") String gameid) {
+    public String getGame(@PathParam("gameid") int gameid) {
 
-        Game game1 = new Game();
-        game1.setGamename("Diablo");
-        game1.setResult(100);
+        Logic logic = new Logic();
 
-        System.out.println(gameid);
 
-        return new Gson().toJson(game1);
+        return new Gson().toJson(logic.getGameFromGameId(gameid));
 
     }
 
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
     @Path("/login/")
     @Produces("application/json")
-    public String login(String data)  {
+    public String login(String username, String password)  {
 
-        System.out.println(data);
+        //Logic logic = new Logic();
+
+        //// Authenticates a user and returns a status code according to the result.
+        // CODES:
+        // 1 || SUCCESS
+        // 2 || USER DOES NOT EXIST
+        // 3 || WRONG PASSWORD
+        // logic.login();
+
+
+
         return "OK" ;
 
         //såfremt der er overenstemmelse med brugernavn og password = godkendelse
@@ -185,6 +197,8 @@ public class HelloWorld {
         System.out.println("Stopping server");
         server.stop(0);
         System.out.println("Server stopped");
+
+        System.out.println();
     }
 
     class Game {

@@ -33,10 +33,12 @@ public class Logic {
 	private User usr;
 	private ArrayList<User> userList;
 	private boolean isAuthenticated;
-	private Game gme;
+	private ArrayList<Game> gameList;
+	private Game game;
 
 
-
+	// Creates constructor, initializes new instanceo of Config class.
+	//Gets connection from database, with parameters from config instance.
 	public Logic(){
 
 		Config config = new Config();
@@ -48,11 +50,13 @@ public class Logic {
 			tui.miscOut("Error.");
 		}
 
+		//Uses statements received from db-wrapper.
 		users = DB.getRecords('user');
 		games = DB.getRecords('games');
 
 		tui = new Tui();
 		userList = new ArrayList<User>();
+		gameList = new ArrayList<Game>();
 		isAuthenticated = false;
 
 	}
@@ -148,7 +152,7 @@ public class Logic {
 
 		if(removeUser(getUserFromUsername(username))) {
 			tui.miscOut(username + " was deleted.");
-			if(username.equals(usr.getUsername()))
+			if(username.equals(usr.getUserName()))
 				start();
 			else
 				return true;
@@ -267,6 +271,21 @@ public class Logic {
 		return null;
 	}
 
+	public Game getGameFromGameId(int gameId){
+
+		for (Game game : gameList) {
+			if (game.getGameId() == gameId){
+				return game;
+			}
+		}
+		return null;
+	}
+
+	public int getGameResult(int gameId){
+
+		return getGameFromGameId(gameId).getResult();
+
+	}
 	//Deletes a game from the database
 	public boolean deleteGame(){
 
