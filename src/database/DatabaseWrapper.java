@@ -85,7 +85,7 @@ public class DatabaseWrapper {
                         resultSet.getInt("endgame"),
                         resultSet.getString("host"),
                         resultSet.getString("opponent"),
-                        resultSet.getString("status")
+                        resultSet.getInt("status")
                 );
             }
 
@@ -214,7 +214,7 @@ public class DatabaseWrapper {
                         resultSet.getInt("endgame"),
                         resultSet.getString("host"),
                         resultSet.getString("opponent"),
-                        resultSet.getString("status")
+                        resultSet.getInt("status")
                 ));
             }
 
@@ -299,6 +299,7 @@ public class DatabaseWrapper {
         {
             PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlUser());
 
+            User user = new User();
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
@@ -314,6 +315,35 @@ public class DatabaseWrapper {
             sqlException.printStackTrace();
             dbDriver.close();
         }
+    }
+
+    public User authenticatedUser (String username) {
+        User user = null;
+        ResultSet resultset = null;
+        PreparedStatement ps;
+
+        try {
+            ps = connection.prepareStatement(dbDriver.authenticatedSql());
+            ps.setString(1, username);
+            resultset = ps.executeQuery();
+
+            while (resultSet.next()) {
+                user = new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstname"),
+                        resultSet.getString("lastname"),
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getDate("created"),
+                        resultSet.getString("status"),
+                        resultSet.getString("type")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    return user;
     }
 
 }
