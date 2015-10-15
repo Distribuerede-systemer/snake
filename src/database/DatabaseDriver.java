@@ -1,37 +1,27 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.sun.rowset.CachedRowSetImpl;
+
+import javax.xml.transform.Result;
+import java.sql.*;
 
 public class DatabaseDriver {
 
-    private static String sqlUrl = "jdbc:mysql://localhost:3306/mydb";
+    private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
     private static String sqlUser = "root";
-    private static String sqlPassword = "";
+    private static String sqlPassword = "root";
 
     private Connection connection = null;
-
-    private PreparedStatement createUser = null;
-    private PreparedStatement selectAllUsers = null;
-
 
     /**
      * Bruges til at oprette forbindelse til databasen og indeholder preparedStatements.
      */
+//
     public DatabaseDriver()
     {
         try
         {
             connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
-
-            createUser = connection.prepareStatement("INSERT INTO User(Firstname, Lastname) VALUES (?, ?)");
-
-            //General prepared statements
-            selectAllUsers = connection.prepareStatement("SELECT * FROM Users");
-
-
 
         }
         catch (SQLException e)
@@ -41,30 +31,33 @@ public class DatabaseDriver {
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     /**
      * Bruges til at lukke forbindelsen til databasen.
      */
-public void close()
-{
-    try{
-        connection.close();
-    }
-    catch(SQLException e)
+
+    public void close()
     {
-        e.printStackTrace();
+        try{
+            connection.close();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
-}
 
-    public PreparedStatement getCreateUser() {
-        return createUser;
-    }
+    //    public String create() {
+//
+//    }
 
-    public static void main(String[] args) {
+    public String getSqlUser() {
 
+        String sqlStatement = "select * from users WHERE id = ?";
 
-        Database database = new Database();
-
-        database.createUser();
-
+        return sqlStatement;
     }
 }

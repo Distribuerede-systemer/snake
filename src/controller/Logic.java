@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.util.*;
 
 
 import model.Config;
@@ -59,7 +59,7 @@ public class Logic {
 
 		while (true) {
 			if(login() == 1)
-			isAuthenticated = true;
+				isAuthenticated = true;
 
 			if(isAuthenticated){
 				userMenu();
@@ -119,12 +119,12 @@ public class Logic {
 			while (resultSet.next()){
 
 				uj.add(new User(resultSet.getInt("ID"),
-						resultSet.getString("Firstname"),
-						resultSet.getString("Lastname"),
-						 resultSet.getString("Username"),
-						resultSet.getString("Password"),
-						resultSet.getString("Created"),
-						resultSet.getString("Status")));
+							resultSet.getString("Firstname"),
+							resultSet.getString("Lastname"),
+							resultSet.getString("Username"),
+							resultSet.getString("Password"),
+							resultSet.getString("Created"),
+							resultSet.getString("Status")));
 			}
 		}catch(Exception e){
 			e.printStackTrace();}
@@ -172,7 +172,7 @@ public class Logic {
 		return false;
 	}
 
-	
+
 	//Gets a list of all games and return these as an ArrayList of Game objects
 	public ArrayList<Game> getGames(){
 
@@ -186,13 +186,13 @@ public class Logic {
 			while (resultSet.next()){
 
 				games.add(new Game(resultSet.getInt("ID"),
-						resultSet.getInt("Result"),
-						resultSet.getString("Controls"),
-						resultSet.getInt("NewGame"),
-						resultSet.getInt("EndGame"),
-						resultSet.getString("Host"),
-						resultSet.getString("Opponent"),
-						resultSet.getString("Status")));
+							resultSet.getInt("Result"),
+							resultSet.getString("Controls"),
+							resultSet.getInt("NewGame"),
+							resultSet.getInt("EndGame"),
+							resultSet.getString("Host"),
+							resultSet.getString("Opponent"),
+							resultSet.getString("Status")));
 			}
 
 		}catch(Exception e){
@@ -254,18 +254,7 @@ public class Logic {
 		}
 		return 2;
 	}
-	/*
-	public User getUserLogin(String username, String password){
 
-		for (User usr : userList) {
-			if (usr.getUsername().equals(username) && usr.getPassword().equals(password))
-			{
-				return usr;
-			}
-		}
-		return null;
-	}
-	*/
 	public User getUserFromUsername(String username){
 
 		for (User usr : userList) {
@@ -281,9 +270,145 @@ public class Logic {
 		return false;
 	}
 
-
-	
 	//Deletes a user from the database
+	//TODO: Create function.
 
+	public Array playGame(int size, String hostControls, String opponentControls){
+		// Dummy variables that should be replaced with data from the host:
+		String hostControls = "ddssaawwdddddd";
+		String opponentControls = "ddwwaass";
+		String turn = Math.round(Math.random() * 1) == 0 ? "host" : "opponent";
 
+		// Hosting party:
+		System.out.println("\n### GAME: host is " + turn + "! ###\n");
+
+		// Split each controls string into a character array:
+		char[] hostControlCharacters = hostControls.toCharArray();
+		char[] opponentControlCharacters = opponentControls.toCharArray();
+
+		// The game variables for the host:
+		boolean hostDidCrash = false;
+		int hostScore = 0;
+		int hostKills = 0;
+		int hostX = 0;
+		int hostY = 1;
+
+		// The game variables for the opponent:
+		boolean opponentDidCrash = false;
+		int opponentScore = 0;
+		int opponentX = 0;
+		int opponentY = -1;
+		int opponentKills = 0;
+
+		// Playing field options:
+		int boundary = 4;
+
+		// Total amount of moves:
+		int movesCount = hostControls.length() < opponentControls.length() ? opponentControls.length() : hostControls.length();
+
+		// Arrays of host and opponent moves:
+		int[][] hostMoves = new int[movesCount][];
+		int[][] opponentMoves = new int[movesCount][];
+
+		// Loop through the host (leader) moves:
+		System.out.println("Looping through host moves:\n");
+
+		for (int i = 0; i < hostControls.length(); i++) {
+			char move = hostControlCharacters[i];
+
+			if (move == 'a') {
+				hostX--;
+			} else if (move == 'd') {
+				hostX++;
+			} else if (move == 'w') {
+				hostY++;
+			} else if (move == 's') {
+				hostY--;
+			}
+
+			hostMoves[i] = new int[]{hostX, hostY};
+
+			System.out.println(Arrays.toString(hostMoves[i]));
+		}
+
+		// Loop through the follower (opponent) moves:
+		System.out.println("\nLooping through opponent moves:\n");
+
+		for (int i = 0; i < opponentControls.length(); i++) {
+			char move = opponentControlCharacters[i];
+
+			if (move == 'a') {
+				opponentX--;
+			} else if (move == 'd') {
+				opponentX++;
+			} else if (move == 'w') {
+				opponentY++;
+			} else if (move == 's') {
+				opponentY--;
+			}
+
+			opponentMoves[i] = new int[]{opponentX, opponentY};
+
+			System.out.println(Arrays.toString(opponentMoves[i]));
+		}
+
+		// Loop through both moves to find collisions:
+		System.out.println("\nDetecting collisions in favor of " + turn + ":\n");
+
+		for (int i = 0; i < movesCount; i++) {
+			int[] hostMove = hostMoves[i];
+			int[] opponentMove = opponentMoves[i];
+
+			// Kills:
+			if (hostMove != null && opponentMove != null && hostMove[0] == opponentMove[0] && hostMove[1] == opponentMove[1]) {
+				if (turn.equals("host")) {
+					hostKills++;
+
+					opponentDidCrash = true;
+				} else {
+					opponentKills++;
+
+					hostDidCrash = true;
+				}
+
+				System.out.println("Collision at [" + hostMove[0] + ", " + hostMove[1] + "]!\tHost " + hostKills + " - Opponent " + opponentKills);
+			}
+
+			// Host move:
+			if (hostMove != null) {
+
+				// Check if the host move results in a wall crash:
+				if (hostMove[0] > boundary || hostMove[1] > boundary) {
+					hostDidCrash = true;
+				}
+
+				// Check if the host move is not null and if the host did not previously crash:
+				if (!hostDidCrash) {
+					hostScore++;
+				}
+
+			}
+
+			// Opponent move:
+			if (opponentMove != null) {
+
+				// Check if the opponent move results in a wall crash:
+				if (opponentMove[0] > boundary || opponentMove[1] > boundary) {
+					opponentDidCrash = true;
+				}
+
+				// Check if the opponent move is not null and if the opponent did not previously crash:
+				if (!opponentDidCrash) {
+					opponentScore++;
+				}
+
+			}
+
+		}
+
+		System.out.println("hostScore: " + hostScore);
+		System.out.println("opponentScore: " + opponentScore);
+
+	}
+}
 }
