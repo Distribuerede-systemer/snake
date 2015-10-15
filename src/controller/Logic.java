@@ -158,9 +158,7 @@ public class Logic {
      * @return true if success, false if failure
      */
     public static boolean joinGame(int gameId, User opponent, String controls){
-
-        //TODO: Find game by id
-        //TODO: Add opponent, with provided controls
+        
 
         //Initializes DatabaseWrapper as dbWrap object.
 		DatabaseWrapper dbWrap = new DatabaseWrapper();
