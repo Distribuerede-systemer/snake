@@ -1,31 +1,73 @@
 package tui;
 
-/**
- * Created by Jakob Frederik Frank on 12-10-2015.
- */
 public class User {
 
-    private String _username;
-    private String _password;
+    //creating variables
+    private String firstName;
+    private String lastName;
+    private String username;
+    private String password;
+    private String created;
+    private String status;
 
-    public User(String username, String pass){
-        _username = username;
-        _password = pass;
+
+    //Create constructor and initiating the variables
+    public User (String firstName, String lastName, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+    }
+
+
+
+    //creating get and set method for all the variables, so they can be used by other classes
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getUsername() {
-        return _username;
+        return username;
+    }
+
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
     public String getPassword() {
-        return _password;
+        return password;
     }
 
     public void setPassword(String password) {
-        _password = password;
+        this.password = password;
     }
 
-    public void setUsername(String username) {
-        _username = username;
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
