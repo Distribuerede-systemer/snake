@@ -10,7 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 
-// The Java class will be hosted at the URI path "/helloworld"
+// The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode.
 public class HelloWorld {
     // The Java method will process HTTP GET requests
