@@ -1,9 +1,6 @@
 package controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 
 import model.Config;
@@ -36,10 +33,16 @@ public class Logic {
 	public Logic(){
 
 		Config config = new Config();
-		connection = DriverManager.getConnection(config.getDbname(), config.getUsername(), config.getPassword());
+		try {
+			connection = DriverManager.getConnection(config.getDbname(), config.getUsername(), config.getPassword());
 
-		users = DB.getRecords('user');
-		games = DB.getRecords('games');
+		}catch (Exception e){
+
+			tui.miscOut("Error.");
+		}
+
+		users = DBCon.getRecords('user');
+		games = DBCon.getRecords('games');
 
 		tui = new Tui();
 		userList = new ArrayList<User>();
