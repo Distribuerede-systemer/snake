@@ -17,11 +17,14 @@ public class User {
 
 
   //Create constructor and initiating the variables
-  public User (String firstName, String lastName, String username, String password) {
+  public User (int id,String firstName, String lastName, String username, String password,  String created, String status) {
       this.firstName = firstName;
       this.lastName = lastName;
       this.userName = username;
       this.password = password;
+      this.id = id;
+      this.created = created;
+      this.status = status;
   }
     
     

@@ -9,10 +9,12 @@ import java.io.IOException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+import controller.Logic;
 
 // The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
 public class HelloWorld {
+
     // The Java method will process HTTP GET requests
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
     // The Java method will produce content identified by the MIME Media type "text/plain"
@@ -69,15 +71,12 @@ public class HelloWorld {
     @GET //"GET-request"
     @Path("/result/{gameid}")
     @Produces("application/json")
-    public String getGame(@PathParam("gameid") String gameid) {
+    public String getGame(@PathParam("gameid") int gameid) {
 
-        Game game1 = new Game();
-        game1.setGamename("Diablo");
-        game1.setResult(100);
+        Logic logic = new Logic();
 
-        System.out.println(gameid);
 
-        return new Gson().toJson(game1);
+        return new Gson().toJson(logic.getGameFromGameId(gameid));
 
     }
 
@@ -185,6 +184,8 @@ public class HelloWorld {
         System.out.println("Stopping server");
         server.stop(0);
         System.out.println("Server stopped");
+
+        System.out.println();
     }
 
     class Game {
