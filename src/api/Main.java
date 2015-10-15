@@ -4,19 +4,14 @@ import java.io.IOException;
 import java.sql.*;
 //import config.config;
 //import logic.Tui;
+//import database.DatabaseDriver;
+
 
 /**
  * Created by Tobias on 15/10/15.
  */
 
 public class Main {
-
-    private static String sqlUrl = "jdbc:mysql://localhost:3306//" + Config.getHost() + ":" + Config.getPort();
-    private static String sqlUser = Config.getUsername();
-    private static String sqlPassword = Config.getPassword();
-    private static String dbName = Config.getDbname();
-    private static Connection connection = null;
-
 
     /**
      * Create an object of tui class.
@@ -25,17 +20,29 @@ public class Main {
 
     public static void main(String[] args) {
 
-        new tui().run();
+        new DatabaseDriver.dbExist();
+
+        new DatabaseDriver.checkConnection();
+
+        new tui();
 
     }
 
 
 
+/*
 
+    private static String sqlUrl = "jdbc:mysql://localhost:3306//" + Config.getHost() + ":" + Config.getPort();
+    private static String sqlUser = Config.getUsername();
+    private static String sqlPassword = Config.getPassword();
+    private static String dbName = Config.getDbname();
+    private static Connection connection = null;
 
-    /**
+    */
+/**
      * This method checks if there is a connection to the database
-     */
+     *//*
+
 
     public static void checkConnection() {
 
@@ -57,11 +64,13 @@ public class Main {
 }
 
 
-        /**
+        */
+/**
          * Checks if the database exists or not
          * @return bool
          * @throws SQLException
-         */
+         *//*
+
 
     public static boolean DbExist() throws SQLException {
 
@@ -80,11 +89,13 @@ public class Main {
         return false;
     }
 
-    /**
+    */
+/**
      * Use a preparedstatment to run SQL on the database
      *
      * @param sql
-     */
+     *//*
+
 
     public static void doQuery(String sql) {
 
@@ -95,6 +106,8 @@ public class Main {
             e.printStackTrace();
         }
     }
+}
+*/
 
 
 
