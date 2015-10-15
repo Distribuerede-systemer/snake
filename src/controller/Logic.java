@@ -99,8 +99,6 @@ public class Logic {
      * @param password
      * @return 2 if auth successful, 1 if user exists but password is incorrect, 0 if failed
      */
-
-
     public static int userLogin(String username, String password) {
         User user;
         DatabaseWrapper db = new DatabaseWrapper();
