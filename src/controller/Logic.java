@@ -34,11 +34,9 @@ public class Logic {
 
 
     }
-
     public boolean isUserAuthenticated() {
         return isAuthenticated;
     }
-
     public static boolean createUser(User user) {
 
         //TODO: Create user with DB-wrapper. If creation succeeded return true, if not return false
@@ -46,20 +44,42 @@ public class Logic {
         return true;
 
     }
-
     public static boolean deleteUser(int id) {
 
         //TODO: Delete user via DB-wrapper
         return false;
 
     }
-
     public static void addUser(User user) {
 
         //TODO: Add user to DB via DB-wrapper
 
     }
+    public User getUser(int userId) {
 
+        //TODO: Get specific user from DB via DB-wrapper
+        User user = new User();
+        return user;
+
+    }
+    // Authenticates a user and returns a status code according to the result.
+    // CODES:
+    // 1 || SUCCESS
+    // 2 || USER DOES NOT EXIST
+    // 3 || WRONG PASSWORD
+    public static int userLogin(String username, String password) {
+
+        ArrayList<User> allUsers = getUsers();
+        for (User user : allUsers){
+            if(user.getUserName().equals(username) && user.getPassword().equals(password)){
+                isAuthenticated = true;
+                return 1;
+            }
+        }
+
+        return 0;
+
+    }
 
     //Gets a list of all games and return these as an ArrayList of Game objects
     public static ArrayList<Game> getGames() {
@@ -70,7 +90,6 @@ public class Logic {
         return games;
 
     }
-
     public static ArrayList<Game> getGames(int userId) {
 
         //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
@@ -79,8 +98,6 @@ public class Logic {
         return games;
 
     }
-
-
     //Returns object of game
     public static Game getGame(int gameId) {
 
@@ -88,7 +105,6 @@ public class Logic {
 
         return null;
     }
-
     //Return an istance of a game
     public static Game createGame(String gameName, User host) {
 
@@ -102,33 +118,6 @@ public class Logic {
 
         return game;
     }
-
-    // Authenticates a user and returns a status code according to the result.
-    // CODES:
-    // 1 || SUCCESS
-    // 2 || USER DOES NOT EXIST
-    // 3 || WRONG PASSWORD
-    public static int login(String username, String password) {
-
-        ArrayList<User> allUsers = getUsers();
-        for (User user : allUsers){
-            if(user.getUserName().equals(username) && user.getPassword().equals(password)){
-                return 1;
-            }
-        }
-
-        return 0;
-
-    }
-
-    public User getUser(int userId) {
-
-        //TODO: Get specific user from DB via DB-wrapper
-        User user = new User();
-        return user;
-
-    }
-
     //Deletes a game from the database
     public boolean deleteGame(int gameId) {
 
