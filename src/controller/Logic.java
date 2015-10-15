@@ -6,6 +6,7 @@ import java.util.Map;
 import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
+import model.Score;
 import model.User;
 import tui.Tui;
 
@@ -82,7 +83,7 @@ public class Logic {
      * @param userId
      * @return User object
      */
-    public User getUser(int userId) {
+    public static User getUser(int userId) {
 
         //TODO: Get specific user from DB via DB-wrapper
         User user = new User();
@@ -118,6 +119,29 @@ public class Logic {
             }
         }
     }
+
+    /**
+     * Get all highscores from the game
+     * @return ArrayList of highscores
+     */
+    public static ArrayList<Score> getHighscores(){
+        //TODO: Get all highscores
+        ArrayList<Score> highScores = null;
+        return highScores;
+    }
+
+    /**
+     * Get a highscore from a specified user
+     * @param userId
+     * @return Score
+     */
+    public static Score getHighscore(int userId){
+        //TODO: Get highscore from user
+
+        Score score = new Score();
+        return score;
+    }
+
 
     /**
      * Get all games
@@ -203,7 +227,7 @@ public class Logic {
         //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
         Game game = new Game();
         game.setName(gameName);
-        game.setHost(host);
+        game.setHost();
         game.setStatus(1); //1 is pending, 0 is done
 
         //TODO: Write game to db, and return game-id and set object before returning

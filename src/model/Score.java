@@ -19,11 +19,12 @@ public class Score {
     public Score(int id, int userId, int gameId, int hostId, int highScore)
     {
         this.id = id;
-        this.highScore = highScore;
         this.gameId = gameId;
         this.hostId = hostId;
         this.highScore = highScore;
     }
+
+    public Score(){}
 
     // Creates get method which returns the highScore
 

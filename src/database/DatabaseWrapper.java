@@ -85,7 +85,7 @@ public class DatabaseWrapper {
                         resultSet.getInt("endgame"),
                         resultSet.getString("host"),
                         resultSet.getString("opponent"),
-                        resultSet.getString("status")
+                        resultSet.getInt("status")
                 );
             }
 
@@ -214,7 +214,7 @@ public class DatabaseWrapper {
                         resultSet.getInt("endgame"),
                         resultSet.getString("host"),
                         resultSet.getString("opponent"),
-                        resultSet.getString("status")
+                        resultSet.getInt("status")
                 ));
             }
 
@@ -299,6 +299,7 @@ public class DatabaseWrapper {
         {
             PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlUser());
 
+            User user = new User();
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
