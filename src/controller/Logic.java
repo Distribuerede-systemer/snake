@@ -14,245 +14,127 @@ import model.User;
 import tui.Tui;
 
 /**
- * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application. 
+ * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
+ *
  * @author Henrik Thorn
  */
 public class Logic {
 
-	private Connection connection = null;
-	private PreparedStatement users = null;
-	private PreparedStatement games = null;
-	private PreparedStatement createUser = null;
-	private PreparedStatement deleteUser = null;
-	private PreparedStatement createGame = null;
-	private PreparedStatement delteGame = null;
-
-	private Tui tui;
-	private User usr;
-	private ArrayList<User> userList;
-	private boolean isAuthenticated;
-	private Game gme;
+    private static boolean isAuthenticated = false;
 
 
+    //Gets a list of all active users and return these as a ArrayList of User objects
+    public static ArrayList<User> getUsers() {
 
-	public Logic(){
+        // Define ArrayList to be used to add users and return them.
+        ArrayList<User> uj = null;
+        //TODO: Get all users from DB-wrapper
 
-		Config config = new Config();
-
-		try {
-			connection = DriverManager.getConnection(config.getDbname(), config.getUsername(), config.getPassword());
-		}
-		catch (Exception e){
-			tui.miscOut("Error.");
-		}
-
-		users = DB.getRecords('user');
-		games = DB.getRecords('games');
-
-		tui = new Tui();
-		userList = new ArrayList<User>();
-		isAuthenticated = false;
-
-	}
-
-	public void start(){
-
-		while (true) {
-			if(login() == 1)
-			isAuthenticated = true;
-
-			if(isAuthenticated){
-				userMenu();
-			}
-		}
-	}
-
-	public void userMenu(){
-
-		while(isAuthenticated) {
-
-			int menu = tui.userMenuScreen();
-
-			switch (menu) {
-
-				case 1:
-					// listUsers();
-					tui.miscOut("Game List: ");
-					break;
-				case 2:
-					tui.miscOut("User List: ");
-					tui.listUsers(userList);
-					break;
-				case 3:
-					tui.miscOut("Create User: ");
-					createUser();
-					break;
-				case 4:
-					tui.miscOut("Delete User: ");
-					deleteUser();
-					break;
-				case 5:
-					tui.miscOut("You Logged Out.");
-					isAuthenticated = false;
-					break;
-				default:
-					tui.miscOut("Unassigned key.");
-					break;
-
-			}
-		}
-	}
+        return uj;
 
 
+    }
+
+    public boolean isUserAuthenticated() {
+        return isAuthenticated;
+    }
+
+    public static boolean createUser(User user) {
+
+        //TODO: Create user with DB-wrapper. If creation succeeded return true, if not return false
+
+        return true;
+
+    }
+
+    public static boolean deleteUser(int id) {
+
+        //TODO: Delete user via DB-wrapper
+        return false;
+
+    }
+
+    public static void addUser(User user) {
+
+        //TODO: Add user to DB via DB-wrapper
+
+    }
 
 
-	//Gets a list of all active users and return these as a ArrayList of User objects 
-	public ArrayList<User> getUsers(){
+    //Gets a list of all games and return these as an ArrayList of Game objects
+    public static ArrayList<Game> getGames() {
 
-		// Define ArrayList to be used to add users and return them. 
-		ArrayList <User> uj = null;
+        //TODO: Get ALL games via DB-wrapper
 
+        ArrayList<Game> games = null;
+        return games;
 
-		return uj;
+    }
 
+    public static ArrayList<Game> getGames(int userId) {
 
-	}
+        //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
 
-	public void createUser(){
+        ArrayList<Game> games = null;
+        return games;
 
-		addUser(tui.enterFirstName(), tui.enterLastName(),tui.enterUsername(), tui.enterPassword());
-	}
-
-	public boolean deleteUser(){
-
-		String username = tui.deleteUserScreen();
-
-		if(removeUser(getUserFromUsername(username))) {
-			tui.miscOut(username + " was deleted.");
-			if(username.equals(usr.getUsername()))
-				start();
-			else
-				return true;
-		}
-		else
-			tui.miscOut(username + " was not found.");
-		return false;
-
-	}
-
-	public void addUser(String firstName, String lastName, String username, String password){
-
-		userList.add(new User(firstName, lastName, username, password));
-	}
-
-	public boolean removeUser(User u){
-		try {
-			if (userList.remove(u))
-				return true;
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	
-	//Gets a list of all games and return these as an ArrayList of Game objects
-	public ArrayList<Game> getGames(){
-
-		ArrayList <Game> games = null;
+    }
 
 
-		try(ResultSet resultSet = games.executeQuery()) {
+    //Returns object of game
+    public static Game getGame(int gameId) {
 
-			games = new ArrayList<Game>();
+        //TODO: Get specific game via DB-wrapper
 
-			while (resultSet.next()){
+        return null;
+    }
 
-				games.add(new Game(resultSet.getInt("ID"),
-						resultSet.getInt("Result"),
-						resultSet.getString("Controls"),
-						resultSet.getInt("NewGame"),
-						resultSet.getInt("EndGame"),
-						resultSet.getString("Host"),
-						resultSet.getString("Opponent"),
-						resultSet.getString("Status")));
-			}
+    //Return an istance of a game
+    public static Game createGame(String gameName, User host) {
 
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+        //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
+        Game game = new Game();
+        game.setName(gameName);
+        game.setHost(host);
+        game.setStatus(1); //1 is pending, 0 is done
 
-		return games;
+        //TODO: Write game to db, and return game-id and set object before returning
 
-	}
+        return game;
+    }
 
-	//Returns object of game
-	public Game getGame(Game gameName){
+    // Authenticates a user and returns a status code according to the result.
+    // CODES:
+    // 1 || SUCCESS
+    // 2 || USER DOES NOT EXIST
+    // 3 || WRONG PASSWORD
+    public static int login(String username, String password) {
 
-		return gameName;
-	}
+        ArrayList<User> allUsers = getUsers();
+        for (User user : allUsers){
+            if(user.getUserName().equals(username) && user.getPassword().equals(password)){
+                return 1;
+            }
+        }
 
-	//Return an istance of a game
-	public Game createGame(String gameName) {
+        return 0;
 
-		//int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
-		Game game = new Game(1, 1, "ASD", 1, 1, "localhost", "abcd", "HEJ");
+    }
 
-		return game;
-	}
+    public User getUser(int userId) {
 
-	// Authenticates a user and returns a status code according to the result. 
-	// CODES:
-	// 1 || SUCCESS
-	// 2 || USER DOES NOT EXIST
-	// 3 || WRONG PASSWORD
-	public int login() {
+        //TODO: Get specific user from DB via DB-wrapper
+        User user = new User();
+        return user;
 
-		String username;
-		String password;
-		try {
+    }
 
-			username =  tui.enterUsername();
-			password = tui.enterPassword();
+    //Deletes a game from the database
+    public boolean deleteGame(int gameId) {
 
-			for (User usr : userList) {
-				if (usr.getUserName().equals(username))
-				{
-					if(usr.getPassword().equals(password)) {
-						tui.miscOut("Success.");
-						return 1;
-					}
-					else {
-						tui.miscOut("Wrong password.");
-						return 3;
-					}
-				}
-				else {
-					tui.miscOut("User does not exist.");
-					return 2;
-				}
-			}
-		} catch (NullPointerException n) {
-			tui.miscOut("Invalid login");
-		}
-		return 2;
-	}
+        //TODO: Delete specific game from DB via DB-wrapper;
 
-	public User getUserFromUsername(String username){
+        return false;
+    }
 
-		for (User usr : userList) {
-			if (usr.getUserName().equals(username)){
-				return usr;
-			}
-		}
-		return null;
-	}
-
-	//Deletes a game from the database
-	public boolean deleteGame(){
-		return false;
-	}
-
-	//Deletes a user from the database
-	//TODO: Create function.
 }

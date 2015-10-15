@@ -28,6 +28,42 @@ public class Tui {
     }
 */
 
+    public void userMenu(){
+
+        while(isAuthenticated) {
+
+            int menu = userMenuScreen();
+
+            switch (menu) {
+
+                case 1:
+                    // listUsers();
+                    miscOut("Game List: ");
+                    break;
+                case 2:
+                    miscOut("User List: ");
+                    ArrayList<User> userList = getUsers();
+                    listUsers(userList);
+                    break;
+                case 3:
+                    miscOut("Create User: ");
+                    createUser();
+                    break;
+                case 4:
+                    miscOut("Delete User: ");
+                    deleteUser();
+                    break;
+                case 5:
+                    miscOut("You Logged Out.");
+                    isAuthenticated = false;
+                    break;
+                default:
+                    miscOut("Unassigned key.");
+                    break;
+
+            }
+        }
+    }
     public int userMenuScreen(){
 
         System.out.println("\n1: List all games");
