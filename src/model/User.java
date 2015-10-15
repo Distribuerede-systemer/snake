@@ -31,7 +31,9 @@ public class User {
         this.status = status;
         this.type = type;
     }
-    
+
+    public User(){}
+
     //creating get and set method for all the variables, so they can be used by other classes
     public int getId() {
         return id;
