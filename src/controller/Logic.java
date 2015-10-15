@@ -2,6 +2,8 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
 import model.User;
@@ -23,9 +25,14 @@ public class Logic {
     public static ArrayList<User> getUsers() {
 
         // Define ArrayList to be used to add users and return them.
-        ArrayList<User> uj = null;
-        //TODO: Get all users from DB-wrapper
 
+		//Initializes dbWrap object as type DatabaseWrapper
+		DatabaseWrapper dbWrap = new DatabaseWrapper();
+
+		//Instantiates ArrayList of type User as uj with the value from getUsers method in DatabaseWrapper.
+		ArrayList<User> uj = dbWrap.getUsers();
+
+		//Returns the ArrayList of users.
         return uj;
 
 
@@ -81,10 +88,14 @@ public class Logic {
      */
     public static User getUser(int userId) {
 
-        //TODO: Get specific user from DB via DB-wrapper
-        User user = new User();
-        return user;
+		//Initializes dbWrap object as type DatabaseWrapper
+		DatabaseWrapper dbWrap = new DatabaseWrapper();
 
+		//Instantiates ArrayList of type User as uj with the value from getUsers method in DatabaseWrapper.
+        User user = dbWrap.getUser(userId);
+
+		//Returns the ArrayList of users.
+        return user;
     }
 
     /**
@@ -130,7 +141,10 @@ public class Logic {
 
         //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
 
-        ArrayList<Game> games = null;
+		DatabaseWrapper dbWrap = new DatabaseWrapper();
+
+        ArrayList<Game> games = dbWrap.getGamesFromUserId(userId);
+
         return games;
 
     }
