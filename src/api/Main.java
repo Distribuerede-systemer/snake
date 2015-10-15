@@ -80,7 +80,7 @@ public class Main {
     }
 
     /**
-     * Create a object of tui class.
+     * Create an object of tui class.
      * This method starts the program
      */
 
