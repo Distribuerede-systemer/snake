@@ -31,15 +31,7 @@ public class User {
         this.type = type;
     }
 
-    public User(String firstName, String lastName, String email, String userName, String password, String type){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.userName = userName;
-        this.password = password;
-        status = "active";
-        this.type = type;
-    }
+    public User(){}
 
     //creating get and set method for all the variables, so they can be used by other classes
     public int getId() {

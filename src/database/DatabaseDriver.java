@@ -100,6 +100,10 @@ public class DatabaseDriver {
         return "Select * from users where username = ?";
     }
 
+    public String createGame() {
+        return"INSERT INTO games() VALUES ("
+    }
+
     public String deleteGame() {
         return"UPDATE games SET status = Deleted WHERE id = ?";
     }

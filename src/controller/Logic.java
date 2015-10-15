@@ -209,13 +209,15 @@ public class Logic {
      */
     public static Map startGame(int gameId){
 
-        //TODO: Get specific game from DB via DB-wrapper
-        //TODO: Get host and opponent associated to game
+        Game game = getGame(gameId);
+        //Game size = new Size();
+        Gamer host = new Gamer();
+        Gamer opponent = new Gamer();
+        //map.setSize(game.getSize());
+        host.setControls(game.getHostControls());
+        opponent.setControls(game.getOpponentControls());
 
-        Gamer host = null;
-        Gamer opponent = null;
-
-        return GameEngine.playGame(10, host, opponent);
+        return GameEngine.playGame(game.get, host, opponent);
 
     }
 
@@ -233,6 +235,8 @@ public class Logic {
         game.setHost("asd");
         game.setStatus(1); //1 is pending, 0 is done
 
+        DatabaseWrapper db = new DatabaseWrapper();
+        game.setGameId(db.createGame(gameName));
         //TODO: Write game to db, and return game-id and set object before returning
 
         return game;
