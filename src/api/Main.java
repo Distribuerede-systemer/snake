@@ -1,34 +1,17 @@
 package api;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import java.io.IOException;
 import java.sql.*;
 
 import Config.Config;
 import logic.Tui;
 
+
 /**
- * Created by tobiasjeremiassen on 12/10/15.
+ * Created by Tobias on 15/10/15.
  */
 
-// The Java class will be hosted at the URI path "/helloworld"
-@Path("/api")
-public class HelloWorld {
-    // The Java method will process HTTP GET requests
-    @GET
-    // The Java method will produce content identified by the MIME Media type "text/plain"
-    @Produces("text/plain")
-    public String getClichedMessage() {
-        // Return some cliched textual content
-        return "Hello World";
-    }
-
-    /**
-     * Created by Tobias on 15/10/15.
-     */
-
+public class Main {
 
     private static String sqlUrl = "jdbc:mysql://" + Config.getHost() + ":" + Config.getPort();
     private static String sqlUser = Config.getUsername();
@@ -52,7 +35,7 @@ public class HelloWorld {
 
     public static void main(String[] args) throws IOException {
 
-        //Check connection
+        //Check connection if there is a connection to the database
         try {
 
             connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
@@ -71,7 +54,13 @@ public class HelloWorld {
         }
     }
 
-    public static boolean DbExist() throws SQLException {
+    /**
+     * Checks if the databse exists or not
+     * @return bool
+     * @throws SQLException
+     */
+
+    protected static boolean DbExist() throws SQLException {
 
         ResultSet resultSet = connection.getMetaData().getCatalogs();
 
@@ -93,8 +82,8 @@ public class HelloWorld {
         return false;
     }
 
-    //Start the program
-    new Tui();
+    //Create a object of Start the program
+    new tui();
 }
 
 
@@ -126,5 +115,5 @@ public class HelloWorld {
     tui.start();*/
 
 
-//TEST !"#!"€!"
+//TEST  (  .  Y   .  )
 
