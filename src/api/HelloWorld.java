@@ -42,10 +42,11 @@ public class HelloWorld {
     @Produces("application/json")
     public String getUser(@PathParam("username") String username) {
 
-        Logic logic = new Logic();
         //udprint/hent/identificer af data omkring spillere
 
-        return new Gson().toJson(logic.getUserFromUsername(username));
+        User user = Logic.getUser(123);
+
+        return new Gson().toJson(user);
     }
 
     @GET //"GET-request"
@@ -66,9 +67,8 @@ public class HelloWorld {
     @Produces("application/json")
     public String getGames() {
 
-        Logic logic = new Logic();
 
-        return new Gson().toJson(logic.getGames());
+        return "";
 
     }
 
@@ -77,10 +77,9 @@ public class HelloWorld {
     @Produces("application/json")
     public String getGame(@PathParam("gameid") int gameid) {
 
-        Logic logic = new Logic();
 
 
-        return new Gson().toJson(logic.getGameFromGameId(gameid));
+        return "";
 
     }
 
@@ -96,13 +95,10 @@ public class HelloWorld {
 
             User user = new Gson().fromJson(data, User.class);
 
-            int result = logic.login(user.getUserName(), user.getPassword());
 
-            System.out.print(result);
             return Response.status(200).entity("{\"success\":\"true\"}").build();
         }catch (Exception e) {
             return  Response.status(400).entity("{}").build();
-            System.out.print("");
         }
         //// Authenticates a user and returns a status code according to the result.
         // CODES:
@@ -111,8 +107,6 @@ public class HelloWorld {
         // 3 || WRONG PASSWORD
         // logic.login();
 
-
-        return "OK";
 
         //såfremt der er overenstemmelse med brugernavn og password = godkendelse
     }
@@ -130,7 +124,7 @@ public class HelloWorld {
          javascript kode */
         //System.out.println(control1.getMovement());
 
-        if (control1.getMovement().equals("w"))
+        /*if (control1.getMovement().equals("w"))
             return Response.status(201).entity("Success").build();
 
         if (control1.getMovement().equals("a")) {
@@ -149,10 +143,11 @@ public class HelloWorld {
             //If-else statement, for de forskellige indtast muligheder, såfremt værdien er ugyldig udprintes en fejlkode.
 
 
-        }
+        }*/
 
         // System.out.println(data);
         //return "OK" ;
+        return Response.status(200).entity("OK").build();
     }
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes

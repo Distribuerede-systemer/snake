@@ -79,7 +79,7 @@ public class Logic {
      * @param userId
      * @return User object
      */
-    public User getUser(int userId) {
+    public static User getUser(int userId) {
 
         //TODO: Get specific user from DB via DB-wrapper
         User user = new User();

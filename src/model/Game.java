@@ -12,24 +12,24 @@ public class Game {
         private int result;
         private int newGame;
         private int endGame;
-        private String gameName;
+        private String name;
         private String hostControls;
-        private String host;
+        private User host;
         private String opponent;
         private String opponentControls;
-        private String status;
+        private int status;
         private Date created;
 
 
 
     //Creating the constructor and initiating the variables
-        public Game( int gameId, int result, String hostControls, Date created, String gameName, int newGame, int endGame, String host, String
-        opponent, String status){
+        public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, User host, String
+        opponent, int status){
             this.gameId = gameId;
             this.result = result;
             this.created = created;
             this.hostControls = hostControls;
-            this.gameName = gameName;
+            this.name = name;
             this.newGame = newGame;
             this.endGame = endGame;
             this.host = host;
