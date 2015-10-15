@@ -62,7 +62,7 @@ public class Main {
      * @throws SQLException
      */
 
-    protected static boolean DbExist() throws SQLException {
+    public static boolean DbExist() throws SQLException {
 
         ResultSet resultSet = connection.getMetaData().getCatalogs();
         while (resultSet.next()) {
