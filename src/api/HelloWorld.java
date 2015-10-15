@@ -38,7 +38,7 @@ public class HelloWorld {
 
     @GET //"GET-request"  Requesting specific data set.
     @Produces("application/json")
-    public String getUser(@PathParam("userid") String username) {
+    public String getUser(@PathParam("userid") String userid) {
 
         System.out.println(userid);
         //Printing/Identifying data among users
