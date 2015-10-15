@@ -16,10 +16,6 @@ public class Logik {
         tui = new Tui();
         userList = new ArrayList<User>();
         isAuthenticated = false;
-
-        addUser("Mads","123");
-        addUser("Ole", "321");
-        addUser("Helle", "asd");
     }
 
     public void start(){

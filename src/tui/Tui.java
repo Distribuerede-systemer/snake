@@ -4,7 +4,6 @@ import java.util.*;
 public class Tui {
 
     private Scanner input;
-    boolean isAuthenticated;
 
     public Tui(){
         input = new Scanner(System.in);
