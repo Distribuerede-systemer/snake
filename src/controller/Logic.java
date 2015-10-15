@@ -1,11 +1,12 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Map;
 import model.Game;
 import model.Gamer;
 import model.Score;
 import model.User;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
@@ -216,7 +217,7 @@ public class Logic {
         //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
         Game game = new Game();
         game.setName(gameName);
-        game.setHost();
+        game.setHost("asfd");
         game.setStatus(1); //1 is pending, 0 is done
 
         //TODO: Write game to db, and return game-id and set object before returning

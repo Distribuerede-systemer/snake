@@ -12,12 +12,13 @@ import javax.ws.rs.core.Response;
 
 import controller.Logic;
 import model.Game;
+import model.Score;
 import sun.rmi.runtime.Log;
 import model.User;
 
 // The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
-public class HelloWorld {
+public class api {
 
     // The Java method will process HTTP GET requests
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
@@ -41,43 +42,38 @@ public class HelloWorld {
     }
 
     @GET //"GET-request"
-    @Path("/user/{username}")
+    @Path("/user/{userId}")
     @Produces("application/json")
-    public String getUser(@PathParam("username") String username) {
+    // JSON: {"userId": [userid]}
+    public String getUser(@PathParam("userId") int userId) {
 
-        username = Logic.getUser();
+        User user = Logic.getUser(userId);
         //udprint/hent/identificer af data omkring spillere
 
-        return new Gson().toJson(username);
+        return new Gson().toJson(user);
     }
 
     @GET //"GET-request"
     @Path("/highscore")
     @Produces("application/json")
-    public String getScore(String data) {
+    public String getHighScore(String data) {
 
-        //TODO: ();Get method from logic to return highscore.
+        //TODO: ();Get method from logic to return highscores.
 
-
-
-        System.out.println(data);
-        //udprintning/hent af data omkring highscore
-
-        return data;
+         ArrayList<model.Score> Score = Logic.getHighscores();
+         return new Gson().toJson(Score);
 
     }
 
     @GET //"GET-request"
-    @Path("/result/{userid}")
+    @Path("/score/{userid}")
     @Produces("application/json")
-    public String getGame(@PathParam("userid") int userid) {
+    public String getScore(@PathParam("userid") int userid) {
 
-        userid = Logic.getGame();
-        return new Gson().toJson(gameid);
+        Score = Logic.getHighscore(userid);
+        return new Gson().toJson(User);
 
     }
-
-
 
     @GET //"GET-request"
     @Path("/games")
@@ -94,7 +90,7 @@ public class HelloWorld {
     @Produces("application/json")
     public String getGame(@PathParam("gameid") int gameid) {
 
-        gameid = Logic.getGame();
+        Game game = Logic.getGame(gameid);
         return new Gson().toJson(gameid);
 
     }
@@ -177,7 +173,16 @@ public class HelloWorld {
     @Produces("text/plain")
     public String createUser(String data) {
 
-        createUser = Logic.createUser();
+        User user = null;
+
+        boolean createdUser = Logic.createUser(user);
+
+        if(createdUser){
+
+        } else {
+
+        }
+
 
         return new Gson().toJson(createUser);
 
@@ -193,30 +198,31 @@ public class HelloWorld {
     }
 
     @POST //POST-request: Opstart af nyt spil
-    @Path("/start")
+    @Path("/gameId")
     @Produces("text/plain")
-    public String startGame(String data) {
+    public String startGame(@Path("gameId") int gameId) {
 
-        startGame = Logic.startGame();
+        startGame = Logic.startGame(gameId);
         return new Gson().toJson(startGame);
+
     }
 
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
     @Path("/user/")
     @Produces("text/plain")
-    public String deleteUser(String data) {
+    public String deleteUser(@Path("id")int id) {
 
-        deleteUser = Logic.deleteUser();
+        boolean deleteUser = Logic.deleteUser();
         return new Gson().toJson(deleteUser);
     }
 
     @DELETE //DELETE-request fjernelse af data(spillet slettes)
-    @Path("/game/")
+    @Path("/gameId/")
     @Produces("text/plain")
-    public String deleteGame(String data) {
+    public String deleteGame(@Path("gameId") int gameId) {
 
-        deleteGame = Logic.deleteUser();
-        return new Gson().toJson(deleteGame)
+        boolean deleteGame = Logic.deleteUser(gameId);
+        return new Gson().toJson(deleteGame);
     }
 
     /**
@@ -264,4 +270,4 @@ public class HelloWorld {
         System.out.println();
     }
 
-    }
+}
