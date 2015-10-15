@@ -83,7 +83,7 @@ public class DatabaseDriver {
      * @return SqlStatement
      */
     public String updateSqlUser(){
-        return "UPDATE Users SET FirstName = ?, LastName = ?, Email = ?, password = ?, " +
+        return "UPDATE Users SET first_name = ?, last_name = ?, email = ?, password = ?, " +
                 "status = ?, type = ? WHERE id = ?";
     }
  //
@@ -92,23 +92,18 @@ public class DatabaseDriver {
      * @return SqlStatement
      */
     public String updateSqlGame(){
-        return "UPDATE Games SET game_name = ?, status = ?, result = ?, hostcontrols = ?, " +
-                "endgame = ?, opponentcontrols = ? WHERE id = ?";
+        return "UPDATE Games SET game_name = ?, status = ?, result = ?, host_controls = ?, " +
+                "opponent_controls = ? WHERE id = ?";
     }
 
     public String createSqlUser() {
-        return "Insert into users () values ()";
+        return "Insert into users (first_name, last_name, email, user_name, password, status, type) " +
+                "values (?, ?, ?, ?, ?, ?, ?, )";
     }
 
-    createUser.setString(1, user.getFirstName());
-    createUser.setString(2, user.getLastName());
-    createUser.setString(3, user.getEmail());
-    createUser.setString(4, user.getUserName());
-    createUser.setString(5, user.getPassword());
-    createUser.setString(6, user.getStatus());
-    createUser.setString(7, user.getType());
-
     public String createSqlGame() {
+        return "Insert into games (host, opponent, name, status, host_controls) " +
+                "values (?, ?, ?, ?, ?)";
     }
 
     public String createSqlScore() {

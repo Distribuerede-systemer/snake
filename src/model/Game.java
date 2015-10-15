@@ -10,36 +10,42 @@ public class Game {
 
 
     //Creating the variables needed for the game
-    private int gameId;
-    private int result;
-    private int newGame;
-    private int endGame;
+    private int id;
+    private int winner;
     private String name;
     private String hostControls;
-    private String host;
-    private String opponent;
+    private User host;
+    private User opponent;
     private String opponentControls;
     private String status;
     private Date created;
 
-
-
     //Creating the constructor and initiating the variables
-    public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, String host, String
+    public Game( int id, int winner, String hostControls, Date created, String name, User host, User
             opponent, String status){
-        this.gameId = gameId;
-        this.result = result;
+        this.id = id;
+        this.winner = winner;
         this.created = created;
         this.hostControls = hostControls;
         this.name = name;
-        this.newGame = newGame;
-        this.endGame = endGame;
         this.host = host;
         this.opponent = opponent;
         this.status = status;
     }
 
     public Game(){}
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 
     public String getName() {
         return name;
@@ -51,20 +57,20 @@ public class Game {
 
     //methods that the API can use
     //Creating get/set method for all the variables, so they can be used by other classes
-    public int getGameId() {
-        return gameId;
+    public int getId() {
+        return id;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setGameId(int id) {
+        this.id = id;
     }
 
-    public int getResult() {
-        return result;
+    public int getWinner() {
+        return winner;
     }
 
-    public void setResult(int result) {
-        this.result = result;
+    public void setWinner(int winner) {
+        this.winner = winner;
     }
 
     public String getHostControls() {
@@ -75,35 +81,19 @@ public class Game {
         this.hostControls = hostControls;
     }
 
-    public int getNewGame() {
-        return newGame;
-    }
-
-    public void setNewGame(int newGame) {
-        this.newGame = newGame;
-    }
-
-    public int getEndGame() {
-        return endGame;
-    }
-
-    public void setEndGame(int endGame) {
-        this.endGame = endGame;
-    }
-
-    public String getHost() {
+    public User getHost() {
         return host;
     }
 
-    public void setHost(String host) {
+    public void setHost(User host) {
         this.host = host;
     }
 
-    public String getOpponent() {
+    public User getOpponent() {
         return opponent;
     }
 
-    public void setOpponent(String opponent) {
+    public void setOpponent(User opponent) {
         this.opponent = opponent;
     }
 

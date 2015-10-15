@@ -49,8 +49,8 @@ public class DatabaseWrapper {
             while (resultSet.next()) {
                 user = new User(
                         resultSet.getInt("id"),
-                        resultSet.getString("firstname"),
-                        resultSet.getString("lastname"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
                         resultSet.getString("email"),
                         resultSet.getString("username"),
                         resultSet.getString("password"),
@@ -91,13 +91,11 @@ public class DatabaseWrapper {
                 game = new Game(
                         resultSet.getInt("id"),
                         resultSet.getInt("result"),
-                        resultSet.getString("hostControls"),
+                        resultSet.getString("host_controls"),
                         resultSet.getDate("created"),
-                        resultSet.getString("game_name"),
-                        resultSet.getInt("newgame"),
-                        resultSet.getInt("endgame"),
-                        resultSet.getString("host"),
-                        resultSet.getString("opponent"),
+                        resultSet.getString("name"),
+                        getUser(resultSet.getInt("host")),
+                        getUser(resultSet.getInt("opponent")),
                         resultSet.getString("status")
                 );
             }
@@ -117,7 +115,6 @@ public class DatabaseWrapper {
 
         return game;
     }
-
 
     public Score getScore(int id) {
         Score score = null;
@@ -176,16 +173,16 @@ public class DatabaseWrapper {
             while (resultSet.next())
             {
                 result.add(new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("firstname"),
-                        resultSet.getString("lastname"),
-                        resultSet.getString("email"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("status"),
-                        resultSet.getString("type")
-                ));
+                                resultSet.getInt("id"),
+                                resultSet.getString("first_name"),
+                                resultSet.getString("last_name"),
+                                resultSet.getString("email"),
+                                resultSet.getString("username"),
+                                resultSet.getString("password"),
+                                resultSet.getDate("created"),
+                                resultSet.getString("status"),
+                                resultSet.getString("type")
+                        ));
             }
 
         } catch (SQLException e) {
@@ -220,13 +217,11 @@ public class DatabaseWrapper {
                 result.add(new Game(
                         resultSet.getInt("id"),
                         resultSet.getInt("result"),
-                        resultSet.getString("hostControls"),
+                        resultSet.getString("host_controls"),
                         resultSet.getDate("created"),
-                        resultSet.getString("game_name"),
-                        resultSet.getInt("newgame"),
-                        resultSet.getInt("endgame"),
-                        resultSet.getString("host"),
-                        resultSet.getString("opponent"),
+                        resultSet.getString("name"),
+                        getUser(resultSet.getInt("host")),
+                        getUser(resultSet.getInt("opponent")),
                         resultSet.getString("status")
                 ));
             }
@@ -299,7 +294,6 @@ public class DatabaseWrapper {
             ps.setString(6, user.getType());
             ps.setInt(7, user.getId());
 
-
             ps.executeUpdate();
         } catch (SQLException sqlException)
         {
@@ -315,13 +309,12 @@ public class DatabaseWrapper {
         {
             PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlGame());
 
-            ps.setString(1, game.getGameName());
+            ps.setString(1, game.getName());
             ps.setString(2, game.getStatus());
-            ps.setInt(3, game.getResult());
+            ps.setInt(3, game.getWinner());
             ps.setString(4, game.getHostControls());
-            ps.setInt(5, game.getEndGame());
             ps.setString(6, game.getOpponentControls());
-            ps.setInt(7, game.getGameId());
+            ps.setInt(7, game.getId());
 
             ps.executeUpdate();
         } catch (SQLException sqlException)
@@ -349,7 +342,6 @@ public class DatabaseWrapper {
                 createUser.setString(6, user.getStatus());
                 createUser.setString(7, user.getType());
 
-
                 createUser.executeUpdate();
         } catch (SQLException sqlException)
         {
@@ -365,16 +357,11 @@ public class DatabaseWrapper {
             // Prepared statement til at tilfoeje en bruger
             PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame());
 
-            createGame.setString(1, game.getHost());
-            createGame.setString(2, game.getOpponent());
-            createGame.setString(3, game.getGameName());
+            createGame.setInt(1, game.getHost().getId());
+            createGame.setInt(2, game.getOpponent().getId());
+            createGame.setString(3, game.getName());
             createGame.setString(4, game.getStatus());
-            createGame.setInt(5, game.getResult());
-            createGame.setString(6, game.getHostControls());
-            createGame.setInt(7, game.getNewGame());
-            createGame.setInt(8, game.getEndGame());
-            createGame.setString(9, game.getOpponentControls());
-
+            createGame.setString(5, game.getHostControls());
 
             createGame.executeUpdate();
         } catch (SQLException sqlException)
@@ -382,11 +369,6 @@ public class DatabaseWrapper {
             sqlException.printStackTrace();
             dbDriver.close();
         }
-    }
-
-    public String createSqlScore(){
-        return "INSERT INTO Scores ( user_id, game_id, host_id, score) " +
-                "VALUES ( ?, ?, ?, ? )";
     }
 
 //    public void createScore(Gamer host, Gamer opponent){

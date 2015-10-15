@@ -11,18 +11,18 @@ public class Score {
     // Declare highScore
     private int id;
     private int userId;
-    private int gameId;
     private int hostId;
-    private int highScore;
+    private int gameId;
+    private int score;
 
     // Creates constructor
-    public Score(int id, int userId, int gameId, int hostId, int highScore)
+    public Score(int id, int userId, int gameId, int hostId, int score)
     {
         this.id = id;
-        this.highScore = highScore;
+        this.userId = userId;
         this.gameId = gameId;
         this.hostId = hostId;
-        this.highScore = highScore;
+        this.score = score;
     }
 
     // Creates get method which returns the highScore
@@ -60,11 +60,11 @@ public class Score {
         this.hostId = hostId;
     }
 
-    public int getHighScore() {
-        return highScore;
+    public int getScore() {
+        return score;
     }
 
-    public void setHighScore(int highScore) {
-        this.highScore = highScore;
+    public void setScore(int score) {
+        this.score = score;
     }
 }
