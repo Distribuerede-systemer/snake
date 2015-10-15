@@ -132,7 +132,7 @@ public class GameEngine {
         }
 
         // Return the gamers back to the logic layer, who will now have access to see score, winner etc.
-        return new Pair <Gamer, Gamer> (host, opponent);
+        return new Pair<>(host, opponent);
 
     }
 
