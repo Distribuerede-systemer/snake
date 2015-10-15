@@ -1,18 +1,21 @@
 package tui;
 import java.util.*;
+import model.User;
 
 public class Tui {
 
     private Scanner input;
+    private User usr;
 
     public Tui(){
+
         input = new Scanner(System.in);
     }
 
     public void listUsers(ArrayList<User> userList){
 
         for(User usr : userList){
-            System.out.println("User: " + usr.getUsername());
+            System.out.println("User: " + usr.getUserName());
         }
     }
 /*

@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Scanner;
-
 
 /**
  * Created by Oscar on 12-10-2015.
@@ -19,15 +17,12 @@ public class User {
 
 
   //Create constructor and initiating the variables
-    public User (int id, String firstName, String lastName, String userName, String password, String created, String status) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userName = userName;
-        this.password = password;
-        this.created = created;
-        this.status = status;
-    }
+  public User (String firstName, String lastName, String username, String password) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.userName = username;
+      this.password = password;
+  }
     
     
     
@@ -85,24 +80,4 @@ public class User {
         this.status = status;
     }
 
-    //creating a scanner with the scannername newScanner
-    Scanner newScanner = new Scanner(System.in);
-
-    //the scanner saves the input in the varible scannerInput
-    String scannerInput = newScanner.nextLine();
-
-    //userNameInput and passwordInput is defined by the input from newScanner
-    String userNameInput = scannerInput;
-    String passwordInput = scannerInput;
-    
-    //auth is always false, unless authentication is accepted.
-    boolean auth = false;
-
-    //checking if userName and the inputted username is alike - checking if password and inputted password is alike
-    private void authentication() {
-
-        if (getUserName() == userNameInput && getPassword() == passwordInput) {
-            auth = true;
-        }
-    }
 }
