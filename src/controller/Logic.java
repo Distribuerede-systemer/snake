@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 import model.Config;
@@ -154,6 +155,28 @@ public class Logic {
         return null;
     }
 
+
+    /**
+     * Makes another user join an existing game
+     * @param gameId
+     * @param opponent
+     * @param controls
+     * @return true if success, false if failure
+     */
+    public static boolean joinGame(int gameId, User opponent, String controls){
+
+        //TODO: Find game by id
+        //TODO: Add opponent, with provided controls
+
+        return true;
+
+    }
+
+
+    public static Map startGame(int gameId){
+
+    }
+
     /**
      * Create a game
      * @param gameName
@@ -184,5 +207,7 @@ public class Logic {
 
         return false;
     }
+
+
 
 }
