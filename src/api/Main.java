@@ -3,7 +3,7 @@ package api;
 import java.io.IOException;
 import java.sql.*;
 //import config.config;
-//import logic.Tui;
+//import tui.Logik;
 //import database.DatabaseDriver;
 
 
@@ -24,9 +24,10 @@ public class Main {
 
         new DatabaseDriver.checkConnection();
 
-        new tui();
+        new Logik.Start();
 
     }
+}
 
 
 
