@@ -1,8 +1,5 @@
 package api;
 
-import com.sun.jersey.api.container.httpserver.HttpServerFactory;
-import com.sun.net.httpserver.HttpServer;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -29,7 +26,9 @@ public class HelloWorld {
         return "Hello World";
     }
 
-    private static final String sqlUrl = "jdbc:mysql://localhost:3306/";
+    //DELETE and replace with config
+
+    private static final String sqlUrl = "jdbc:mysql://localhost:10321/";
     private static final String sqlUser = "root";
     private static final String sqlPassword = "";
 
@@ -68,7 +67,10 @@ public class HelloWorld {
 
             System.exit(1);
         }
+    }
+}
 
+/*
 
 
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
@@ -83,6 +85,7 @@ public class HelloWorld {
         System.out.println("Server stopped");
     }
 
+*/
 
     //Start the program
      // new Tui();
@@ -91,9 +94,9 @@ public class HelloWorld {
 /*    Tui tui = new Tui();
     tui.start();*/
 
-}
 
 
 
-//Test
+
+//TEST !"#!"€!"
 
