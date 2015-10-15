@@ -1,20 +1,18 @@
 package api;
 
-import com.sun.net.httpserver.HttpServer;
-import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-
+import com.sun.jersey.api.container.httpserver.HttpServerFactory;
+import com.sun.net.httpserver.HttpServer;
 import controller.Logic;
 import model.Game;
 import model.Score;
-import sun.rmi.runtime.Log;
 import model.User;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 
 // The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
@@ -70,8 +68,8 @@ public class api {
     @Produces("application/json")
     public String getScore(@PathParam("userid") int userid) {
 
-        Score = Logic.getHighscore(userid);
-        return new Gson().toJson(User);
+        Score score = Logic.getHighscore(userid);
+        return new Gson().toJson(userid);
 
     }
 
@@ -100,19 +98,19 @@ public class api {
     @Produces("application/json")
     public Response login(String data) {
 
-        Logic logic = new Logic();
-
+//        Logic logic = new Logic();
+  //      Logic.userLogin();
 
         try{
 
             User user = new Gson().fromJson(data, User.class);
 
-            int result = logic.login(user.getUserName(), user.getPassword());
+            int result = Logic.userLogin(user.getUserName(), user.getPassword());
 
             System.out.print(result);
             return Response.status(200).entity("{\"success\":\"true\"}").build();
         }catch (Exception e) {
-            return  Response.status(400).entity("{}").build();
+            return  Response.status(400).entity("{\"Bad\"request\"true\"}").build();
             System.out.print("");
         }
         //// Authenticates a user and returns a status code according to the result.
@@ -123,7 +121,7 @@ public class api {
         // logic.login();
 
 
-        return "OK";
+        //return "OK";
 
         //såfremt der er overenstemmelse med brugernavn og password = godkendelse
     }
@@ -141,7 +139,7 @@ public class api {
          javascript kode */
         //System.out.println(control1.getMovement());
 
-        Logic.
+        Logic
 
         if (control1.getMovement().equals("w"))
             return Response.status(201).entity("Success").build();
@@ -184,25 +182,26 @@ public class api {
         }
 
 
-        return new Gson().toJson(createUser);
+        //return new Gson().toJson(createUser);
 
     }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
     @Path("/create")
     @Produces("text/plain")
-    public String createGame(String data) {
+    public String createGame(String gameName, int userId) {
 
-        createGame = Logic.createGame();
+        User host = Logic.getUser(userId);
+        createGame = Logic.createGame(gameName, host);
         return new Gson().toJson(createGame);
     }
 
     @POST //POST-request: Opstart af nyt spil
     @Path("/gameId")
     @Produces("text/plain")
-    public String startGame(@Path("gameId") int gameId) {
+    public String startGame(int gameId) {
 
-        startGame = Logic.startGame(gameId);
+        Map startGame = Logic.startGame(gameId);
         return new Gson().toJson(startGame);
 
     }
@@ -210,16 +209,16 @@ public class api {
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
     @Path("/user/")
     @Produces("text/plain")
-    public String deleteUser(@Path("id")int id) {
+    public String deleteUser(int userId) {
 
-        boolean deleteUser = Logic.deleteUser();
+        boolean deleteUser = Logic.deleteUser(userId);
         return new Gson().toJson(deleteUser);
     }
 
     @DELETE //DELETE-request fjernelse af data(spillet slettes)
     @Path("/gameId/")
     @Produces("text/plain")
-    public String deleteGame(@Path("gameId") int gameId) {
+    public String deleteGame(int gameId) {
 
         boolean deleteGame = Logic.deleteUser(gameId);
         return new Gson().toJson(deleteGame);
@@ -242,7 +241,7 @@ public class api {
             User user = new Gson().fromJson(data, User.class);
 
             Logic logic = new Logic();
-            int result = logic.login(user.getUserName(), user.getPassword());
+            int result = Logic.login(user.getUserName(), user.getPassword());
 
             System.out.println(result);
             return Response.status(200).entity("{\"success\":\"true\"}").build();
