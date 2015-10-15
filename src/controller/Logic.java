@@ -121,7 +121,7 @@ public class Logic {
         try {
 
             resultSet = selectAllGames.executeQuery();
-            getGames() = new ArrayList<games>();
+            getGames() = new ArrayList<Game>();
             
             while (resultSet.next()) {
 
