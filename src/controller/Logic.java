@@ -5,6 +5,7 @@ import java.util.Map;
 import model.Game;
 import model.Gamer;
 import model.User;
+import database.DatabaseWrapper;
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
@@ -129,8 +130,12 @@ public class Logic {
     public static ArrayList<Game> getGames(int userId) {
 
         //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
-
+		DatabaseWrapper dbWrap = new DatabaseWrapper();
         ArrayList<Game> games = null;
+
+
+		dbWrap.getGame(userId);
+
         return games;
 
     }
@@ -143,6 +148,9 @@ public class Logic {
     public static Game getGame(int gameId) {
 
         //TODO: Get specific game via DB-wrapper
+
+
+
 
         return null;
     }
