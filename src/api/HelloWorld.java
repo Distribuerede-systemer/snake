@@ -1,15 +1,19 @@
 package api;
-import com.sun.net.httpserver.HttpServer;
-import com.sun.jersey.api.container.httpserver.HttpServerFactory;
-import java.io.IOException;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+//import logic.Tui;
 
 /**
- * Created by jesperbruun on 12/10/15.
+ * Created by tobiasjeremiassen on 12/10/15.
  */
+
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("/api")
 public class HelloWorld {
@@ -22,8 +26,47 @@ public class HelloWorld {
         return "Hello World";
     }
 
+    private static final String sqlUrl = "jdbc:mysql://localhost:3306/";
+    private static final String sqlUser = "root";
+    private static final String sqlPassword = "";
+
+    private static Connection connection = null;
+
     public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServerFactory.create("http://localhost:9998/");
+
+
+        /**
+         * Check if the connection to the Database is valid.
+         *
+         */
+
+        try {
+
+            connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
+
+            //Returns true if the connection has not been closed and is still valid.
+            // The driver shall submit a query on the connection or use some other mechanism that
+            // positively verifies the connection is still valid when this method is called.
+
+            if (connection.isValid(1000)) {
+
+                //If the database is valid, print "DB ok"
+                System.out.println("DB is running! cool");
+
+            } else {
+
+                System.out.println("Database does not exists, LOL!");
+            }
+
+        } catch (SQLException e) {
+
+            //handle the exception
+            e.printStackTrace();
+
+            System.exit(1);
+        }
+
+        /*HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
 
         System.out.println("Server running");
@@ -32,6 +75,20 @@ public class HelloWorld {
         System.in.read();
         System.out.println("Stopping server");
         server.stop(0);
-        System.out.println("Server stopped");
+        System.out.println("Server stopped");*/
     }
+
+
+    //Start the program
+    //new Tui();
+
+
+    // Tui tui = new Tui();
+    //tui.start();
+
 }
+
+
+
+
+
