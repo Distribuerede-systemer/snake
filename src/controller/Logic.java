@@ -1,6 +1,9 @@
 package controller;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 
@@ -28,22 +31,23 @@ public class Logic {
 	private User usr;
 	private ArrayList<User> userList;
 	private boolean isAuthenticated;
+	private Game gme;
 
 
 
 	public Logic(){
 
 		Config config = new Config();
+
 		try {
 			connection = DriverManager.getConnection(config.getDbname(), config.getUsername(), config.getPassword());
-
-		}catch (Exception e){
-
+		}
+		catch (Exception e){
 			tui.miscOut("Error.");
 		}
 
-		users = DBCon.getRecords('user');
-		games = DBCon.getRecords('games');
+		users = DB.getRecords('user');
+		games = DB.getRecords('games');
 
 		tui = new Tui();
 		userList = new ArrayList<User>();
@@ -170,12 +174,12 @@ public class Logic {
 
 	
 	//Gets a list of all games and return these as an ArrayList of Game objects
-	public ArrayList<Game> getGames(String type){
+	public ArrayList<Game> getGames(){
 
 		ArrayList <Game> games = null;
 
 
-		try(ResultSet resultset = games.executeQuery()) {
+		try(ResultSet resultSet = games.executeQuery()) {
 
 			games = new ArrayList<Game>();
 
@@ -229,7 +233,7 @@ public class Logic {
 			password = tui.enterPassword();
 
 			for (User usr : userList) {
-				if (usr.getUsername().equals(username))
+				if (usr.getUserName().equals(username))
 				{
 					if(usr.getPassword().equals(password)) {
 						tui.miscOut("Success.");
@@ -265,7 +269,7 @@ public class Logic {
 	public User getUserFromUsername(String username){
 
 		for (User usr : userList) {
-			if (usr.getUsername().equals(username)){
+			if (usr.getUserName().equals(username)){
 				return usr;
 			}
 		}
@@ -274,6 +278,7 @@ public class Logic {
 
 	//Deletes a game from the database
 	public boolean deleteGame(){
+		return false;
 	}
 
 
