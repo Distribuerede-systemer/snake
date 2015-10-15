@@ -75,7 +75,7 @@ public class DatabaseWrapper {
 
 
             while (resultSet.next()) {
-                game = new Game(
+                game  = new Game(
                         resultSet.getInt("id"),
                         resultSet.getInt("result"),
                         resultSet.getString("hostControls"),

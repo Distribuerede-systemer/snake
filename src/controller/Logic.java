@@ -1,5 +1,7 @@
 package controller;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 import model.Game;
@@ -114,10 +116,42 @@ public class Logic {
      */
     public static ArrayList<Game> getGames() {
 
-        //TODO: Get ALL games via DB-wrapper
-
         ArrayList<Game> games = null;
+        ResultSet resultSet = null;
+        try {
+
+            resultSet = selectAllGames.executeQuery();
+            getGames() = new ArrayList<games>();
+            
+            while (resultSet.next()) {
+
+                getGames().add(new Game (
+                        resultSet.getInt("id"),
+                        resultSet.getInt("result"),
+                        resultSet.getString("hostControls"),
+                        resultSet.getDate("created"),
+                        resultSet.getString("game_name"),
+                        resultSet.getInt("newgame"),
+                        resultSet.getInt("endgame"),
+                        resultSet.getString("host"),
+                        resultSet.getString("opponent"),
+                        resultSet.getString("status")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+
+            }
+
         return games;
+    }
 
     }
 
