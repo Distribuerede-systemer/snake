@@ -22,5 +22,10 @@ public class Score {
     {
         return highScore;
     }
-
+    // Creates setter method
+    public void setHighScore(int _highScore)
+    {
+        highScore = _highScore;
+    }
+    
 }
