@@ -25,35 +25,34 @@ public class Logic {
 	private PreparedStatement createUser = null;
 	private PreparedStatement deleteUser = null;
 	private PreparedStatement createGame = null;
-	private PreparedStatement delteGame = null;
+	private PreparedStatement deleteGame = null;
 
 	private Tui tui;
 	private User usr;
 	private ArrayList<User> userList;
 	private boolean isAuthenticated;
-	private Game gme;
+	private Game game;
 
 
-
-	public Logic(){
+	public Logic() {
 
 		Config config = new Config();
 
 		try {
 			connection = DriverManager.getConnection(config.getDbname(), config.getUsername(), config.getPassword());
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			tui.miscOut("Error.");
 		}
 
-		users = DB.getRecords('user');
-		games = DB.getRecords('games');
+		users = DB.getRecords("user");
+		games = DB.getRecords("games");
 
 		tui = new Tui();
 		userList = new ArrayList<User>();
 		isAuthenticated = false;
 
 	}
+
 
 	public void start(){
 
@@ -124,8 +123,11 @@ public class Logic {
 						 resultSet.getString("Username"),
 						resultSet.getString("Password"),
 						resultSet.getString("Created"),
-						resultSet.getString("Status")));
+						resultSet.getString("Status");
+
 			}
+
+
 		}catch(Exception e){
 			e.printStackTrace();}
 		// Return Users

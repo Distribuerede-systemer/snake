@@ -1,6 +1,5 @@
 package database;
 
-import com.sun.rowset.CachedRowSetImpl;
 import model.User;
 
 import java.sql.*;
@@ -37,16 +36,11 @@ public class DatabaseWrapper {
 
             while (resultSet.next()) {
                 user = new User(
-                        resultSet.getInt("id"),
                         resultSet.getString("firstname"),
                         resultSet.getString("lastname"),
                         resultSet.getString("email"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("status"),
-                        resultSet.getString("type")
-                        );
+                        resultSet.getString("username")
+                );
             }
 
         } catch (SQLException e) {

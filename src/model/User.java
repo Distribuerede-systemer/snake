@@ -20,7 +20,7 @@ public class User {
     private String type;
 
 
-    public User (int id, String firstName, String lastName, String email, String userName, String password, Date created, String status, String type ) {
+    public User(String firstName, String lastName, String email, String userName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -88,4 +88,6 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
 }
