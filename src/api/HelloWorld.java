@@ -71,7 +71,7 @@ public class HelloWorld {
 }
 
 /*
-
+//tere
 
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
