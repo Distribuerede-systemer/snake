@@ -83,7 +83,7 @@ public class HelloWorld {
 
     @POST
     @Path("/login/")
-    @Produces("text/plain")
+    @Produces("application/json")
     public String login(String data)  {
 
         System.out.println(data);
@@ -95,18 +95,28 @@ public class HelloWorld {
     @Produces("application/json")
 
     public Response controls (String json) {
-            // public String controls(String data)  {
+        // public String controls(String data)  {
 
         Control control1 = new Gson().fromJson(json, Control.class);
-
         System.out.println(control1.getMovement());
 
-        if (control1.getMovement().equals("d"))
-        return Response.status(201).entity("Success").build();
-        else { return Response.status(500).entity("Fail").build();
+        if (control1.getMovement().equals("w"))
+            return Response.status(201).entity("Success").build();
+
+            if (control1.getMovement().equals("a")) {
+            return Response.status(201).entity("Success").build();
+
+        }   if (control1.getMovement().equals("s")) {
+            return Response.status(201).entity("Success").build();
+
+        }   if (control1.getMovement().equals("d")) {
+            return Response.status(201).entity("Success").build();
 
         }
+        else { return Response.status(500).entity("Fail").build();
 
+
+        }
 
        // System.out.println(data);
         //return "OK" ;
