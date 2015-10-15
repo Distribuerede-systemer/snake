@@ -1,5 +1,8 @@
 package api;
 
+import com.sun.jersey.api.container.httpserver.HttpServerFactory;
+import com.sun.net.httpserver.HttpServer;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -66,7 +69,7 @@ public class HelloWorld {
             System.exit(1);
         }
 
-        /*HttpServer server = HttpServerFactory.create("http://localhost:9998/");
+        HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
 
         System.out.println("Server running");
@@ -75,12 +78,12 @@ public class HelloWorld {
         System.in.read();
         System.out.println("Stopping server");
         server.stop(0);
-        System.out.println("Server stopped");*/
+        System.out.println("Server stopped");
     }
 
 
     //Start the program
-    //new Tui();
+     // new Tui();
 
 
     // Tui tui = new Tui();
