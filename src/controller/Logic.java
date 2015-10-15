@@ -2,6 +2,8 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
 import model.User;
@@ -23,8 +25,9 @@ public class Logic {
     public static ArrayList<User> getUsers() {
 
         // Define ArrayList to be used to add users and return them.
-        ArrayList<User> uj = null;
-        //TODO: Get all users from DB-wrapper
+        DatabaseWrapper db = new DatabaseWrapper();
+
+        ArrayList<User> uj = db.getUsers();
 
         return uj;
 
