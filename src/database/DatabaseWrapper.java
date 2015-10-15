@@ -18,7 +18,6 @@ public class DatabaseWrapper {
         connection = dbDriver.getConnection();
     }
 
-
     public User getUser(int id) {
         User user = null;
         ResultSet resultSet = null;
@@ -29,15 +28,25 @@ public class DatabaseWrapper {
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
-            if (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getInt(1));
-                user.setFirstName(resultSet.getString(2));
-                user.setLastName(resultSet.getString(3));
-                user.setUserName(resultSet.getString(4));
-                user.setPassword(resultSet.getString(5));
-                user.setCreated(resultSet.getDate(6));
-                user.setStatus(resultSet.getString(7));
+//            while (resultSet.next())
+//            {
+////                user = new User(resultSet.getString("userName"), resultSet.getString("Password"),
+////                        resultSet.getBoolean("AdminRights"), resultSet.getDouble("Balance"));
+//            }
+
+
+            while (resultSet.next()) {
+                user = new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstname"),
+                        resultSet.getString("lastname"),
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getDate("created"),
+                        resultSet.getString("status"),
+                        resultSet.getString("type")
+                        );
             }
 
         } catch (SQLException e) {
@@ -50,6 +59,7 @@ public class DatabaseWrapper {
                 dbDriver.close();
             }
         }
+
         return user;
     }
 
