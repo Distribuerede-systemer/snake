@@ -10,9 +10,9 @@ public class Main {
 
         Logik logik = new Logik();
 
-        logik.addUser("Mads","123");
-        logik.addUser("Ole", "321");
-        logik.addUser("Helle", "asd");
+        logik.addUser("Mads", "Madsen", "test1", "123");
+        logik.addUser("Ole", "Jensen", "test2", "1234");
+        logik.addUser("Henrik", "Madsen", "test3", "12345");
 
         logik.start();
 

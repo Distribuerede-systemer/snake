@@ -111,7 +111,7 @@ public class Logik {
 
     public void createUser(){
 
-        addUser(tui.enterUsername(), tui.enterPassword());
+        addUser(tui.enterFirstName(), tui.enterLastName(),tui.enterUsername(), tui.enterPassword());
     }
 
     public boolean deleteUser(){
@@ -131,9 +131,9 @@ public class Logik {
 
     }
 
-    public void addUser(String username, String password){
+    public void addUser(String firstName, String lastName, String username, String password){
 
-        userList.add(new User(username, password));
+        userList.add(new User(firstName, lastName, username, password));
     }
 
     public boolean removeUser(User u){
