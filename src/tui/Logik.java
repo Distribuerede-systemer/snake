@@ -43,25 +43,26 @@ public class Logik {
 
                 case 1:
                     // listUsers();
-                    System.out.println("Du har valgt at se alle spil");
+                    tui.miscOut("Game List: ");
                     break;
                 case 2:
-                    System.out.println("Du har valgt at se alle brugere");
+                    tui.miscOut("User List: ");
                     tui.listUsers(userList);
                     break;
                 case 3:
-                    System.out.println("Du har valgt at oprette en bruger");
+                    tui.miscOut("Create User: ");
                     createUser();
                     break;
                 case 4:
-                    System.out.println("Du har valgt at slette en bruger");
+                    tui.miscOut("Delete User: ");
+                    deleteUser();
                     break;
                 case 5:
-                    System.out.println("Du har valgt at logge ud");
+                    tui.miscOut("You Logged Out.");
                     isAuthenticated = false;
                     break;
                 default:
-                    System.out.println("Ugyldigt input");
+                    tui.miscOut("Unassigned key.");
                     break;
 
             }
@@ -97,6 +98,16 @@ public class Logik {
         return null;
     }
 
+    public User getUserFromUsername(String username){
+
+        for (User usr : userList) {
+            if (usr.getUsername().equals(username)){
+                return usr;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<User> getUserList(){
 
         return userList;
@@ -107,9 +118,36 @@ public class Logik {
         addUser(tui.enterUsername(), tui.enterPassword());
     }
 
+    public boolean deleteUser(){
+
+        String username = tui.deleteUserScreen();
+
+        if(removeUser(getUserFromUsername(username))) {
+            tui.miscOut(username + " was deleted.");
+            if(username.equals(usr.getUsername()))
+                start();
+            else
+                return true;
+        }
+        else
+            tui.miscOut(username + " was not found.");
+            return false;
+
+    }
+
     public void addUser(String username, String password){
 
         userList.add(new User(username, password));
+    }
+
+    public boolean removeUser(User u){
+        try {
+            if (userList.remove(u))
+                return true;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

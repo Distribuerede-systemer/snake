@@ -15,7 +15,6 @@ public class Tui {
         for(User usr : userList){
             System.out.println("User: " + usr.getUsername());
         }
-        System.out.print("\n");
     }
 /*
     public void listGames(ArrayList<Game> gameList){
@@ -29,7 +28,7 @@ public class Tui {
 
     public int userMenuScreen(){
 
-        System.out.println("1: List all games");
+        System.out.println("\n1: List all games");
         System.out.println("2: List all users");
         System.out.println("3: Create user");
         System.out.println("4: Delete user");
@@ -41,12 +40,11 @@ public class Tui {
     public String deleteUserScreen(){
         // listUsers();
 
-        System.out.println("Type username you wish to delete: ");
+        System.out.print("Type username you wish to delete: ");
         String username = input.next();
 
         return username;
     }
-
 
     public String enterUsername(){
 
@@ -83,5 +81,9 @@ public class Tui {
         String email = input.next();
 
         return email;
+    }
+
+    public void miscOut(String s){
+        System.out.println(s);
     }
 }
