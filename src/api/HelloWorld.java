@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-//import logic.Tui;
+import logic.Tui;
 
 /**
  * Created by tobiasjeremiassen on 12/10/15.
@@ -57,8 +57,19 @@ public class HelloWorld {
 
             } else {
 
-                System.out.println("Database does not exists, LOL!");
+                try {
+
+                    CSVLoader loader = new CSVLoader(getCon());
+
+                    loader.loadCSV("C:\\employee.sql", "CUSTOMER", true);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
+            }
+
 
         } catch (SQLException e) {
 
@@ -69,6 +80,11 @@ public class HelloWorld {
         }
     }
 }
+
+
+
+
+
 
 /*
 //tere
