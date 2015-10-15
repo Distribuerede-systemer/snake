@@ -7,12 +7,10 @@ import model.User;
 public class Tui {
 
     private Scanner input;
-    private User usr;
 
     public Tui(){
 
         input = new Scanner(System.in);
-        usr = null;
     }
 
     public void listUsers(ArrayList<User> userList){
