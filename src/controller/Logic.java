@@ -10,6 +10,7 @@ import model.Config;
 import model.Game;
 // imports information about password and username from the User class in the model package
 import model.User;
+import tui.Tui;
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application. 
@@ -25,6 +26,12 @@ public class Logic {
 	private PreparedStatement createGame = null;
 	private PreparedStatement delteGame = null;
 
+	private Tui tui;
+	private User usr;
+	private ArrayList<User> userList;
+	private boolean isAuthenticated;
+
+
 
 	public Logic(){
 
@@ -34,12 +41,62 @@ public class Logic {
 		users = DB.getRecords('user');
 		games = DB.getRecords('games');
 
+		tui = new Tui();
+		userList = new ArrayList<User>();
+		isAuthenticated = false;
+
 	}
 
-	//TODO: Delete this main method. 
-	public static void main(String[] args) {
-		System.out.println("Hello World!"); // Display the string.
+	public void start(){
+
+		while (true) {
+			if(login() == 1)
+			isAuthenticated = true;
+
+			if(isAuthenticated){
+				userMenu();
+			}
+		}
 	}
+
+	public void userMenu(){
+
+		while(isAuthenticated) {
+
+			int menu = tui.userMenuScreen();
+
+			switch (menu) {
+
+				case 1:
+					// listUsers();
+					tui.miscOut("Game List: ");
+					break;
+				case 2:
+					tui.miscOut("User List: ");
+					tui.listUsers(userList);
+					break;
+				case 3:
+					tui.miscOut("Create User: ");
+					createUser();
+					break;
+				case 4:
+					tui.miscOut("Delete User: ");
+					deleteUser();
+					break;
+				case 5:
+					tui.miscOut("You Logged Out.");
+					isAuthenticated = false;
+					break;
+				default:
+					tui.miscOut("Unassigned key.");
+					break;
+
+			}
+		}
+	}
+
+
+
 
 	//Gets a list of all active users and return these as a ArrayList of User objects 
 	public ArrayList<User> getUsers(){
@@ -71,23 +128,51 @@ public class Logic {
 
 	}
 
-	//return object of User.
-	public User getUser(User userName)
-	{
+	public void createUser(){
 
-		return userName;
+		addUser(tui.enterFirstName(), tui.enterLastName(),tui.enterUsername(), tui.enterPassword());
+	}
+
+	public boolean deleteUser(){
+
+		String username = tui.deleteUserScreen();
+
+		if(removeUser(getUserFromUsername(username))) {
+			tui.miscOut(username + " was deleted.");
+			if(username.equals(usr.getUsername()))
+				start();
+			else
+				return true;
+		}
+		else
+			tui.miscOut(username + " was not found.");
+		return false;
+
+	}
+
+	public void addUser(String firstName, String lastName, String username, String password){
+
+		userList.add(new User(firstName, lastName, username, password));
+	}
+
+	public boolean removeUser(User u){
+		try {
+			if (userList.remove(u))
+				return true;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	
 	//Gets a list of all games and return these as an ArrayList of Game objects
-	public ArrayList getGames(String type){
+	public ArrayList<Game> getGames(String type){
 
 		ArrayList <Game> games = null;
 
-		ResultSet resultSet = null;
 
-		try {
-			resultSet = users.executeQuery();
+		try(ResultSet resultset = games.executeQuery()) {
 
 			games = new ArrayList<Game>();
 
@@ -131,57 +216,64 @@ public class Logic {
 	// 1 || SUCCESS
 	// 2 || USER DOES NOT EXIST
 	// 3 || WRONG PASSWORD
-	public int userLogin(String username, String password){
+	public int login() {
 
-		int code = 0;
+		String username;
+		String password;
 
 
-		for (User user : getUser()) {
+		try {
 
-			switch (code){
-				case 1:
-					user.getUserName().equals(username);
-					user.getPassword().equals(password);
-					System.out.println("Succes!");
-					break;
-				case 2:
-					user.getPassword().!equals(password);
-					System.out.println("Wrong password");
-					break;
-				default:
-					System.out.println("User doesn't exist");
-					break;
+			username =  tui.enterUsername();
+			password = tui.enterPassword();
+			usr = getUserLogin(username, password);
+
+			if(usr == null) {
+				tui.miscOut("User does not exist.");
+				return 2;
 			}
-
-		
+			if (usr.getPassword().equals(password)) {
+				tui.miscOut("Success.");
+				return 1;
+			}
+			else {
+				tui.miscOut("Wrong password.");
+				return 3;
+			}
+		} catch (NullPointerException n) {
+			tui.miscOut("Invalid login");
 		}
+		return 2;
+	}
 
-		//Return status code for further use
-		return code;
+	public User getUserLogin(String username, String password){
+
+		for (User usr : userList) {
+			if (usr.getUsername().equals(username) && usr.getPassword().equals(password))
+			{
+				return usr;
+			}
+		}
+		return null;
+	}
+
+	public User getUserFromUsername(String username){
+
+		for (User usr : userList) {
+			if (usr.getUsername().equals(username)){
+				return usr;
+			}
+		}
+		return null;
 	}
 
 	//Deletes a game from the database
-	public boolean deleteGame(int Id){
-		boolean status = false;
-
-		return status;
+	public boolean deleteGame(){
 	}
 
 
 	
 	//Deletes a user from the database
-	public boolean deleteUser(int Id){
-		boolean status = false;
 
-		return status;
-	}
-
-	public void createUser(int id, String firstName, String lastName, String userName, String password,
-						   String created, String status){
-		User user = new User(id, firstName, lastName, userName, password, created, status);
-
-
-		String firstName = input.nextLine();
-	}
 
 }
