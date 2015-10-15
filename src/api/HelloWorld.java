@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 import controller.Logic;
 import sun.rmi.runtime.Log;
+import model.User;
 
 // The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
@@ -86,10 +87,23 @@ public class HelloWorld {
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
     @Path("/login/")
     @Produces("application/json")
-    public String login(String username, String password)  {
+    public Response login(String data) {
 
-        //Logic logic = new Logic();
+        Logic logic = new Logic();
 
+
+        try{
+
+            User user = new Gson().fromJson(data, User.class);
+
+            int result = logic.login(user.getUserName(), user.getPassword());
+
+            System.out.print(result);
+            return Response.status(200).entity("{\"success\":\"true\"}").build();
+        }catch (Exception e) {
+            return  Response.status(400).entity("{}").build();
+            System.out.print("");
+        }
         //// Authenticates a user and returns a status code according to the result.
         // CODES:
         // 1 || SUCCESS
@@ -98,8 +112,7 @@ public class HelloWorld {
         // logic.login();
 
 
-
-        return "OK" ;
+        return "OK";
 
         //såfremt der er overenstemmelse med brugernavn og password = godkendelse
     }
@@ -108,82 +121,84 @@ public class HelloWorld {
     @Path("/controls/")
     @Produces("application/json")
 
-    public Response controls (String json) {
+    public Response controls(String json) {
         // public String controls(String data)  {
 
 
-        Control control1 = new Gson().fromJson(json, Control.class);
+        //    Control control1 = new Gson().fromJson(json, Control.class);
         /* Vi laver her et json til gson statement, denne linje gør at vores json kode bliver konventeret
          javascript kode */
-        System.out.println(control1.getMovement());
+        //System.out.println(control1.getMovement());
 
         if (control1.getMovement().equals("w"))
             return Response.status(201).entity("Success").build();
 
-            if (control1.getMovement().equals("a")) {
-            return Response.status(201).entity("Success").build();
-
-        }   if (control1.getMovement().equals("s")) {
-            return Response.status(201).entity("Success").build();
-
-        }   if (control1.getMovement().equals("d")) {
+        if (control1.getMovement().equals("a")) {
             return Response.status(201).entity("Success").build();
 
         }
-        else { return Response.status(500).entity("Fail").build();
+        if (control1.getMovement().equals("s")) {
+            return Response.status(201).entity("Success").build();
+
+        }
+        if (control1.getMovement().equals("d")) {
+            return Response.status(201).entity("Success").build();
+
+        } else {
+            return Response.status(500).entity("Fail").build();
             //If-else statement, for de forskellige indtast muligheder, såfremt værdien er ugyldig udprintes en fejlkode.
 
 
         }
 
-       // System.out.println(data);
+        // System.out.println(data);
         //return "OK" ;
     }
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
     @Path("/user/")
     @Produces("text/plain")
-    public String createUser(String data)  {
+    public String createUser(String data) {
 
         System.out.println(data);
-        return "OK" ;
-}
+        return "OK";
+    }
+
     @POST //POST-request: Nyt data; nyt spil oprettes
     @Path("/create")
     @Produces("text/plain")
-    public String createGame(String data)  {
+    public String createGame(String data) {
 
         System.out.println(data);
-        return "OK" ;
+        return "OK";
     }
 
     @POST //POST-request: Opstart af nyt spil
     @Path("/start")
     @Produces("text/plain")
-    public String startGame(String data)  {
+    public String startGame(String data) {
 
         System.out.println(data);
-        return "OK" ;
+        return "OK";
     }
 
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
     @Path("/user/")
     @Produces("text/plain")
-    public String deleteUser(String data)  {
+    public String deleteUser(String data) {
 
         System.out.println(data);
-        return data + " has been deleted" ;
+        return data + " has been deleted";
     }
 
     @DELETE //DELETE-request fjernelse af data(spillet slettes)
     @Path("/game/")
     @Produces("text/plain")
-    public String deleteGame(String data)  {
+    public String deleteGame(String data) {
 
         System.out.println(data);
-        return data + " has been deleted" ;
+        return data + " has been deleted";
     }
-
 
 
     public static void main(String[] args) throws IOException {
@@ -239,7 +254,5 @@ public class HelloWorld {
         }
 
 
-
     }
-
 }
