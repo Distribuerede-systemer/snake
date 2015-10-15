@@ -57,7 +57,6 @@ public class Main {
 
     /**
      * Checks if the databse exists or not
-     *
      * @return bool
      * @throws SQLException
      */
