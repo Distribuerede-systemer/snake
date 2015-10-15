@@ -26,7 +26,7 @@ public class Main {
 
         new DatabaseDriver.checkConnection();
 
-        Tui tui = new Tui();0
+        Tui tui = new Tui();
         tui.getuserMenu();
 
 
