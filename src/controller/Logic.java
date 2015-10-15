@@ -134,16 +134,16 @@ public class Logic {
 
     /**
      * Get specific game created by user
-     * @param userId
+     * @param id
      * @return ArrayList of matched games
      */
-    public static ArrayList<Game> getGames(int userId) {
+    public static ArrayList<Game> getGames(int id) {
 
         //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
 
 		DatabaseWrapper dbWrap = new DatabaseWrapper();
 
-        ArrayList<Game> games = dbWrap.getGamesFromUserId(userId);
+        ArrayList<Game> games = dbWrap.getGames(id);
 
         return games;
 
