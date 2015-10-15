@@ -18,30 +18,33 @@ public class User {
     private String password;
     private Date created;
     private String status;
+    private String email;
+    private String type;
 
 
-  //Create constructor and initiating the variables
-    public User (int id, String firstName, String lastName, String userName, String password, Date created, String status) {
+
+    public User (int id, String firstName, String lastName, String email, String userName, String password, Date created, String status, String type ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.userName = userName;
         this.password = password;
         this.created = created;
         this.status = status;
-    }
-    
-    public User() {
-
+        this.type = type;
     }
     
     //creating get and set method for all the variables, so they can be used by other classes
+
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -91,24 +94,19 @@ public class User {
         this.status = status;
     }
 
-    //creating a scanner with the scannername newScanner
-    Scanner newScanner = new Scanner(System.in);
+    public String getEmail() {
+        return email;
+    }
 
-    //the scanner saves the input in the varible scannerInput
-    String scannerInput = newScanner.nextLine();
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    //userNameInput and passwordInput is defined by the input from newScanner
-    String userNameInput = scannerInput;
-    String passwordInput = scannerInput;
-    
-    //auth is always false, unless authentication is accepted.
-    boolean auth = false;
+    public String getType() {
+        return type;
+    }
 
-    //checking if userName and the inputted username is alike - checking if password and inputted password is alike
-    private void authentication() {
-
-        if (getUserName() == userNameInput && getPassword() == passwordInput) {
-            auth = true;
-        }
+    public void setType(String type) {
+        this.type = type;
     }
 }
