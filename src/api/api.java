@@ -7,6 +7,7 @@ import controller.Logic;
 import model.Game;
 import model.Score;
 import model.User;
+import tui.Tui;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -17,6 +18,8 @@ import java.util.Map;
 // The Java class will be hosted at the URI path "/helloworld more comment"
 @Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
 public class Api {
+
+    //TODO: Revisit paths
 
     // The Java method will process HTTP GET requests
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
@@ -56,7 +59,7 @@ public class Api {
     @Produces("application/json")
     public String getHighScore(String data) {
 
-        //TODO: ();Get method from logic to return highscores.
+        //TODO: Get method from logic to return highscores.
 
          ArrayList<model.Score> Score = Logic.getHighscores();
          return new Gson().toJson(Score);
@@ -132,7 +135,7 @@ public class Api {
     }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/create")
+    @Path("/game")
     @Produces("text/plain")
     public String createGame(String json) {
 
@@ -175,6 +178,7 @@ public class Api {
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
+
 
         System.out.println("Server running");
         System.out.println("Visit: http://localhost:9998/api");

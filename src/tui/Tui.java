@@ -7,6 +7,9 @@ import model.User;
 
 public class Tui {
 
+
+    //TODO: Make this class use static methods
+
     private Scanner input;
 
     public Tui(){
@@ -137,6 +140,7 @@ public class Tui {
 
     public User createUser(){
 
+        //TODO: This should work!
         User usr = new User(enterFirstName(), enterLastName(), enterEmail(), enterUsername(), enterPassword(),enterUserType() );
 
         return usr;
