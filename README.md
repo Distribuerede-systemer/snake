@@ -24,3 +24,10 @@ I jeres gruppe, opretter i en branch med jeres gruppenavn og comitter jeres kode
 - Commit dine ændringer: `git commit -m "din commit besked"`
 - Skub dine ændringer til repo: `git push`
 
+**Generelt git workflow**
+
+Sørg for at `commit` ofte. Pas på med ikke at have for mange ventende `commit` da det giver større sandsynlighed for merge conflits for andre. 
+
+`push` så snart du har kode som virker, og `commit/push` aldrig når du har compiler/syntax fejl.
+
+Inden at du lavet et `push`, sørg for at lave en `pull`så du er sikker på, at du har sidst opdateret kode.
