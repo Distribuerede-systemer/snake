@@ -14,6 +14,8 @@ I jeres gruppe, opretter i en branch med jeres gruppenavn og comitter jeres kode
 
 ###Git Cheatsheet
 
+Hvis I vil lege med git i en interaktiv øvelse, prøv da [denne guide](https://try.github.io/levels/1/challenges/1)
+
 - Skift branch: `git checkout branch-name`
   - Ex: `git checkout develop`
 - Hent opdateringer fra repo: `git pull`
