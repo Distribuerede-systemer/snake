@@ -11,3 +11,11 @@ Kode som er blevet testet af test-gruppen, og som vi kan arbejde videre på, til
 **Jeres branches**
 
 I jeres gruppe, opretter i en branch med jeres gruppenavn og comitter jeres kode her til. Når I er tilfredse med resultatet af jeres kode, kan I give det til test-gruppen som gennemtester funktionaliteten.
+
+###Git Cheatsheet
+
+- Skift branch: `git checkout branch-name`
+  - Ex: `git checkout develop`
+- Hent opdateringer fra repo: `git pull`
+- Commit din ændringer: `git commit -m "din commit besked"`
+
