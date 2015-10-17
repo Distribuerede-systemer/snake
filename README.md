@@ -17,5 +17,10 @@ I jeres gruppe, opretter i en branch med jeres gruppenavn og comitter jeres kode
 - Skift branch: `git checkout branch-name`
   - Ex: `git checkout develop`
 - Hent opdateringer fra repo: `git pull`
-- Commit din ændringer: `git commit -m "din commit besked"`
+- Hvad er status/ændret: `git status`
+- Hvad er ændringerne: `git diff`
+- Tilføj dine ændringer til dit commit: `git add file.java`
+  - Obs ønsker du at tilføje alle dine ændringer `git add .`
+- Commit dine ændringer: `git commit -m "din commit besked"`
+- Skub dine ændringer til repo: `git push`
 
