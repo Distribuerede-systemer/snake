@@ -16,7 +16,7 @@ public class Main {
 
 
 
-        Game game = new Game("asasa", "Henrik Thorns Snake game", db.getUser(1), db.getUser(2), "pending");
+        Game game = new Game("asasa", "Third Snake Game", db.getUser(1), db.getUser(3), "pending");
 
 
         int gameId = db.createGame(game);
@@ -35,15 +35,9 @@ public class Main {
 
         Gamer opponent = new Gamer();
         opponent.setScore(45);
-        opponent.setId(2);
+        opponent.setId(3);
 
         db.createScore(gameId, host, opponent);
-
-
-
-
-
-
 
 
     }

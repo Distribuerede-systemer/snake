@@ -13,6 +13,14 @@ import java.util.ArrayList;
  * The methods convert the data and return an object.
  */
 //
+
+    // TODO: dynamicQuery (returning cachedrowset)
+    // TODO: getGamesPendingByUserID (select * from games where status = "pending" and id = id)
+    // TODO: getGamesByUserID (select * from games where status <> "deleted" and (host = id OR opponent = id))
+    // TODO: getHighScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
+    // TODO: ???
+
+
 public class DatabaseWrapper {
 
 
@@ -356,9 +364,9 @@ public class DatabaseWrapper {
             // Prepared statement til at tilfoeje en bruger
             PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame(),Statement.RETURN_GENERATED_KEYS );
 
-            createGame.setInt(1, 22);
+            createGame.setInt(1, 2);
 //            createGame.setInt(1, game.getHost().getId());
-            createGame.setInt(2, 33);
+            createGame.setInt(2, 3);
 //            createGame.setInt(2, game.getOpponent.getId());
             createGame.setString(3, game.getName());
             createGame.setString(4, game.getStatus());
