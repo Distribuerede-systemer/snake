@@ -2,9 +2,13 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
+import model.Score;
 import model.User;
+import tui.Tui;
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
@@ -18,13 +22,15 @@ public class Logic {
 
     /**
      * Get all users
+     *
      * @return ArrayList of users
      */
     public static ArrayList<User> getUsers() {
 
         // Define ArrayList to be used to add users and return them.
-        ArrayList<User> uj = null;
-        //TODO: Get all users from DB-wrapper
+        DatabaseWrapper db = new DatabaseWrapper();
+
+        ArrayList<User> uj = db.getUsers();
 
         return uj;
 
@@ -33,14 +39,20 @@ public class Logic {
 
     /**
      * Is user authenticated?
+     *
      * @return true if yes, false if no
      */
-    public boolean isUserAuthenticated() {
+    public static boolean isUserAuthenticated() {
         return isAuthenticated;
+    }
+
+    public static void setIsUserAuthenticated(boolean auth) {
+        isAuthenticated = auth;
     }
 
     /**
      * Create user
+     *
      * @param user
      * @return true if success, false if failure
      */
@@ -54,6 +66,7 @@ public class Logic {
 
     /**
      * Delete user
+     *
      * @param id
      * @return true success, false if failure
      */
@@ -66,6 +79,7 @@ public class Logic {
 
     /**
      * Add user
+     *
      * @param user
      */
     public static void addUser(User user) {
@@ -76,10 +90,11 @@ public class Logic {
 
     /**
      * Get specific user
+     *
      * @param userId
      * @return User object
      */
-    public User getUser(int userId) {
+    public static User getUser(int userId) {
 
         //TODO: Get specific user from DB via DB-wrapper
         User user = new User();
@@ -89,27 +104,59 @@ public class Logic {
 
     /**
      * Authenticates user
+     * The int uses 2 parameters: username and password which it authenticates as the correct credentials of an existing user.
      *
      * @param username
      * @param password
-     * @return 1 if auth successful, 0 if failed
+     * @return 2 if auth successful, 1 if user exists but password is incorrect, 0 if failed
      */
     public static int userLogin(String username, String password) {
+        User user;
+        DatabaseWrapper db = new DatabaseWrapper();
+        user = db.authenticatedUser(username);
+        if (user == null) {
+            // User does not exists.
+            return 0;
+        } else {
+            if (password.equals(user.getPassword())) {
+                // Return 2 if user exists and password is correct. Success.
+                return 2;
 
-        ArrayList<User> allUsers = getUsers();
-        for (User user : allUsers){
-            if(user.getUserName().equals(username) && user.getPassword().equals(password)){
-                isAuthenticated = true;
+            } else {
+                //Return 1 if user exists but password is wrong.
                 return 1;
             }
         }
-
-        return 0;
-
     }
 
     /**
+     * Get all highscores from the game
+     *
+     * @return ArrayList of highscores
+     */
+    public static ArrayList<Score> getHighscores() {
+        //TODO: Get all highscores
+        ArrayList<Score> highScores = null;
+        return highScores;
+    }
+
+    /**
+     * Get a highscore from a specified user
+     *
+     * @param userId
+     * @return Score
+     */
+    public static Score getHighscore(int userId) {
+        //TODO: Get highscore from user
+
+        Score score = new Score();
+        return score;
+    }
+
+
+    /**
      * Get all games
+     *
      * @return ArrayList of games
      */
     public static ArrayList<Game> getGames() {
@@ -123,6 +170,7 @@ public class Logic {
 
     /**
      * Get specific game created by user
+     *
      * @param userId
      * @return ArrayList of matched games
      */
@@ -137,6 +185,7 @@ public class Logic {
 
     /***
      * Get specific game
+     *
      * @param gameId
      * @return Game object
      */
@@ -150,12 +199,13 @@ public class Logic {
 
     /**
      * Makes another user join an existing game
+     *
      * @param gameId
      * @param opponent
      * @param controls
      * @return true if success, false if failure
      */
-    public static boolean joinGame(int gameId, User opponent, String controls){
+    public static boolean joinGame(int gameId, User opponent, String controls) {
 
         //TODO: Find game by id
         //TODO: Add opponent, with provided controls
@@ -166,23 +216,27 @@ public class Logic {
 
     /**
      * Starts a game
+     *
      * @param gameId
      * @return returns game results
      */
-    public static Map startGame(int gameId){
+    public static Map startGame(int gameId) {
 
-        //TODO: Get specific game from DB via DB-wrapper
-        //TODO: Get host and opponent associated to game
+        Game game = getGame(gameId);
 
-        Gamer host = null;
-        Gamer opponent = null;
+        Gamer host = new Gamer();
+        Gamer opponent = new Gamer();
 
-        return GameEngine.playGame(10, host, opponent);
+        host.setControls(game.getHostControls());
+        opponent.setControls(game.getOpponentControls());
+
+        return GameEngine.playGame(game.getMapSize(), host, opponent);
 
     }
 
     /**
      * Create a game
+     *
      * @param gameName
      * @param host
      * @return returns inriched game object
@@ -193,8 +247,10 @@ public class Logic {
         Game game = new Game();
         game.setName(gameName);
         game.setHost(host);
-        game.setStatus("123"); //1 is pending, 0 is done
+        game.setStatus(1); //1 is pending, 0 is done
 
+        DatabaseWrapper db = new DatabaseWrapper();
+        game.setGameId(db.createGame(gameName));
         //TODO: Write game to db, and return game-id and set object before returning
 
         return game;
@@ -202,16 +258,19 @@ public class Logic {
 
     /**
      * Delete game
+     *
      * @param gameId
      * @return true if success, false if failure
      */
     public static boolean deleteGame(int gameId) {
+        DatabaseWrapper db = new DatabaseWrapper();
+        if (db.deleteGame(gameId))
+            return true;
+        else {
+            return false;
+        }
 
-        //TODO: Delete specific game from DB via DB-wrapper;
-
-        return false;
     }
-
 
 
 }
