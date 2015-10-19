@@ -180,4 +180,9 @@ public class DatabaseDriver {
     }
 
 
+
+
+    public String authenticatedSql() {
+        return "Select * from users where username = ?";
+    }
 }
