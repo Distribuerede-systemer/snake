@@ -15,14 +15,15 @@ import java.util.ArrayList;
 //
 
 // TODO: dynamicQuery (returning cachedrowset)
-// TODO: getGamesPendingByUserID (select * from games where status = "pending" and host = id)
-// TODO: getGamesByUserID (select * from games where status <> "deleted" and (host = id OR opponent = id))
 // TODO: getHighScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
 // TODO: ???
+// TODO: USER objektet giver fejl
+// TODO: Create game i logik
+// TODO: Rette dbWrapper game-metoder saa de passer til det nye gamer objekt
+// TODO: Metode i logik som skal slette pending tid efter x antal dage
 
 
 public class DatabaseWrapper {
-
 
     private ResultSet resultSet = null;
     private Connection connection;
