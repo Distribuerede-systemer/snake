@@ -26,6 +26,8 @@ public class Logic {
      */
     public static ArrayList<User> getUsers() {
 
+
+        //Add a new commenet
         // Define ArrayList to be used to add users and return them.
         DatabaseWrapper db = new DatabaseWrapper();
 
