@@ -162,14 +162,22 @@ public class DatabaseDriver {
         return "UPDATE Games SET status = ? WHERE id = ?";
     }
 
-    public String getSqlPendingGames() {
-
-        return "select * from games WHERE opponent = ? and status = 'pending'";
+    public String getSqlAllGamesByUserID() {
+        return "select * from games where status <> 'deleted' (host = ? OR opponent = ?)";
     }
 
-    public String getSqlGamesByUserID() {
-
-        return "select * from games where status = 'done' and (host = ? OR opponent = ?)";
+    public String getSqlPendingGamesByUserID() {
+        return "select * from games WHERE status = 'pending' and (host = ? OR opponent = ?)";
     }
+
+    public String getSqlCompletedGamesByUserID() {
+
+        return "select * from games where status = 'completed' and (host = ? OR opponent = ?)";
+    }
+
+    public String getSqlGameInvitesByUserID() {
+        return "select * from games WHERE status = 'pending' and opponent = ?";
+    }
+
 
 }
