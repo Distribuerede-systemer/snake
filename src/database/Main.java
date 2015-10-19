@@ -14,9 +14,7 @@ public class Main {
     public static void main(String[] args) {
         DatabaseWrapper db = new DatabaseWrapper();
 
-
-
-        Game game = new Game("asasa", "Third Snake Game", db.getUser(1), db.getUser(3), "pending");
+        Game game = new Game("asasa", "Fifth Snake Game", db.getUser(1), db.getUser(3), "pending");
 
 
         int gameId = db.createGame(game);

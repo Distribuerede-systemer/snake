@@ -7,7 +7,6 @@ import controller.Logic;
 import model.Game;
 import model.Score;
 import model.User;
-import tui.Tui;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -15,13 +14,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-@Path("/api")
-public class Api {
+// The Java class will be hosted at the URI path "/helloworld more comment"
+@Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
+public class api {
 
-    //TODO: Revisit paths
-    //TODO: Revisit "produces"
-
+    // The Java method will process HTTP GET requests
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
+    // The Java method will produce content identified by the MIME Media type "text/plain"
     @Produces("text/plain")
     public String getClichedMessage() {
         // Return some cliched textual content
@@ -33,7 +32,7 @@ public class Api {
     @Produces("application/json")
     public String getAllUsers() {
 
-        ArrayList<User> users = Logic.getUsers();
+        ArrayList<model.User> users = Logic.getUsers();
 
 
         //TODO; Hent brugere fra DB
@@ -57,10 +56,10 @@ public class Api {
     @Produces("application/json")
     public String getHighScore(String data) {
 
-        //TODO: Get method from logic to return highscores.
+        //TODO: ();Get method from logic to return highscores.
 
-        ArrayList<Score> Score = Logic.getHighscores();
-        return new Gson().toJson(Score);
+         ArrayList<model.Score> Score = Logic.getHighscores();
+         return new Gson().toJson(Score);
 
     }
 
@@ -99,7 +98,7 @@ public class Api {
     @Produces("application/json")
     public Response login(String data) {
 
-        try {
+        try{
 
             User user = new Gson().fromJson(data, User.class);
 
@@ -107,8 +106,8 @@ public class Api {
 
             //TODO: Use result to see if it is a success or not.
             return Response.status(200).entity("{\"success\":\"true\"}").build();
-        } catch (Exception e) {
-            return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+        }catch (Exception e) {
+            return  Response.status(400).entity("{\"Bad\"request\"true\"}").build();
         }
     }
 
@@ -121,7 +120,7 @@ public class Api {
 
         boolean createdUser = Logic.createUser(user);
 
-        if (createdUser) {
+        if(createdUser){
 
         } else {
 
@@ -133,7 +132,7 @@ public class Api {
     }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/game")
+    @Path("/create")
     @Produces("text/plain")
     public String createGame(String json) {
 
@@ -176,7 +175,6 @@ public class Api {
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
-
 
         System.out.println("Server running");
         System.out.println("Visit: http://localhost:9998/api");
