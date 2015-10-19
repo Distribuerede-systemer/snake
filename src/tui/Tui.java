@@ -33,6 +33,8 @@ public class Tui {
 
     public void userMenu(){
 
+
+
         while(Logic.isUserAuthenticated()) {
 
             int menu = userMenuScreen();

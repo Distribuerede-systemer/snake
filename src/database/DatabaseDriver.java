@@ -101,7 +101,7 @@ public class DatabaseDriver {
     }
 
     public String createGame() {
-        return"INSERT INTO games() VALUES ("
+        return"INSERT INTO games() VALUES (";
     }
 
     public String deleteGame() {

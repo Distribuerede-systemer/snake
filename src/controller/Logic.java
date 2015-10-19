@@ -227,7 +227,7 @@ public class Logic {
      *
      * @param gameName
      * @param host
-     * @return returns inriched game object
+     * @return returns enriched game object
      */
     public static Game createGame(String gameName, User host) {
 
