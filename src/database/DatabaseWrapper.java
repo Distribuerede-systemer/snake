@@ -16,7 +16,7 @@ import java.util.ArrayList;
 //
 
 // TODO: dynamicQuery (returning cachedrowset)
-// TODO: getHighScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
+// TODO: getHighScore (select users.*, sum(scores.score) as TotalScore from users join scores where users.id = scores.user_id group by users.username order by TotalScore desc)
 // TODO: ???
 // TODO: USER objektet giver fejl
 // TODO: Create game i logik
@@ -525,11 +525,6 @@ public class DatabaseWrapper {
         return result;
     }
 
-
-
-
-
-
     public User authenticatedUser(String username) {
         User user = null;
         ResultSet resultset = null;
@@ -557,5 +552,46 @@ public class DatabaseWrapper {
             e.printStackTrace();
         }
         return user;
+    }
+
+    public ArrayList<Gamer> getHighScore(){
+        ResultSet resultSet = null;
+        PreparedStatement ps;
+        ArrayList<Gamer> result = null;
+
+
+        try {
+            ps = connection.prepareStatement(dbDriver.getSqlHighScore());
+            resultSet = ps.executeQuery();
+
+            result = new ArrayList<Gamer>();
+
+            // Indlaesser brugere i arrayListen
+            while (resultSet.next())
+            {
+                Gamer gamer = new Gamer();
+                gamer.setId(resultSet.getInt("id"));
+                gamer.setFirstName(resultSet.getString("first_name"));
+                gamer.setLastName(resultSet.getString("last_name"));
+                gamer.setEmail(resultSet.getString("email"));
+                gamer.setUserName(resultSet.getString("username"));
+                gamer.setCreated(resultSet.getDate("created"));
+                gamer.setStatus(resultSet.getString("status"));
+                gamer.setTotalScore(resultSet.getInt("TotalScore"));
+                result.add(gamer);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                dbDriver.close();
+            }
+        }
+
+        return result;
     }
 }

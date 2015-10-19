@@ -14,8 +14,8 @@ public class DatabaseDriver {
      * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
      */
     private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
-    private static String sqlUser = "root";
-    private static String sqlPassword = "";
+    private static String sqlUser = "dataguy";
+    private static String sqlPassword = "QjcUayHA3axeGLns";
 
     private Connection connection = null;
 
@@ -180,5 +180,10 @@ public class DatabaseDriver {
 
     public String authenticatedSql() {
         return "Select * from users where username = ?";
+    }
+
+    public String getSqlHighScore() {
+        return "select users.*, sum(scores.score) as TotalScore from users " +
+                "join scores where users.id = scores.user_id group by users.username order by TotalScore desc";
     }
 }
