@@ -5,7 +5,6 @@ import model.Gamer;
 import model.Score;
 import model.User;
 
-import javax.sql.rowset.CachedRowSet;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 //
 
 // TODO: dynamicQuery (returning cachedrowset)
-// TODO: getHighScore (select users.*, sum(scores.score) as TotalScore from users join scores where users.id = scores.user_id group by users.username order by TotalScore desc)
+// TODO: getHighScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
 // TODO: ???
 // TODO: USER objektet giver fejl
 // TODO: Create game i logik
@@ -109,7 +108,8 @@ public class DatabaseWrapper {
                         resultSet.getString("name"),
                         getUser(resultSet.getInt("host")),
                         getUser(resultSet.getInt("opponent")),
-                        resultSet.getString("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("mapSize")
                 );
             }
 
@@ -235,7 +235,8 @@ public class DatabaseWrapper {
                         resultSet.getString("name"),
                         getUser(resultSet.getInt("host")),
                         getUser(resultSet.getInt("opponent")),
-                        resultSet.getString("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("mapSize")
                 ));
             }
 
@@ -507,7 +508,8 @@ public class DatabaseWrapper {
                         resultSet.getString("name"),
                         getUser(resultSet.getInt("host")),
                         getUser(resultSet.getInt("opponent")),
-                        resultSet.getString("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("mapSize")
                 ));
             }
 
