@@ -5,6 +5,7 @@ import model.Gamer;
 import model.Score;
 import model.User;
 
+import javax.sql.rowset.CachedRowSet;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -557,5 +558,4 @@ public class DatabaseWrapper {
         }
         return user;
     }
-
 }

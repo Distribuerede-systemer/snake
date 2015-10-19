@@ -153,7 +153,6 @@ public class DatabaseDriver {
                 "values (?, ?, ?, ?)";
     }
 
-
     public String deleteSqlUser() {
         return "UPDATE Users SET status = ? WHERE id = ?";
     }
@@ -178,9 +177,6 @@ public class DatabaseDriver {
     public String getSqlGameInvitesByUserID() {
         return "select * from games WHERE status = 'pending' and opponent = ?";
     }
-
-
-
 
     public String authenticatedSql() {
         return "Select * from users where username = ?";
