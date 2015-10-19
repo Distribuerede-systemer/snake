@@ -1,37 +1,33 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.sun.rowset.CachedRowSetImpl;
 
+import javax.xml.transform.Result;
+import java.sql.*;
+
+/**
+ * @author Team Depardieu
+ *This class connects to the database - It also includes different prepared statements
+ */
 public class DatabaseDriver {
-
-    private static String sqlUrl = "jdbc:mysql://localhost:3306/mydb";
+    /**
+     * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
+     */
+    private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
     private static String sqlUser = "root";
-    private static String sqlPassword = "";
+    private static String sqlPassword = "root";
 
     private Connection connection = null;
 
-    private PreparedStatement createUser = null;
-    private PreparedStatement selectAllUsers = null;
-
 
     /**
-     * Bruges til at oprette forbindelse til databasen og indeholder preparedStatements.
+     * Connects to the database with the specified Url, User and Password.
      */
     public DatabaseDriver()
     {
         try
         {
             connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
-
-            createUser = connection.prepareStatement("INSERT INTO User(Firstname, Lastname) VALUES (?, ?)");
-
-            //General prepared statements
-            selectAllUsers = connection.prepareStatement("SELECT * FROM Users");
-
-
 
         }
         catch (SQLException e)
@@ -41,30 +37,62 @@ public class DatabaseDriver {
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     /**
-     * Bruges til at lukke forbindelsen til databasen.
+     * Method used to close to DB connection
      */
-public void close()
-{
-    try{
-        connection.close();
-    }
-    catch(SQLException e)
+
+    public void close()
     {
-        e.printStackTrace();
+        try{
+            connection.close();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
-}
 
-    public PreparedStatement getCreateUser() {
-        return createUser;
+    /**
+     * Querybuilder with two parameters, which, when specified will get a single record from a specific table.
+     * @param table
+     * @return SqlStatement
+     */
+
+    public String getSqlRecord(String table) {
+
+        return "select * from " + table + " WHERE id = ?";
     }
 
-    public static void main(String[] args) {
+    /**
+     * Querybuilder with a single parameter, which, when specified will get a table.
+     * @param table
+     * @return SqlStatement
+     */
 
+    public String getSqlRecords(String table) {
 
-        Database database = new Database();
+        return "select * from " + table;
+    }
 
-        database.createUser();
+    /**
+     * Querybuilder with seven parameters, which, when specified will update the value of the shown columns in the 'users' table
+     * @return SqlStatement
+     */
+    public String updateSqlUser(){
+        return "UPDATE Users SET FirstName = ?, LastName = ?, Email = ?, password = ?, " +
+                "status = ?, type = ? WHERE id = ?";
+    }
 
+    /**
+     * Querybuilder with seven parameters, which, when specified will update the value of the shown columns in the 'games' table
+     * @return SqlStatement
+     */
+    public String updateSqlGame(){
+        return "UPDATE Games SET game_name = ?, status = ?, result = ?, hostcontrols = ?, " +
+                "endgame = ?, opponentcontrols = ? WHERE id = ?";
     }
 }

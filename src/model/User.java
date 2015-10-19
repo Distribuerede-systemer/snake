@@ -1,11 +1,11 @@
 package model;
 
-import java.util.Scanner;
-
+import java.util.Date;
 
 /**
  * Created by Oscar on 12-10-2015.
  */
+//
 public class User {
 
     //creating variables
@@ -14,30 +14,35 @@ public class User {
     private String lastName;
     private String userName;
     private String password;
-    private String created;
+    private Date created;
     private String status;
+    private String email;
+    private String type;
 
-
-  //Create constructor and initiating the variables
-    public User (int id, String firstName, String lastName, String userName, String password, String created, String status) {
+    public User (int id, String firstName, String lastName, String email, String userName, String password, Date created, String status, String type ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.userName = userName;
         this.password = password;
         this.created = created;
         this.status = status;
+        this.type = type;
     }
-    
-    
-    
-    //creating get and set method for all the variables, so they can be used by other classes
 
+    public User(){}
+
+    //creating get and set method for all the variables, so they can be used by other classes
     public int getId() {
         return id;
     }
 
-      public String getFirstName() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
         return firstName;
     }
 
@@ -69,11 +74,11 @@ public class User {
         this.password = password;
     }
 
-    public String getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -83,26 +88,5 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    //creating a scanner with the scannername newScanner
-    Scanner newScanner = new Scanner(System.in);
-
-    //the scanner saves the input in the varible scannerInput
-    String scannerInput = newScanner.nextLine();
-
-    //userNameInput and passwordInput is defined by the input from newScanner
-    String userNameInput = scannerInput;
-    String passwordInput = scannerInput;
-    
-    //auth is always false, unless authentication is accepted.
-    boolean auth = false;
-
-    //checking if userName and the inputted username is alike - checking if password and inputted password is alike
-    private void authentication() {
-
-        if (getUserName() == userNameInput && getPassword() == passwordInput) {
-            auth = true;
-        }
     }
 }

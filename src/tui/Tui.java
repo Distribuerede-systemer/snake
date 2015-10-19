@@ -1,18 +1,21 @@
 package tui;
 import java.util.*;
+import model.User;
 
 public class Tui {
 
     private Scanner input;
+    private User usr;
 
     public Tui(){
+
         input = new Scanner(System.in);
     }
 
     public void listUsers(ArrayList<User> userList){
 
         for(User usr : userList){
-            System.out.println("User: " + usr.getUsername());
+            System.out.println("User: " + usr.getUserName());
         }
     }
 /*
@@ -25,6 +28,42 @@ public class Tui {
     }
 */
 
+    public void userMenu(){
+
+        while(isAuthenticated) {
+
+            int menu = userMenuScreen();
+
+            switch (menu) {
+
+                case 1:
+                    // listUsers();
+                    miscOut("Game List: ");
+                    break;
+                case 2:
+                    miscOut("User List: ");
+                    ArrayList<User> userList = getUsers();
+                    listUsers(userList);
+                    break;
+                case 3:
+                    miscOut("Create User: ");
+                    createUser();
+                    break;
+                case 4:
+                    miscOut("Delete User: ");
+                    deleteUser();
+                    break;
+                case 5:
+                    miscOut("You Logged Out.");
+                    isAuthenticated = false;
+                    break;
+                default:
+                    miscOut("Unassigned key.");
+                    break;
+
+            }
+        }
+    }
     public int userMenuScreen(){
 
         System.out.println("\n1: List all games");

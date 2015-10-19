@@ -1,23 +1,24 @@
 package controller;
+import model.Gamer;
 
-/**
- * @author Team Depardieu
- * Usage: MainMethod for Security.java testing
- * TODO: Delete after tests.
- */
+import java.util.Map;
+
 public class Main {
 
     public static void main(String[] args) {
 
-        String depardieu = "{\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"}";
-        Security security = new Security();
-        String test = security.encrypt(depardieu, "j");
-        System.out.println(depardieu);
-        System.out.println(security.hashing(depardieu));
-        System.out.println(security.encrypt(depardieu, "j"));
-        System.out.println(security.decrypt(test, "j"));
-        if (depardieu.equals(security.decrypt(test, "j"))) {
-            System.out.println("True");
-        }
+        Gamer gamer1 = new Gamer();
+        gamer1.setControls("awdawdawd");
+        Gamer gamer2 = new Gamer();
+        gamer2.setControls("dwadwadwa");
+
+        Map gamers = (Map) GameEngine.playGame(15, gamer1, gamer2);
+        // Get Host (h)
+        Gamer host = (Gamer) gamers.get('h');
+
+        // Get Opponent (o)
+        Gamer opponent = (Gamer) gamers.get('o');
+
+        System.out.println(host.getScore());
     }
 }
