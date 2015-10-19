@@ -9,7 +9,7 @@ import java.sql.Date;
 public class Game {
     //Creating the variables needed for the game
     private int gameId;
-    private int result;
+    private User winner;
     private int newGame;
     private int endGame;
     private String name;
@@ -17,18 +17,18 @@ public class Game {
     private User host;
     private User opponent;
     private String opponentControls;
-    private int status;
+    private String status;
     private Date created;
     private int mapSize;
 
 
 
     //Creating the constructor and initiating the variables
-    public Game( int gameId, int result, String hostControls, Date created, String name, int newGame, int endGame, User host, User
-            opponent, int status, int mapSize){
+    public Game( int gameId, User winner, String hostControls, Date created, String name, int newGame, int endGame, User host, User
+            opponent, String status, int mapSize){
         this.mapSize = mapSize;
         this.gameId = gameId;
-        this.result = result;
+        this.winner = winner;
         this.created = created;
         this.hostControls = hostControls;
         this.name = name;
@@ -40,6 +40,14 @@ public class Game {
     }
 
     public Game(){}
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 
     public int getMapSize() {
         return mapSize;
@@ -58,8 +66,16 @@ public class Game {
     }
 
     //methods that the API can use
-    public int getResultForGame(){
-        return result;
+    public User getResultForGame(){
+        return winner;
+    }
+
+    public User getWinner() {
+        return winner;
+    }
+
+    public void setWinner(User winner) {
+        this.winner = winner;
     }
 
     public void validate(){
@@ -75,13 +91,7 @@ public class Game {
         this.gameId = gameId;
     }
 
-    public int getResult() {
-        return result;
-    }
 
-    public void setResult(int result) {
-        this.result = result;
-    }
 
     public String getHostControls() {
         return hostControls;
@@ -123,11 +133,11 @@ public class Game {
         this.opponent = opponent;
     }
 
-    public int getStatus(){
+    public String getStatus(){
         return status;
     }
 
-    public void setStatus(int status){
+    public void setStatus(String status){
         this.status = status;
     }
 

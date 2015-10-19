@@ -100,17 +100,16 @@ public class DatabaseWrapper {
 
 
             while (resultSet.next()) {
-                game = new Game(
-                        resultSet.getInt("id"),
-                        getUser(resultSet.getInt("winner")),
-                        resultSet.getString("host_controls"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("name"),
-                        getUser(resultSet.getInt("host")),
-                        getUser(resultSet.getInt("opponent")),
-                        resultSet.getInt("status"),
-                        resultSet.getInt("mapSize")
-                );
+                game = new Game();
+                game.setGameId(resultSet.getInt("id"));
+                game.setWinner(getUser(resultSet.getInt("winner")));
+                game.setHostControls(resultSet.getString("host_controls"));
+                game.setCreated(resultSet.getDate("created"));
+                game.setName(resultSet.getString("name"));
+                game.setHost(getUser(resultSet.getInt("host")));
+                game.setOpponent(getUser(resultSet.getInt("opponent")));
+                game.setStatus(resultSet.getString("status"));
+                game.setMapSize(resultSet.getInt("mapsize"));
             }
 
         } catch (SQLException e) {
@@ -225,21 +224,23 @@ public class DatabaseWrapper {
             result = new ArrayList<Game>();
 
             // Indlaesser brugere i arrayListen
-            while (resultSet.next())
-            {
-                result.add(new Game(
-                        resultSet.getInt("id"),
-                        getUser(resultSet.getInt("winner")),
-                        resultSet.getString("host_controls"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("name"),
-                        getUser(resultSet.getInt("host")),
-                        getUser(resultSet.getInt("opponent")),
-                        resultSet.getInt("status"),
-                        resultSet.getInt("mapSize")
-                ));
-            }
 
+
+
+
+            while (resultSet.next()) {
+                Game game = new Game();
+                game.setGameId(resultSet.getInt("id"));
+                game.setWinner(getUser(resultSet.getInt("winner")));
+                game.setHostControls(resultSet.getString("host_controls"));
+                game.setCreated(resultSet.getDate("created"));
+                game.setName(resultSet.getString("name"));
+                game.setHost(getUser(resultSet.getInt("host")));
+                game.setOpponent(getUser(resultSet.getInt("opponent")));
+                game.setStatus(resultSet.getString("status"));
+                game.setMapSize(resultSet.getInt("mapsize"));
+                result.add(game);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -328,7 +329,7 @@ public class DatabaseWrapper {
             ps.setInt(3, game.getWinner().getId());
             ps.setString(4, game.getHostControls());
             ps.setString(5, game.getOpponentControls());
-            ps.setInt(6, game.getId());
+            ps.setInt(6, game.getGameId());
 
             ps.executeUpdate();
         } catch (SQLException sqlException)
@@ -498,19 +499,19 @@ public class DatabaseWrapper {
             result = new ArrayList<Game>();
 
             // Indlaesser brugere i arrayListen
-            while (resultSet.next())
-            {
-                result.add(new Game(
-                        resultSet.getInt("id"),
-                        getUser(resultSet.getInt("winner")),
-                        resultSet.getString("host_controls"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("name"),
-                        getUser(resultSet.getInt("host")),
-                        getUser(resultSet.getInt("opponent")),
-                        resultSet.getInt("status"),
-                        resultSet.getInt("mapSize")
-                ));
+            while (resultSet.next()) {
+                Game game = new Game();
+
+                game.setGameId(resultSet.getInt("id"));
+                game.setWinner(getUser(resultSet.getInt("winner")));
+                game.setHostControls(resultSet.getString("host_controls"));
+                game.setCreated(resultSet.getDate("created"));
+                game.setName(resultSet.getString("name"));
+                game.setHost(getUser(resultSet.getInt("host")));
+                game.setOpponent(getUser(resultSet.getInt("opponent")));
+                game.setStatus(resultSet.getString("status"));
+                game.setMapSize(resultSet.getInt("mapsize"));
+                result.add(game);
             }
 
         } catch (SQLException e) {
