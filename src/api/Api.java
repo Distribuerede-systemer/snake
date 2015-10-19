@@ -38,11 +38,28 @@ public class Api {
 
             int result = Logic.userLogin(user.getUserName(), user.getPassword());
 
+            switch (result) {
+                case 0:
+                    return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+                    //break;
+                case 1:
+                    return Response.status(200).entity("{\"success\":\"true\"}").build();
+                    //break;
+                case 2:
+                    return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+                   //break;
+                default:
+                    //
+                    break;
+            }
+
             //TODO: Use result to see if it is a success or not.
             return Response.status(200).entity("{\"success\":\"true\"}").build();
         } catch (Exception e) {
             return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
         }
+
+
     }
 
     @GET //"GET-request"
@@ -83,7 +100,6 @@ public class Api {
 
         return "";
         //return new Gson().toJson(createUser);
-
     }
 
     @GET //"GET-request"
