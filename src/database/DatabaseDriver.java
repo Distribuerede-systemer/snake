@@ -162,4 +162,16 @@ public class DatabaseDriver {
     public String deleteSqlGame() {
         return "UPDATE Games SET status = ? WHERE id = ?";
     }
+
+    public String authenticatedSql() {
+        return "Select * from users where username = ?";
+    }
+
+    public String createGame() {
+        return"INSERT INTO games() VALUES (";
+    }
+
+    public String deleteGame() {
+        return"UPDATE games SET status = Deleted WHERE id = ?";
+    }
 }
