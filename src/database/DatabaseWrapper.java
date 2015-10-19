@@ -28,9 +28,9 @@ public class DatabaseWrapper {
     private Connection connection;
     DatabaseDriver dbDriver = new DatabaseDriver();
     public static final int ALLGAMESBYID = 0;
-    public static final int PENDINGGAMES = 1;
-    public static final int ALLINVITEDGAMESBYID = 2;
-    public static final int COMPLETEDGAMES = 3;
+    public static final int ALLPENDINGGAMESBYID = 1;
+    public static final int PENDINGINVITESBYID = 2;
+    public static final int COMPLETEDGAMESBYID = 3;
 
 
     /**
@@ -469,49 +469,26 @@ public class DatabaseWrapper {
         try {
 
             switch (type){
-                case PENDINGGAMES:
-                    ps = connection.prepareStatement(dbDriver.getSqlPendingGames());
+                case ALLGAMESBYID:
+                    ps = connection.prepareStatement(dbDriver.getSqlAllGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
                     break;
-                case COMPLETEDGAMES:
-                    ps = connection.prepareStatement(dbDriver.getSqlGamesByUserID());
+                case ALLPENDINGGAMESBYID:
+                    ps = connection.prepareStatement(dbDriver.getSqlPendingGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
                     break;
-                case COMPLETEDGAMES:
-                    ps = connection.prepareStatement(dbDriver.getSqlGamesByUserID());
+                case PENDINGINVITESBYID:
+                    ps = connection.prepareStatement(dbDriver.getSqlCompletedGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
                     break;
-                case COMPLETEDGAMES:
-                    ps = connection.prepareStatement(dbDriver.getSqlGamesByUserID());
+                case COMPLETEDGAMESBYID:
+                    ps = connection.prepareStatement(dbDriver.getSqlGameInvitesByUserID());
                     ps.setInt(1, id);
-                    ps.setInt(2, id);
                     break;
             }
-
-
-            public String getSqlAllGamesByUserID() {
-                return "select * from games where status <> 'deleted' (host = ? OR opponent = ?)";
-            }
-
-            public String getSqlPendingGamesByUserID() {
-                return "select * from games WHERE status = 'pending' and (host = ? OR opponent = ?)";
-            }
-
-            public String getSqlCompletedGamesByUserID() {
-
-                return "select * from games where status = 'completed' and (host = ? OR opponent = ?)";
-            }
-
-            public String getSqlGameInvitesByUserID() {
-                return "select * from games WHERE status = 'pending' and opponent = ?";
-            }
-
-
-
-
 
             resultSet = ps.executeQuery();
 
