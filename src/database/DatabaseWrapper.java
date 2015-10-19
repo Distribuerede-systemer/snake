@@ -44,7 +44,7 @@ public class DatabaseWrapper {
                         resultSet.getDate("created"),
                         resultSet.getString("status"),
                         resultSet.getString("type")
-                        );
+                );
             }
 
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class DatabaseWrapper {
         try {
             ps = connection.prepareStatement(dbDriver.getSqlRecord("games"));
 
-        ps.setInt(1, id);
+            ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
 
@@ -85,16 +85,13 @@ public class DatabaseWrapper {
                         resultSet.getInt("endgame"),
                         resultSet.getString("host"),
                         resultSet.getString("opponent"),
-                        resultSet.getString("status")
+                        resultSet.getInt("status")
                 );
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-
-        finally {
+        } finally {
             try {
                 resultSet.close();
             } catch (SQLException ex) {
@@ -132,10 +129,7 @@ public class DatabaseWrapper {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-
-        finally {
+        } finally {
             try {
                 resultSet.close();
             } catch (SQLException ex) {
@@ -160,8 +154,7 @@ public class DatabaseWrapper {
             result = new ArrayList<User>();
 
             // Indlaesser brugere i arrayListen
-            while (resultSet.next())
-            {
+            while (resultSet.next()) {
                 result.add(new User(
                         resultSet.getInt("id"),
                         resultSet.getString("firstname"),
@@ -202,8 +195,7 @@ public class DatabaseWrapper {
             result = new ArrayList<Game>();
 
             // Indlaesser brugere i arrayListen
-            while (resultSet.next())
-            {
+            while (resultSet.next()) {
                 result.add(new Game(
                         resultSet.getInt("id"),
                         resultSet.getInt("result"),
@@ -214,7 +206,7 @@ public class DatabaseWrapper {
                         resultSet.getInt("endgame"),
                         resultSet.getString("host"),
                         resultSet.getString("opponent"),
-                        resultSet.getString("status")
+                        resultSet.getInt("status")
                 ));
             }
 
@@ -245,8 +237,7 @@ public class DatabaseWrapper {
             result = new ArrayList<Score>();
 
             // Indlaesser brugere i arrayListen
-            while (resultSet.next())
-            {
+            while (resultSet.next()) {
                 result.add(new Score(
                         resultSet.getInt("id"),
                         resultSet.getInt("user_id"),
@@ -270,10 +261,8 @@ public class DatabaseWrapper {
         return result;
     }
 
-    public void updateUser(User user)
-    {
-        try
-        {
+    public void updateUser(User user) {
+        try {
             PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlUser());
 
             ps.setString(1, user.getFirstName());
@@ -286,19 +275,17 @@ public class DatabaseWrapper {
 
 
             ps.executeUpdate();
-        } catch (SQLException sqlException)
-        {
+        } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             dbDriver.close();
         }
     }
 
-    public void updateGame(Game game)
-    {
-        try
-        {
+    public void updateGame(Game game) {
+        try {
             PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlUser());
 
+            User user = new User();
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
@@ -309,11 +296,39 @@ public class DatabaseWrapper {
 
 
             ps.executeUpdate();
-        } catch (SQLException sqlException)
-        {
+        } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             dbDriver.close();
         }
+    }
+
+    public User authenticatedUser(String username) {
+        User user = null;
+        ResultSet resultset = null;
+        PreparedStatement ps;
+
+        try {
+            ps = connection.prepareStatement(dbDriver.authenticatedSql());
+            ps.setString(1, username);
+            resultset = ps.executeQuery();
+
+            while (resultSet.next()) {
+                user = new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstname"),
+                        resultSet.getString("lastname"),
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getDate("created"),
+                        resultSet.getString("status"),
+                        resultSet.getString("type")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
 }
