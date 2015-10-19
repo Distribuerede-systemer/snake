@@ -102,13 +102,16 @@ public class DatabaseWrapper {
             while (resultSet.next()) {
                 game = new Game(
                         resultSet.getInt("id"),
-                        getUser(resultSet.getInt("winner")),
+                        resultSet.getInt("winner"),
                         resultSet.getString("host_controls"),
                         resultSet.getDate("created"),
                         resultSet.getString("name"),
+                        resultSet.getInt("new_game"),
+                        resultSet.getInt("end_game"),
                         getUser(resultSet.getInt("host")),
                         getUser(resultSet.getInt("opponent")),
-                        resultSet.getString("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("mapSize")
                 );
             }
 
@@ -228,13 +231,16 @@ public class DatabaseWrapper {
             {
                 result.add(new Game(
                         resultSet.getInt("id"),
-                        getUser(resultSet.getInt("winner")),
+                        resultSet.getInt("winner"),
                         resultSet.getString("host_controls"),
                         resultSet.getDate("created"),
                         resultSet.getString("name"),
+                        resultSet.getInt("new_game"),
+                        resultSet.getInt("end_game"),
                         getUser(resultSet.getInt("host")),
                         getUser(resultSet.getInt("opponent")),
-                        resultSet.getString("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("mapSize")
                 ));
             }
 
@@ -322,11 +328,11 @@ public class DatabaseWrapper {
             PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlGame());
 
             ps.setString(1, game.getName());
-            ps.setString(2, game.getStatus());
-            ps.setInt(3, game.getWinner().getId());
+            ps.setInt(2, game.getStatus());
+            ps.setInt(3, game.getResult());
             ps.setString(4, game.getHostControls());
             ps.setString(5, game.getOpponentControls());
-            ps.setInt(6, game.getId());
+            ps.setInt(6, game.getGameId());
 
             ps.executeUpdate();
         } catch (SQLException sqlException)
@@ -375,7 +381,7 @@ public class DatabaseWrapper {
             createGame.setInt(2, 3);
 //            createGame.setInt(2, game.getOpponent.getId());
             createGame.setString(3, game.getName());
-            createGame.setString(4, game.getStatus());
+            createGame.setInt(4, game.getStatus());
             createGame.setString(5, game.getHostControls());
 
             createGame.executeUpdate();
@@ -500,13 +506,16 @@ public class DatabaseWrapper {
             {
                 result.add(new Game(
                         resultSet.getInt("id"),
-                        getUser(resultSet.getInt("winner")),
+                        resultSet.getInt("winner"),
                         resultSet.getString("host_controls"),
                         resultSet.getDate("created"),
                         resultSet.getString("name"),
+                        resultSet.getInt("new_game"),
+                        resultSet.getInt("end_game"),
                         getUser(resultSet.getInt("host")),
                         getUser(resultSet.getInt("opponent")),
-                        resultSet.getString("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("mapSize")
                 ));
             }
 
