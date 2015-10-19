@@ -1,6 +1,8 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.Scanner;
+
 
 /**
  * Created by Oscar on 12-10-2015.
@@ -31,10 +33,30 @@ public class User {
         this.status = status;
         this.type = type;
     }
+
+    public User () {}
     
     //creating get and set method for all the variables, so they can be used by other classes
+
+
     public int getId() {
         return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setId(int id) {
@@ -87,5 +109,21 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

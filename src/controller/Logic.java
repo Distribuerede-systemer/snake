@@ -1,414 +1,276 @@
 package controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
 
-
-import model.Config;
+import database.DatabaseWrapper;
 import model.Game;
-// imports information about password and username from the User class in the model package
+import model.Gamer;
+import model.Score;
 import model.User;
 import tui.Tui;
 
 /**
- * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application. 
+ * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
+ *
  * @author Henrik Thorn
  */
 public class Logic {
 
-	private Connection connection = null;
-	private PreparedStatement users = null;
-	private PreparedStatement games = null;
-	private PreparedStatement createUser = null;
-	private PreparedStatement deleteUser = null;
-	private PreparedStatement createGame = null;
-	private PreparedStatement delteGame = null;
+    private static boolean isAuthenticated = false;
+
+
+    /**
+     * Get all users
+     *
+     * @return ArrayList of users
+     */
+    public static ArrayList<User> getUsers() {
+
+        // Define ArrayList to be used to add users and return them.
+        DatabaseWrapper db = new DatabaseWrapper();
+
+        ArrayList<User> uj = db.getUsers();
+
+        return uj;
+
+
+    }
+
+    /**
+     * Is user authenticated?
+     *
+     * @return true if yes, false if no
+     */
+    public static boolean isUserAuthenticated() {
+        return isAuthenticated;
+    }
+
+    public static void setIsUserAuthenticated(boolean auth) {
+        isAuthenticated = auth;
+    }
+
+    /**
+     * Create user
+     *
+     * @param user
+     * @return true if success, false if failure
+     */
+    public static boolean createUser(User user) {
+
+        //TODO: Create user with DB-wrapper. If creation succeeded return true, if not return false
+
+        return true;
+
+    }
+
+    /**
+     * Delete user
+     *
+     * @param id
+     * @return true success, false if failure
+     */
+    public static boolean deleteUser(int id) {
+
+        //TODO: Delete user via DB-wrapper
+        return false;
+
+    }
+
+    /**
+     * Add user
+     *
+     * @param user
+     */
+    public static void addUser(User user) {
+
+        //TODO: Add user to DB via DB-wrapper
+
+    }
+
+    /**
+     * Get specific user
+     *
+     * @param userId
+     * @return User object
+     */
+    public static User getUser(int userId) {
+
+        //TODO: Get specific user from DB via DB-wrapper
+        User user = new User();
+        return user;
+
+    }
+
+    /**
+     * Authenticates user
+     * The int uses 2 parameters: username and password which it authenticates as the correct credentials of an existing user.
+     *
+     * @param username
+     * @param password
+     * @return 2 if auth successful, 1 if user exists but password is incorrect, 0 if failed
+     */
+    public static int userLogin(String username, String password) {
+        User user;
+        DatabaseWrapper db = new DatabaseWrapper();
+        user = db.authenticatedUser(username);
+        if (user == null) {
+            // User does not exists.
+            return 0;
+        } else {
+            if (password.equals(user.getPassword())) {
+                // Return 2 if user exists and password is correct. Success.
+                return 2;
+
+            } else {
+                //Return 1 if user exists but password is wrong.
+                return 1;
+            }
+        }
+    }
+
+    /**
+     * Get all highscores from the game
+     *
+     * @return ArrayList of highscores
+     */
+    public static ArrayList<Score> getHighscores() {
+        //TODO: Get all highscores
+        ArrayList<Score> highScores = null;
+        return highScores;
+    }
+
+    /**
+     * Get a highscore from a specified user
+     *
+     * @param userId
+     * @return Score
+     */
+    public static Score getHighscore(int userId) {
+        //TODO: Get highscore from user
+
+        Score score = new Score();
+        return score;
+    }
+
+
+    /**
+     * Get all games
+     *
+     * @return ArrayList of games
+     */
+    public static ArrayList<Game> getGames() {
+
+        //TODO: Get ALL games via DB-wrapper
+
+        ArrayList<Game> games = null;
+        return games;
+
+    }
+
+    /**
+     * Get specific game created by user
+     *
+     * @param userId
+     * @return ArrayList of matched games
+     */
+    public static ArrayList<Game> getGames(int userId) {
+
+        //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
+
+        ArrayList<Game> games = null;
+        return games;
+
+    }
+
+    /***
+     * Get specific game
+     *
+     * @param gameId
+     * @return Game object
+     */
+    public static Game getGame(int gameId) {
+
+        //TODO: Get specific game via DB-wrapper
+
+        return null;
+    }
+
+
+    /**
+     * Makes another user join an existing game
+     *
+     * @param gameId
+     * @param opponent
+     * @param controls
+     * @return true if success, false if failure
+     */
+    public static boolean joinGame(int gameId, User opponent, String controls) {
+
+        //TODO: Find game by id
+        //TODO: Add opponent, with provided controls
+
+        return true;
+
+    }
+
+    /**
+     * Starts a game
+     *
+     * @param gameId
+     * @return returns game results
+     */
+    public static Map startGame(int gameId) {
+
+        Game game = getGame(gameId);
+
+        Gamer host = new Gamer();
+        Gamer opponent = new Gamer();
+
+        host.setControls(game.getHostControls());
+        opponent.setControls(game.getOpponentControls());
+
+        return GameEngine.playGame(game.getMapSize(), host, opponent);
+
+    }
+
+    /**
+     * Create a game
+     *
+     * @param gameName
+     * @param host
+     * @return returns inriched game object
+     */
+    public static Game createGame(String gameName, User host) {
+
+        //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
+        Game game = new Game();
+        game.setName(gameName);
+        game.setHost(host);
+        game.setStatus(1); //1 is pending, 0 is done
+
+        DatabaseWrapper db = new DatabaseWrapper();
+        game.setGameId(db.createGame(gameName));
+        //TODO: Write game to db, and return game-id and set object before returning
+
+        return game;
+    }
+
+    /**
+     * Delete game
+     *
+     * @param gameId
+     * @return true if success, false if failure
+     */
+    public static boolean deleteGame(int gameId) {
+        DatabaseWrapper db = new DatabaseWrapper();
+        if (db.deleteGame(gameId))
+            return true;
+        else {
+            return false;
+        }
+
+    }
 
-	private Tui tui;
-	private User usr;
-	private ArrayList<User> userList;
-	private boolean isAuthenticated;
-	private Game gme;
 
-
-
-	public Logic(){
-
-		Config config = new Config();
-
-		try {
-			connection = DriverManager.getConnection(config.getDbname(), config.getUsername(), config.getPassword());
-		}
-		catch (Exception e){
-			tui.miscOut("Error.");
-		}
-
-		users = DB.getRecords('user');
-		games = DB.getRecords('games');
-
-		tui = new Tui();
-		userList = new ArrayList<User>();
-		isAuthenticated = false;
-
-	}
-
-	public void start(){
-
-		while (true) {
-			if(login() == 1)
-				isAuthenticated = true;
-
-			if(isAuthenticated){
-				userMenu();
-			}
-		}
-	}
-
-	public void userMenu(){
-
-		while(isAuthenticated) {
-
-			int menu = tui.userMenuScreen();
-
-			switch (menu) {
-
-				case 1:
-					// listUsers();
-					tui.miscOut("Game List: ");
-					break;
-				case 2:
-					tui.miscOut("User List: ");
-					tui.listUsers(userList);
-					break;
-				case 3:
-					tui.miscOut("Create User: ");
-					createUser();
-					break;
-				case 4:
-					tui.miscOut("Delete User: ");
-					deleteUser();
-					break;
-				case 5:
-					tui.miscOut("You Logged Out.");
-					isAuthenticated = false;
-					break;
-				default:
-					tui.miscOut("Unassigned key.");
-					break;
-
-			}
-		}
-	}
-
-
-
-
-	//Gets a list of all active users and return these as a ArrayList of User objects 
-	public ArrayList<User> getUsers(){
-
-		// Define ArrayList to be used to add users and return them. 
-		ArrayList <User> uj = null;
-
-		try(ResultSet resultSet = users.executeQuery()) {
-
-			uj = new ArrayList<User>();
-
-			while (resultSet.next()){
-
-				uj.add(new User(resultSet.getInt("ID"),
-							resultSet.getString("Firstname"),
-							resultSet.getString("Lastname"),
-							resultSet.getString("Username"),
-							resultSet.getString("Password"),
-							resultSet.getString("Created"),
-							resultSet.getString("Status")));
-			}
-		}catch(Exception e){
-			e.printStackTrace();}
-		// Return Users
-
-		return uj;
-
-
-	}
-
-	public void createUser(){
-
-		addUser(tui.enterFirstName(), tui.enterLastName(),tui.enterUsername(), tui.enterPassword());
-	}
-
-	public boolean deleteUser(){
-
-		String username = tui.deleteUserScreen();
-
-		if(removeUser(getUserFromUsername(username))) {
-			tui.miscOut(username + " was deleted.");
-			if(username.equals(usr.getUsername()))
-				start();
-			else
-				return true;
-		}
-		else
-			tui.miscOut(username + " was not found.");
-		return false;
-
-	}
-
-	public void addUser(String firstName, String lastName, String username, String password){
-
-		userList.add(new User(firstName, lastName, username, password));
-	}
-
-	public boolean removeUser(User u){
-		try {
-			if (userList.remove(u))
-				return true;
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-
-	//Gets a list of all games and return these as an ArrayList of Game objects
-	public ArrayList<Game> getGames(){
-
-		ArrayList <Game> games = null;
-
-
-		try(ResultSet resultSet = games.executeQuery()) {
-
-			games = new ArrayList<Game>();
-
-			while (resultSet.next()){
-
-				games.add(new Game(resultSet.getInt("ID"),
-							resultSet.getInt("Result"),
-							resultSet.getString("Controls"),
-							resultSet.getInt("NewGame"),
-							resultSet.getInt("EndGame"),
-							resultSet.getString("Host"),
-							resultSet.getString("Opponent"),
-							resultSet.getString("Status")));
-			}
-
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
-		return games;
-
-	}
-
-	//Returns object of game
-	public Game getGame(Game gameName){
-
-		return gameName;
-	}
-
-	//Return an istance of a game
-	public Game createGame(String gameName) {
-
-		//int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
-		Game game = new Game(1, 1, "ASD", 1, 1, "localhost", "abcd", "HEJ");
-
-		return game;
-	}
-
-	// Authenticates a user and returns a status code according to the result. 
-	// CODES:
-	// 1 || SUCCESS
-	// 2 || USER DOES NOT EXIST
-	// 3 || WRONG PASSWORD
-	public int login() {
-
-		String username;
-		String password;
-		try {
-
-			username =  tui.enterUsername();
-			password = tui.enterPassword();
-
-			for (User usr : userList) {
-				if (usr.getUserName().equals(username))
-				{
-					if(usr.getPassword().equals(password)) {
-						tui.miscOut("Success.");
-						return 1;
-					}
-					else {
-						tui.miscOut("Wrong password.");
-						return 3;
-					}
-				}
-				else {
-					tui.miscOut("User does not exist.");
-					return 2;
-				}
-			}
-		} catch (NullPointerException n) {
-			tui.miscOut("Invalid login");
-		}
-		return 2;
-	}
-
-	public User getUserFromUsername(String username){
-
-		for (User usr : userList) {
-			if (usr.getUserName().equals(username)){
-				return usr;
-			}
-		}
-		return null;
-	}
-
-	//Deletes a game from the database
-	public boolean deleteGame(){
-		return false;
-	}
-
-	//Deletes a user from the database
-	//TODO: Create function.
-
-	public Array playGame(int size, String hostControls, String opponentControls){
-		// Dummy variables that should be replaced with data from the host:
-		String hostControls = "ddssaawwdddddd";
-		String opponentControls = "ddwwaass";
-		String turn = Math.round(Math.random() * 1) == 0 ? "host" : "opponent";
-
-		// Hosting party:
-		System.out.println("\n### GAME: host is " + turn + "! ###\n");
-
-		// Split each controls string into a character array:
-		char[] hostControlCharacters = hostControls.toCharArray();
-		char[] opponentControlCharacters = opponentControls.toCharArray();
-
-		// The game variables for the host:
-		boolean hostDidCrash = false;
-		int hostScore = 0;
-		int hostKills = 0;
-		int hostX = 0;
-		int hostY = 1;
-
-		// The game variables for the opponent:
-		boolean opponentDidCrash = false;
-		int opponentScore = 0;
-		int opponentX = 0;
-		int opponentY = -1;
-		int opponentKills = 0;
-
-		// Playing field options:
-		int boundary = 4;
-
-		// Total amount of moves:
-		int movesCount = hostControls.length() < opponentControls.length() ? opponentControls.length() : hostControls.length();
-
-		// Arrays of host and opponent moves:
-		int[][] hostMoves = new int[movesCount][];
-		int[][] opponentMoves = new int[movesCount][];
-
-		// Loop through the host (leader) moves:
-		System.out.println("Looping through host moves:\n");
-
-		for (int i = 0; i < hostControls.length(); i++) {
-			char move = hostControlCharacters[i];
-
-			if (move == 'a') {
-				hostX--;
-			} else if (move == 'd') {
-				hostX++;
-			} else if (move == 'w') {
-				hostY++;
-			} else if (move == 's') {
-				hostY--;
-			}
-
-			hostMoves[i] = new int[]{hostX, hostY};
-
-			System.out.println(Arrays.toString(hostMoves[i]));
-		}
-
-		// Loop through the follower (opponent) moves:
-		System.out.println("\nLooping through opponent moves:\n");
-
-		for (int i = 0; i < opponentControls.length(); i++) {
-			char move = opponentControlCharacters[i];
-
-			if (move == 'a') {
-				opponentX--;
-			} else if (move == 'd') {
-				opponentX++;
-			} else if (move == 'w') {
-				opponentY++;
-			} else if (move == 's') {
-				opponentY--;
-			}
-
-			opponentMoves[i] = new int[]{opponentX, opponentY};
-
-			System.out.println(Arrays.toString(opponentMoves[i]));
-		}
-
-		// Loop through both moves to find collisions:
-		System.out.println("\nDetecting collisions in favor of " + turn + ":\n");
-
-		for (int i = 0; i < movesCount; i++) {
-			int[] hostMove = hostMoves[i];
-			int[] opponentMove = opponentMoves[i];
-
-			// Kills:
-			if (hostMove != null && opponentMove != null && hostMove[0] == opponentMove[0] && hostMove[1] == opponentMove[1]) {
-				if (turn.equals("host")) {
-					hostKills++;
-
-					opponentDidCrash = true;
-				} else {
-					opponentKills++;
-
-					hostDidCrash = true;
-				}
-
-				System.out.println("Collision at [" + hostMove[0] + ", " + hostMove[1] + "]!\tHost " + hostKills + " - Opponent " + opponentKills);
-			}
-
-			// Host move:
-			if (hostMove != null) {
-
-				// Check if the host move results in a wall crash:
-				if (hostMove[0] > boundary || hostMove[1] > boundary) {
-					hostDidCrash = true;
-				}
-
-				// Check if the host move is not null and if the host did not previously crash:
-				if (!hostDidCrash) {
-					hostScore++;
-				}
-
-			}
-
-			// Opponent move:
-			if (opponentMove != null) {
-
-				// Check if the opponent move results in a wall crash:
-				if (opponentMove[0] > boundary || opponentMove[1] > boundary) {
-					opponentDidCrash = true;
-				}
-
-				// Check if the opponent move is not null and if the opponent did not previously crash:
-				if (!opponentDidCrash) {
-					opponentScore++;
-				}
-
-			}
-
-		}
-
-		System.out.println("hostScore: " + hostScore);
-		System.out.println("opponentScore: " + opponentScore);
-
-	}
-}
 }

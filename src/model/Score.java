@@ -9,18 +9,58 @@ package model;
 public class Score {
 
     // Declare highScore
-    int highScore;
+    private int id;
+    private int userId;
+    private int opponentId;
+    private int gameId;
+    private int score;
 
     // Creates constructor
-    public Score(int _highScore)
+    public Score(int id, int userId, int gameId, int opponentId, int score)
     {
-        highScore = _highScore;
+        this.id = id;
+        this.userId = userId;
+        this.gameId = gameId;
+        this.opponentId = opponentId;
+        this.score = score;
     }
 
     // Creates get method which returns the highScore
-    public int getHighScore()
-    {
-        return highScore;
+
+
+    public int getId() {
+        return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
+
+
+
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }
