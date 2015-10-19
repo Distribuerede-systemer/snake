@@ -14,11 +14,10 @@ public class DatabaseDriver {
      * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
      */
     private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
-    private static String sqlUser = "dataguy";
-    private static String sqlPassword = "QjcUayHA3axeGLns";
+    private static String sqlUser = "root";
+    private static String sqlPassword = "";
 
     private Connection connection = null;
-
 
     /**
      * Connects to the database with the specified Url, User and Password.
@@ -129,7 +128,7 @@ public class DatabaseDriver {
         return "UPDATE Users SET first_name = ?, last_name = ?, email = ?, password = ?, " +
                 "status = ?, type = ? WHERE id = ?";
     }
- //
+    //
     /**
      * Querybuilder with seven parameters, which, when specified will update the value of the shown columns in the 'games' table
      * @return SqlStatement
@@ -162,4 +161,15 @@ public class DatabaseDriver {
     public String deleteSqlGame() {
         return "UPDATE Games SET status = ? WHERE id = ?";
     }
+
+    public String getSqlPendingGames() {
+
+        return "select * from games WHERE opponent = ? and status = 'pending'";
+    }
+
+    public String getSqlGamesByUserID() {
+
+        return "select * from games where status = 'done' and (host = ? OR opponent = ?)";
+    }
+
 }

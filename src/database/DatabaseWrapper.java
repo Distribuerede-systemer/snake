@@ -14,11 +14,11 @@ import java.util.ArrayList;
  */
 //
 
-    // TODO: dynamicQuery (returning cachedrowset)
-    // TODO: getGamesPendingByUserID (select * from games where status = "pending" and id = id)
-    // TODO: getGamesByUserID (select * from games where status <> "deleted" and (host = id OR opponent = id))
-    // TODO: getHighScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
-    // TODO: ???
+// TODO: dynamicQuery (returning cachedrowset)
+// TODO: getGamesPendingByUserID (select * from games where status = "pending" and id = id)
+// TODO: getGamesByUserID (select * from games where status <> "deleted" and (host = id OR opponent = id))
+// TODO: getHighScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
+// TODO: ???
 
 
 public class DatabaseWrapper {
@@ -27,6 +27,8 @@ public class DatabaseWrapper {
     private ResultSet resultSet = null;
     private Connection connection;
     DatabaseDriver dbDriver = new DatabaseDriver();
+    public static final int COMPLETEDGAMES = 0;
+    public static final int PENDINGGAMES = 1;
 
     /**
      * The connection from DatabaseDriver is initialized in the class
@@ -63,7 +65,7 @@ public class DatabaseWrapper {
                         resultSet.getDate("created"),
                         resultSet.getString("status"),
                         resultSet.getString("type")
-                        );
+                );
             }
 
         } catch (SQLException e) {
@@ -89,7 +91,7 @@ public class DatabaseWrapper {
         try {
             ps = connection.prepareStatement(dbDriver.getSqlRecord("games"));
 
-        ps.setInt(1, id);
+            ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
 
@@ -179,16 +181,16 @@ public class DatabaseWrapper {
             while (resultSet.next())
             {
                 result.add(new User(
-                                resultSet.getInt("id"),
-                                resultSet.getString("first_name"),
-                                resultSet.getString("last_name"),
-                                resultSet.getString("email"),
-                                resultSet.getString("username"),
-                                resultSet.getString("password"),
-                                resultSet.getDate("created"),
-                                resultSet.getString("status"),
-                                resultSet.getString("type")
-                        ));
+                        resultSet.getInt("id"),
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getDate("created"),
+                        resultSet.getString("status"),
+                        resultSet.getString("type")
+                ));
             }
 
         } catch (SQLException e) {
@@ -340,15 +342,15 @@ public class DatabaseWrapper {
             // Prepared statement til at tilfoeje en bruger
             PreparedStatement createUser = connection.prepareStatement(dbDriver.createSqlUser());
 
-                createUser.setString(1, user.getFirstName());
-                createUser.setString(2, user.getLastName());
-                createUser.setString(3, user.getEmail());
-                createUser.setString(4, user.getUserName());
-                createUser.setString(5, user.getPassword());
-                createUser.setString(6, user.getStatus());
-                createUser.setString(7, user.getType());
+            createUser.setString(1, user.getFirstName());
+            createUser.setString(2, user.getLastName());
+            createUser.setString(3, user.getEmail());
+            createUser.setString(4, user.getUserName());
+            createUser.setString(5, user.getPassword());
+            createUser.setString(6, user.getStatus());
+            createUser.setString(7, user.getType());
 
-                createUser.executeUpdate();
+            createUser.executeUpdate();
         } catch (SQLException sqlException)
         {
             sqlException.printStackTrace();
@@ -454,6 +456,99 @@ public class DatabaseWrapper {
             sqlException.printStackTrace();
             dbDriver.close();
         }
+    }
+
+    public ArrayList<Game> getPendingGamesById(int id) {
+        ResultSet resultSet = null;
+        PreparedStatement ps;
+        ArrayList<Game> result = null;
+
+        try {
+            ps = connection.prepareStatement(dbDriver.getSqlPendingGames());
+            ps.setInt(1, id);
+            resultSet = ps.executeQuery();
+
+
+            result = new ArrayList<Game>();
+
+            // Indlaesser brugere i arrayListen
+            while (resultSet.next())
+            {
+                result.add(new Game(
+                        resultSet.getInt("id"),
+                        getUser(resultSet.getInt("winner")),
+                        resultSet.getString("host_controls"),
+                        resultSet.getDate("created"),
+                        resultSet.getString("name"),
+                        getUser(resultSet.getInt("host")),
+                        getUser(resultSet.getInt("opponent")),
+                        resultSet.getString("status")
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                dbDriver.close();
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<Game> getGamesByUserID(int type, int id) {
+        ResultSet resultSet = null;
+        PreparedStatement ps = null;
+        ArrayList<Game> result = null;
+
+        try {
+
+            switch (type){
+                case PENDINGGAMES:
+                    ps = connection.prepareStatement(dbDriver.getSqlPendingGames());
+                    ps.setInt(1, id);
+                    break;
+                case COMPLETEDGAMES:
+                    ps = connection.prepareStatement(dbDriver.getSqlGamesByUserID());
+                    ps.setInt(1, id);
+                    break;
+            }
+
+            resultSet = ps.executeQuery();
+
+            result = new ArrayList<Game>();
+
+            // Indlaesser brugere i arrayListen
+            while (resultSet.next())
+            {
+                result.add(new Game(
+                        resultSet.getInt("id"),
+                        getUser(resultSet.getInt("winner")),
+                        resultSet.getString("host_controls"),
+                        resultSet.getDate("created"),
+                        resultSet.getString("name"),
+                        getUser(resultSet.getInt("host")),
+                        getUser(resultSet.getInt("opponent")),
+                        resultSet.getString("status")
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                dbDriver.close();
+            }
+        }
+
+        return result;
     }
 
 }
