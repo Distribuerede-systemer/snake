@@ -6,6 +6,7 @@ package model;
 public class Gamer extends User {
 
     private int score;
+    private int totalScore;
     private int kills;
     private String controls;
     private boolean winner;
@@ -20,6 +21,14 @@ public class Gamer extends User {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
     }
 
     public void setKills(int kills) {

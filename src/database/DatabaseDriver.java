@@ -14,8 +14,8 @@ public class DatabaseDriver {
      * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
      */
     private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
-    private static String sqlUser = "root";
-    private static String sqlPassword = "";
+    private static String sqlUser = "dataguy";
+    private static String sqlPassword = "QjcUayHA3axeGLns";
 
     private Connection connection = null;
 
@@ -153,7 +153,6 @@ public class DatabaseDriver {
                 "values (?, ?, ?, ?)";
     }
 
-
     public String deleteSqlUser() {
         return "UPDATE Users SET status = ? WHERE id = ?";
     }
@@ -162,14 +161,29 @@ public class DatabaseDriver {
         return "UPDATE Games SET status = ? WHERE id = ?";
     }
 
-    public String getSqlPendingGames() {
-
-        return "select * from games WHERE opponent = ? and status = 'pending'";
+    public String getSqlAllGamesByUserID() {
+        return "select * from games where status <> 'deleted' (host = ? OR opponent = ?)";
     }
 
-    public String getSqlGamesByUserID() {
-
-        return "select * from games where status = 'done' and (host = ? OR opponent = ?)";
+    public String getSqlPendingGamesByUserID() {
+        return "select * from games WHERE status = 'pending' and (host = ? OR opponent = ?)";
     }
 
+    public String getSqlCompletedGamesByUserID() {
+
+        return "select * from games where status = 'completed' and (host = ? OR opponent = ?)";
+    }
+
+    public String getSqlGameInvitesByUserID() {
+        return "select * from games WHERE status = 'pending' and opponent = ?";
+    }
+
+    public String authenticatedSql() {
+        return "Select * from users where username = ?";
+    }
+
+    public String getSqlHighScore() {
+        return "select users.*, sum(scores.score) as TotalScore from users " +
+                "join scores where users.id = scores.user_id group by users.username order by TotalScore desc";
+    }
 }

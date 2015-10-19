@@ -2,13 +2,12 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Map;
-
 import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
 import model.Score;
 import model.User;
-import tui.Tui;
+
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
@@ -16,7 +15,7 @@ import tui.Tui;
  * @author Henrik Thorn
  */
 public class Logic {
-
+    static DatabaseWrapper db = new DatabaseWrapper();
     private static boolean isAuthenticated = false;
 
 
@@ -112,7 +111,6 @@ public class Logic {
      */
     public static int userLogin(String username, String password) {
         User user;
-        DatabaseWrapper db = new DatabaseWrapper();
         user = db.authenticatedUser(username);
         if (user == null) {
             // User does not exists.
@@ -247,10 +245,10 @@ public class Logic {
         Game game = new Game();
         game.setName(gameName);
         game.setHost(host);
-        game.setStatus(1); //1 is pending, 0 is done
+        game.setStatus("pending"); //1 is pending, 0 is done
 
-        DatabaseWrapper db = new DatabaseWrapper();
-        game.setGameId(db.createGame(gameName));
+
+//        game.setName(db.createGame(gameName));
         //TODO: Write game to db, and return game-id and set object before returning
 
         return game;
