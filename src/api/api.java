@@ -7,6 +7,7 @@ import controller.Logic;
 import model.Game;
 import model.Score;
 import model.User;
+import tui.Tui;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -14,28 +15,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-// The Java class will be hosted at the URI path "/helloworld more comment"
-@Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
+@Path("/api")
 public class Api {
 
-    public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServerFactory.create("http://localhost:9998/");
-        server.start();
+    //TODO: Revisit paths
+    //TODO: Revisit "produces"
 
-        System.out.println("Server running");
-        System.out.println("Visit: http://localhost:9998/Api");
-        System.out.println("Hit return to stop...");
-        System.in.read();
-        System.out.println("Stopping server");
-        server.stop(0);
-        System.out.println("Server stopped");
-
-        System.out.println();
-    }
-
-    // The Java method will process HTTP GET requests
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
-    // The Java method will produce content identified by the MIME Media type "text/plain"
     @Produces("text/plain")
     public String getClichedMessage() {
         // Return some cliched textual content
@@ -47,7 +33,7 @@ public class Api {
     @Produces("application/json")
     public String getAllUsers() {
 
-        ArrayList<model.User> users = Logic.getUsers();
+        ArrayList<User> users = Logic.getUsers();
 
 
         //TODO; Hent brugere fra DB
@@ -71,9 +57,9 @@ public class Api {
     @Produces("application/json")
     public String getHighScore(String data) {
 
-        //TODO: ();Get method from logic to return highscores.
+        //TODO: Get method from logic to return highscores.
 
-        ArrayList<model.Score> Score = Logic.getHighscores();
+        ArrayList<Score> Score = Logic.getHighscores();
         return new Gson().toJson(Score);
 
     }
@@ -84,7 +70,7 @@ public class Api {
     public String getScore(@PathParam("userid") int userid) {
 
         Score score = Logic.getHighscore(userid);
-        return new Gson().toJson(userid);
+        return new Gson().toJson(score);
 
     }
 
@@ -104,7 +90,7 @@ public class Api {
     public String getGame(@PathParam("gameid") int gameid) {
 
         Game game = Logic.getGame(gameid);
-        return new Gson().toJson(gameid);
+        return new Gson().toJson(game);
 
     }
 
@@ -113,44 +99,24 @@ public class Api {
     @Produces("application/json")
     public Response login(String data) {
 
-//        Logic logic = new Logic();
-        //      Logic.userLogin();
-
         try {
 
             User user = new Gson().fromJson(data, User.class);
 
             int result = Logic.userLogin(user.getUserName(), user.getPassword());
 
-            System.out.print(result);
+            //TODO: Use result to see if it is a success or not.
             return Response.status(200).entity("{\"success\":\"true\"}").build();
         } catch (Exception e) {
             return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
-
         }
-        //// Authenticates a user and returns a status code according to the result.
-        // CODES:
-        // 1 || SUCCESS
-        // 2 || USER DOES NOT EXIST
-        // 3 || WRONG PASSWORD
-        // logic.login();
-
-
-        //return "OK";
-
-        //såfremt der er overenstemmelse med brugernavn og password = godkendelse
     }
-
-
-    // System.out.println(data);
-    //return "OK" ;
-    //}
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
     @Path("/user/")
     @Produces("text/plain")
-    public String createUser(String createUser) {
-
+    public String createUser(String data) {
+        //TODO: Needs to be fixed.
         User user = null;
 
         boolean createdUser = Logic.createUser(user);
@@ -161,27 +127,28 @@ public class Api {
 
         }
 
-
-        return new Gson().toJson(createUser);
+        return "";
+        //return new Gson().toJson(createUser);
 
     }
-
-
 
     @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/create")
+    @Path("/game")
     @Produces("text/plain")
-    public String createGame(String gameName, int userId) {
+    public String createGame(String json) {
 
-        User host = Logic.getUser(userId);
-        Game createGame = Logic.createGame(gameName, host);
-        return new Gson().toJson(createGame);
+
+        //TODO: Parse json and get userId and gameName.
+        //User host = Logic.getUser(userId);
+        //Game createGame = Logic.createGame(gameName, host);
+        //return new Gson().toJson(createGame);
+        return "";
     }
 
-    @POST //POST-request: Opstart af nyt spil
-    @Path("/gameId")
+    @GET //GET-request: Opstart af nyt spil
+    @Path("/startgame/{gameid}")
     @Produces("text/plain")
-    public String startGame(int gameId) {
+    public String startGame(@PathParam("gameid") int gameId) {
 
         Map startGame = Logic.startGame(gameId);
         return new Gson().toJson(startGame);
@@ -197,13 +164,29 @@ public class Api {
         return new Gson().toJson(deleteUser);
     }
 
-    @DELETE //DELETE-request fjernelse af data(spillet slettes)
-    @Path("/gameId/")
+    @GET //DELETE-request fjernelse af data(spillet slettes)
+    @Path("/deleteGame/{gameid}")
     @Produces("text/plain")
-    public String deleteGame(int gameId) {
+    public String deleteGame(@PathParam("gameid") int gameId) {
 
         boolean deleteGame = Logic.deleteUser(gameId);
         return new Gson().toJson(deleteGame);
+    }
+
+    public static void main(String[] args) throws IOException {
+        HttpServer server = HttpServerFactory.create("http://localhost:9998/");
+        server.start();
+
+
+        System.out.println("Server running");
+        System.out.println("Visit: http://localhost:9998/api");
+        System.out.println("Hit return to stop...");
+        System.in.read();
+        System.out.println("Stopping server");
+        server.stop(0);
+        System.out.println("Server stopped");
+
+        System.out.println();
     }
 
 }
