@@ -1,0 +1,9 @@
+{
+	"host": "localhost",
+	"port": "3306",
+	"username": "root",
+	"password": "doekdoek",
+	"dbname": "cbscalendar",
+	"hashingsalt": "123456",
+	"encryptionkey": "123456"
+}
