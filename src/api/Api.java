@@ -131,6 +131,8 @@ public class Api {
 
 
         //TODO: Parse json and get userId and gameName.
+
+
         //User host = Logic.getUser(userId);
         //Game createGame = Logic.createGame(gameName, host);
         //return new Gson().toJson(createGame);
@@ -205,3 +207,4 @@ public class Api {
     }
 
 }
+
