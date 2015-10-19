@@ -28,72 +28,6 @@ public class Api {
         return "Hello World!";
     }
 
-    @GET //"GET-request"
-    @Path("/user/") //USER-path - identifice det inden for metoden
-    @Produces("application/json")
-    public String getAllUsers() {
-
-        ArrayList<User> users = Logic.getUsers();
-
-
-        //TODO; Hent brugere fra DB
-        return new Gson().toJson(users);
-    }
-
-    @GET //"GET-request"
-    @Path("/user/{userId}")
-    @Produces("application/json")
-    // JSON: {"userId": [userid]}
-    public String getUser(@PathParam("userId") int userId) {
-
-        User user = Logic.getUser(userId);
-        //udprint/hent/identificer af data omkring spillere
-
-        return new Gson().toJson(user);
-    }
-
-    @GET //"GET-request"
-    @Path("/highscore")
-    @Produces("application/json")
-    public String getHighScore(String data) {
-
-        //TODO: Get method from logic to return highscores.
-
-        ArrayList<Score> Score = Logic.getHighscores();
-        return new Gson().toJson(Score);
-
-    }
-
-    @GET //"GET-request"
-    @Path("/score/{userid}")
-    @Produces("application/json")
-    public String getScore(@PathParam("userid") int userid) {
-
-        Score score = Logic.getHighscore(userid);
-        return new Gson().toJson(score);
-
-    }
-
-    @GET //"GET-request"
-    @Path("/games")
-    @Produces("application/json")
-    public String getGames() {
-
-        ArrayList<model.Game> games = Logic.getGames();
-        return new Gson().toJson(games);
-
-    }
-
-    @GET //"GET-request"
-    @Path("/result/{gameid}")
-    @Produces("application/json")
-    public String getGame(@PathParam("gameid") int gameid) {
-
-        Game game = Logic.getGame(gameid);
-        return new Gson().toJson(game);
-
-    }
-
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
     @Path("/login/")
     @Produces("application/json")
@@ -110,6 +44,27 @@ public class Api {
         } catch (Exception e) {
             return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
         }
+    }
+
+    @GET //"GET-request"
+    @Path("/user/") //USER-path - identifice det inden for metoden
+    @Produces("application/json")
+    public String getAllUsers() {
+
+        ArrayList<User> users = Logic.getUsers();
+
+
+        //TODO; Hent brugere fra DB
+        return new Gson().toJson(users);
+    }
+
+    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
+    @Path("/user/")
+    @Produces("text/plain")
+    public String deleteUser(int userId) {
+
+        boolean deleteUser = Logic.deleteUser(userId);
+        return new Gson().toJson(deleteUser);
     }
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
@@ -132,8 +87,30 @@ public class Api {
 
     }
 
+    @GET //"GET-request"
+    @Path("/user/{userId}")
+    @Produces("application/json")
+    // JSON: {"userId": [userid]}
+    public String getUser(@PathParam("userId") int userId) {
+
+        User user = Logic.getUser(userId);
+        //udprint/hent/identificer af data omkring spillere
+
+        return new Gson().toJson(user);
+    }
+
+    @GET //"GET-request"
+    @Path("/games")
+    @Produces("application/json")
+    public String getGames() {
+
+        ArrayList<model.Game> games = Logic.getGames();
+        return new Gson().toJson(games);
+
+    }
+
     @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/game")
+    @Path("/game/")
     @Produces("text/plain")
     public String createGame(String json) {
 
@@ -155,22 +132,45 @@ public class Api {
 
     }
 
-    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
-    @Path("/user/")
-    @Produces("text/plain")
-    public String deleteUser(int userId) {
-
-        boolean deleteUser = Logic.deleteUser(userId);
-        return new Gson().toJson(deleteUser);
-    }
-
-    @GET //DELETE-request fjernelse af data(spillet slettes)
-    @Path("/deleteGame/{gameid}")
+    @DELETE //DELETE-request fjernelse af data(spillet slettes)
+    @Path("/game/{gameid}")
     @Produces("text/plain")
     public String deleteGame(@PathParam("gameid") int gameId) {
 
         boolean deleteGame = Logic.deleteUser(gameId);
         return new Gson().toJson(deleteGame);
+    }
+
+    @GET //"GET-request"
+    @Path("/result/{gameid}")
+    @Produces("application/json")
+    public String getGame(@PathParam("gameid") int gameid) {
+
+        Game game = Logic.getGame(gameid);
+        return new Gson().toJson(game);
+
+    }
+
+    @GET //"GET-request"
+    @Path("/highscore/")
+    @Produces("application/json")
+    public String getHighScore(String data) {
+
+        //TODO: Get method from logic to return highscores.
+
+        ArrayList<Score> Score = Logic.getHighscores();
+        return new Gson().toJson(Score);
+
+    }
+
+    @GET //"GET-request"
+    @Path("/score/{userid}")
+    @Produces("application/json")
+    public String getScore(@PathParam("userid") int userid) {
+
+        Score score = Logic.getHighscore(userid);
+        return new Gson().toJson(score);
+
     }
 
     public static void main(String[] args) throws IOException {
