@@ -444,7 +444,7 @@ public class DatabaseWrapper {
     }
 
 
-    public void deleteGame(int id)
+    public boolean deleteGame(int id)
     {
         try
         {
@@ -455,11 +455,14 @@ public class DatabaseWrapper {
 
 
             ps.executeUpdate();
-        } catch (SQLException sqlException)
+        }
+        catch (SQLException sqlException)
         {
             sqlException.printStackTrace();
             dbDriver.close();
+            return false;
         }
+        return true;
     }
 
     public ArrayList<Game> getGamesByUserID(int type, int id) {
