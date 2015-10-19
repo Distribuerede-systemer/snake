@@ -7,7 +7,6 @@ import controller.Logic;
 import model.Game;
 import model.Score;
 import model.User;
-import tui.Tui;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -22,7 +21,7 @@ public class Api {
     //TODO: Revisit "produces"
 
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
-    @Produces("text/plain")
+    @Produces("application/json")
     public String getClichedMessage() {
         // Return some cliched textual content
         return "Hello World!";
@@ -60,7 +59,7 @@ public class Api {
 
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
     @Path("/user/")
-    @Produces("text/plain")
+    @Produces("application/json")
     public String deleteUser(int userId) {
 
         boolean deleteUser = Logic.deleteUser(userId);
@@ -69,7 +68,7 @@ public class Api {
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
     @Path("/user/")
-    @Produces("text/plain")
+    @Produces("application/json")
     public String createUser(String data) {
         //TODO: Needs to be fixed.
         User user = null;
@@ -111,7 +110,7 @@ public class Api {
 
     @POST //POST-request: Nyt data; nyt spil oprettes
     @Path("/game/")
-    @Produces("text/plain")
+    @Produces("application/json")
     public String createGame(String json) {
 
 
@@ -124,7 +123,7 @@ public class Api {
 
     @GET //GET-request: Opstart af nyt spil
     @Path("/startgame/{gameid}")
-    @Produces("text/plain")
+    @Produces("application/json")
     public String startGame(@PathParam("gameid") int gameId) {
 
         Map startGame = Logic.startGame(gameId);
@@ -134,7 +133,7 @@ public class Api {
 
     @DELETE //DELETE-request fjernelse af data(spillet slettes)
     @Path("/game/{gameid}")
-    @Produces("text/plain")
+    @Produces("appication/json")
     public String deleteGame(@PathParam("gameid") int gameId) {
 
         boolean deleteGame = Logic.deleteUser(gameId);
