@@ -37,25 +37,21 @@ public class Api {
 
             switch (result) {
                 case 0:
-                    return Response.status(400).entity("{\"User\"doens't exist\"true\"}").build();
+                    return Response.status(400).entity("{\"User\"doens't exist\"}").build();
                     //break;
                 case 1:
-                    return Response.status(400).entity("{\"Wrong\"password\"true\"}").build();
+                    return Response.status(400).entity("{\"Wrong\"password\"}").build();
                     //break;
                 case 2:
-                    return Response.status(200).entity("{\"Login\"successful\"true\"}").build();
+                    return Response.status(200).entity("{\"Login\"successful\"}").build();
                    //break;
                 default:
-                    //
-                    break;
+                    return Response.status(400).entity("{\"Something\"went\"wrong\"}").build();
             }
 
-            //TODO: Use result to see if it is a success or not.
-            return Response.status(200).entity("{\"success\":\"true\"}").build();
         } catch (Exception e) {
             return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
         }
-
 
     }
 
