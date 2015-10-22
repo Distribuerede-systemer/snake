@@ -256,6 +256,7 @@ public class Logic {
         return game;
     }
 
+    //endgame() Kaldes når spil er slut og skubber score data til databasen til senere brug.
     public static Game endGame (int gameId, Gamer host, Gamer opponent) {
 
         game.setStatus("Finished");
