@@ -120,8 +120,6 @@ public class Api {
     @Produces("application/json")
     public Response createGame(String json) {
 
-
-        //TODO: Parse json and get userId and gameName.
         JSONParser jsonParser = new JSONParser();
 
         String gameName = null;
