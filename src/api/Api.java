@@ -37,13 +37,13 @@ public class Api {
 
             switch (result) {
                 case 0:
-                    return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+                    return Response.status(400).entity("{\"User\"doens't exist\"true\"}").build();
                     //break;
                 case 1:
-                    return Response.status(200).entity("{\"success\":\"true\"}").build();
+                    return Response.status(400).entity("{\"Wrong\"password\"true\"}").build();
                     //break;
                 case 2:
-                    return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+                    return Response.status(200).entity("{\"Login\"successful\"true\"}").build();
                    //break;
                 default:
                     //
