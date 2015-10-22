@@ -297,6 +297,8 @@ public class DatabaseWrapper {
     {
         try
         {
+
+            User user = new User();
             PreparedStatement ps = connection.prepareStatement(dbDriver.updateSqlUser());
 
             ps.setString(1, user.getFirstName());

@@ -89,4 +89,12 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getType() {
+        return type;
+    }
 }
