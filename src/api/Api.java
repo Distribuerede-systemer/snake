@@ -17,9 +17,6 @@ import java.util.Map;
 @Path("/api")
 public class Api {
 
-    //TODO: Revisit paths
-    //TODO: Revisit "produces"
-
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
     @Produces("application/json")
     public String getClichedMessage() {
