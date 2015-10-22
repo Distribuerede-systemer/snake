@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 public class DatabaseWrapper {
 
-    private ResultSet resultSet = null;
     private Connection connection;
     DatabaseDriver dbDriver = new DatabaseDriver();
     public static final int ALLGAMESBYID = 0;
@@ -59,17 +58,18 @@ public class DatabaseWrapper {
             resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                user = new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("email"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("status"),
-                        resultSet.getString("type")
-                );
+
+                user = new User();
+
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setFirstName(resultSet.getString("last_name"));
+                user.setFirstName(resultSet.getString("email"));
+                user.setFirstName(resultSet.getString("username"));
+                user.setFirstName(resultSet.getString("password"));
+                user.setCreated(resultSet.getDate("created"));
+                user.setStatus(resultSet.getString("status"));
+                user.setType(resultSet.getString("type"));
             }
 
         } catch (SQLException e) {
@@ -140,13 +140,13 @@ public class DatabaseWrapper {
             resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                score = new Score(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getInt("game_id"),
-                        resultSet.getInt("host_id"),
-                        resultSet.getInt("score")
-                );
+
+                score = new Score();
+                score.setId(resultSet.getInt("id"));
+                score.setId(resultSet.getInt("user_id"));
+                score.setId(resultSet.getInt("game_id"));
+                score.setId(resultSet.getInt("host_id"));
+                score.setId(resultSet.getInt("score"));
             }
 
         } catch (SQLException e) {
@@ -172,6 +172,7 @@ public class DatabaseWrapper {
     public ArrayList<User> getUsers() {
         ResultSet resultSet = null;
         PreparedStatement ps;
+        User user = null;
         ArrayList<User> result = null;
 
         try {
@@ -184,17 +185,20 @@ public class DatabaseWrapper {
             // Indlaesser brugere i arrayListen
             while (resultSet.next())
             {
-                result.add(new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("email"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("status"),
-                        resultSet.getString("type")
-                ));
+
+                user = new User();
+
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setFirstName(resultSet.getString("last_name"));
+                user.setFirstName(resultSet.getString("email"));
+                user.setFirstName(resultSet.getString("username"));
+                user.setFirstName(resultSet.getString("password"));
+                user.setCreated(resultSet.getDate("created"));
+                user.setStatus(resultSet.getString("status"));
+                user.setType(resultSet.getString("type"));
+
+                result.add(user);
             }
 
         } catch (SQLException e) {
@@ -267,13 +271,16 @@ public class DatabaseWrapper {
 
             while (resultSet.next())
             {
-                result.add(new Score(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getInt("game_id"),
-                        resultSet.getInt("host_id"),
-                        resultSet.getInt("score")
-                ));
+
+
+                Score score = new Score();
+                score.setId(resultSet.getInt("id"));
+                score.setId(resultSet.getInt("user_id"));
+                score.setId(resultSet.getInt("game_id"));
+                score.setId(resultSet.getInt("host_id"));
+                score.setId(resultSet.getInt("score"));
+
+                result.add(score);
             }
 
         } catch (SQLException e) {
@@ -541,26 +548,27 @@ return true;
 
     public User authenticatedUser(String username) {
         User user = null;
-        ResultSet resultset = null;
+        ResultSet resultSet = null;
         PreparedStatement ps;
 
         try {
             ps = connection.prepareStatement(dbDriver.authenticatedSql());
             ps.setString(1, username);
-            resultset = ps.executeQuery();
+            resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                user = new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("firstname"),
-                        resultSet.getString("lastname"),
-                        resultSet.getString("email"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("status"),
-                        resultSet.getString("type")
-                );
+
+                user = new User();
+
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setFirstName(resultSet.getString("last_name"));
+                user.setFirstName(resultSet.getString("email"));
+                user.setFirstName(resultSet.getString("username"));
+                user.setFirstName(resultSet.getString("password"));
+                user.setCreated(resultSet.getDate("created"));
+                user.setStatus(resultSet.getString("status"));
+                user.setType(resultSet.getString("type"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
