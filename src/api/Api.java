@@ -122,8 +122,8 @@ public class Api {
 
         JSONParser jsonParser = new JSONParser();
 
-        String gameName = null;
-        User user = null;
+        String gameName;
+        User user;
 
         try {
 
