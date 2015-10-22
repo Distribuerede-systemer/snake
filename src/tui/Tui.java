@@ -27,7 +27,7 @@ public class Tui {
         System.out.print("\n");
     }
 */
-
+/*
     public void userMenu(){
 
         while(isAuthenticated) {
@@ -63,7 +63,7 @@ public class Tui {
 
             }
         }
-    }
+    }*/
     public int userMenuScreen(){
 
         System.out.println("\n1: List all games");

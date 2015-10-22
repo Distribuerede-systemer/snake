@@ -15,7 +15,7 @@ public class DatabaseDriver {
      */
     private static String sqlUrl = "jdbc:mysql://localhost:3306/DBcon";
     private static String sqlUser = "root";
-    private static String sqlPassword = "root";
+    private static String sqlPassword = "";
 
     private Connection connection = null;
 

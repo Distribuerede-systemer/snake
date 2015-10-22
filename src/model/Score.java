@@ -11,6 +11,15 @@ public class Score {
     // Declare highScore
     private int id;
     private int userId;
+
+    public int getOpponentId() {
+        return opponentId;
+    }
+
+    public void setOpponentId(int opponentId) {
+        this.opponentId = opponentId;
+    }
+
     private int opponentId;
     private int gameId;
     private int score;

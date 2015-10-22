@@ -63,10 +63,10 @@ public class DatabaseWrapper {
 
                 user.setId(resultSet.getInt("id"));
                 user.setFirstName(resultSet.getString("first_name"));
-                user.setFirstName(resultSet.getString("last_name"));
-                user.setFirstName(resultSet.getString("email"));
-                user.setFirstName(resultSet.getString("username"));
-                user.setFirstName(resultSet.getString("password"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setUserName(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
                 user.setCreated(resultSet.getDate("created"));
                 user.setStatus(resultSet.getString("status"));
                 user.setType(resultSet.getString("type"));
@@ -141,12 +141,13 @@ public class DatabaseWrapper {
 
             while (resultSet.next()) {
 
+                //TODO: host_id ≠ opponentId?
                 score = new Score();
                 score.setId(resultSet.getInt("id"));
-                score.setId(resultSet.getInt("user_id"));
-                score.setId(resultSet.getInt("game_id"));
-                score.setId(resultSet.getInt("host_id"));
-                score.setId(resultSet.getInt("score"));
+                score.setUserId(resultSet.getInt("user_id"));
+                score.setGameId(resultSet.getInt("game_id"));
+                score.setOpponentId(resultSet.getInt("host_id"));
+                score.setScore(resultSet.getInt("score"));
             }
 
         } catch (SQLException e) {
@@ -190,10 +191,10 @@ public class DatabaseWrapper {
 
                 user.setId(resultSet.getInt("id"));
                 user.setFirstName(resultSet.getString("first_name"));
-                user.setFirstName(resultSet.getString("last_name"));
-                user.setFirstName(resultSet.getString("email"));
-                user.setFirstName(resultSet.getString("username"));
-                user.setFirstName(resultSet.getString("password"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setUserName(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
                 user.setCreated(resultSet.getDate("created"));
                 user.setStatus(resultSet.getString("status"));
                 user.setType(resultSet.getString("type"));
@@ -272,13 +273,13 @@ public class DatabaseWrapper {
             while (resultSet.next())
             {
 
-
+                //TODO: host_id ≠ opponentId?
                 Score score = new Score();
                 score.setId(resultSet.getInt("id"));
-                score.setId(resultSet.getInt("user_id"));
-                score.setId(resultSet.getInt("game_id"));
-                score.setId(resultSet.getInt("host_id"));
-                score.setId(resultSet.getInt("score"));
+                score.setUserId(resultSet.getInt("user_id"));
+                score.setGameId(resultSet.getInt("game_id"));
+                score.setOpponentId(resultSet.getInt("host_id"));
+                score.setScore(resultSet.getInt("score"));
 
                 result.add(score);
             }
@@ -562,10 +563,10 @@ return true;
 
                 user.setId(resultSet.getInt("id"));
                 user.setFirstName(resultSet.getString("first_name"));
-                user.setFirstName(resultSet.getString("last_name"));
-                user.setFirstName(resultSet.getString("email"));
-                user.setFirstName(resultSet.getString("username"));
-                user.setFirstName(resultSet.getString("password"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setUserName(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
                 user.setCreated(resultSet.getDate("created"));
                 user.setStatus(resultSet.getString("status"));
                 user.setType(resultSet.getString("type"));
