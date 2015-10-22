@@ -256,7 +256,7 @@ public class Logic {
         return game;
     }
 
-    //endgame() Kaldes når spil er slut og skubber score data til databasen til senere brug.
+    //endgame() Called when game is over and pushes score data to the database for future use.
     public static Game endGame (int gameId, Gamer host, Gamer opponent) {
 
         game.setStatus("Finished");
