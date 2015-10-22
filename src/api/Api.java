@@ -7,9 +7,13 @@ import controller.Logic;
 import model.Game;
 import model.Score;
 import model.User;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -58,8 +62,8 @@ public class Api {
 
         //TODO: ();Get method from logic to return highscores.
 
-         ArrayList<model.Score> Score = Logic.getHighscores();
-         return new Gson().toJson(Score);
+        ArrayList<model.Score> Score = Logic.getHighscores();
+        return new Gson().toJson(Score);
 
     }
 
@@ -98,7 +102,7 @@ public class Api {
     @Produces("application/json")
     public Response login(String data) {
 
-        try{
+        try {
 
             User user = new Gson().fromJson(data, User.class);
 
@@ -106,8 +110,8 @@ public class Api {
 
             //TODO: Use result to see if it is a success or not.
             return Response.status(200).entity("{\"success\":\"true\"}").build();
-        }catch (Exception e) {
-            return  Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+        } catch (Exception e) {
+            return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
         }
     }
 
@@ -120,7 +124,7 @@ public class Api {
 
         boolean createdUser = Logic.createUser(user);
 
-        if(createdUser){
+        if (createdUser) {
 
         } else {
 
@@ -134,14 +138,35 @@ public class Api {
     @POST //POST-request: Nyt data; nyt spil oprettes
     @Path("/create")
     @Produces("text/plain")
-    public String createGame(String json) {
+    public Response createGame(String json) {
+
+        //Initialize imported Java-class JSONParser as jsonParser object.
+        JSONParser jsonParser = new JSONParser();
+
+        String gameName = null;
+        User user = null;
+        try {
+
+            //Initialize Object class as json, parsed by jsonParsed.
+            Object obj = jsonParser.parse(json);
+
+            //Instantiate JSONObject class as jsonObject equal to obj object.
+            JSONObject jsonObject = (JSONObject) obj;
+
+            //Use set-methods for defifing static variables from json-file.
+            gameName = ((String) jsonObject.get("gameName"));
+
+            user = new Gson().fromJson(json, User.class);
 
 
-        //TODO: Parse json and get userId and gameName.
-        //User host = Logic.getUser(userId);
-        //Game createGame = Logic.createGame(gameName, host);
-        //return new Gson().toJson(createGame);
-        return "";
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        }
+
+        Game createGame = Logic.createGame(gameName, user);
+        return Response.status(200).entity("").build();
     }
 
     @GET //GET-request: Opstart af nyt spil
