@@ -76,7 +76,7 @@ public class Logic {
     public static boolean deleteUser(int id) {
 
         //TODO: Delete user via DB-wrapper
-        return false;
+        return db.deleteUser(id);
 
     }
 

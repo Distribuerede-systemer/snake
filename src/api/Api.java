@@ -72,10 +72,16 @@ public class Api {
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
     @Path("/user/")
     @Produces("application/json")
-    public String deleteUser(int userId) {
+    public Response deleteUser(int userId) {
 
         boolean deleteUser = Logic.deleteUser(userId);
-        return new Gson().toJson(deleteUser);
+
+        if (deleteUser) {
+            return Response.status(200).entity("{\"Success!\"user\"true\"}").build();
+        } else {
+            return Response.status(400).entity("{\"Failed\"}").build();
+        }
+
     }
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes

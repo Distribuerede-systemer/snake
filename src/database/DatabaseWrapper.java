@@ -435,7 +435,7 @@ return true;
     }
 
 
-    public void deleteUser(int id)
+    public boolean deleteUser(int id)
     {
         try
         {
@@ -450,7 +450,9 @@ return true;
         {
             sqlException.printStackTrace();
             dbDriver.close();
+            return false;
         }
+        return true;
     }
 
 
