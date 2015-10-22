@@ -168,6 +168,8 @@ public class Api {
     public String startGame(@PathParam("gameid") int gameId) {
 
         Map startGame = Logic.startGame(gameId);
+
+
         return new Gson().toJson(startGame);
 
     }

@@ -151,8 +151,7 @@ public class Logic {
     public static Score getHighscore(int userId) {
         //TODO: Get highscore from user
 
-        Score score = db.getScore(userId);
-        return score;
+        return db.getScore(userId);
     }
 
 
@@ -193,7 +192,7 @@ public class Logic {
 
         //TODO: Get specific game via DB-wrapper
 
-        return null;
+        return db.getGame(gameId);
     }
 
 
@@ -224,9 +223,14 @@ public class Logic {
 
         Game game = getGame(gameId);
 
+        //TODO:
+        /*Gamer host = game.getHost();
+        Gamer opponent = game.getOpponent();*/
         Gamer host = new Gamer();
         Gamer opponent = new Gamer();
 
+        host.setId(game.getHost().getId());
+        opponent.setId(game.getOpponent().getId());
         host.setControls(game.getHostControls());
         opponent.setControls(game.getOpponentControls());
 

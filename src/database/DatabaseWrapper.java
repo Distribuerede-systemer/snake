@@ -100,7 +100,8 @@ public class DatabaseWrapper {
                 game.setHost(getUser(resultSet.getInt("host")));
                 game.setOpponent(getUser(resultSet.getInt("opponent")));
                 game.setStatus(resultSet.getString("status"));
-                game.setMapSize(resultSet.getInt("mapsize"));
+                game.setOpponentControls(resultSet.getString("opponent_controls"));
+                game.setMapSize(resultSet.getInt("map_size"));
             }
 
         } catch (SQLException e) {
