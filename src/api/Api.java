@@ -7,24 +7,21 @@ import controller.Logic;
 import model.Game;
 import model.Score;
 import model.User;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.json.simple.parser.JSONParser;
+import tui.Tui;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-// The Java class will be hosted at the URI path "/helloworld more comment"
-@Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
+@Path("/api")
 public class Api {
 
-    // The Java method will process HTTP GET requests
+    //TODO: Revisit paths
+    //TODO: Revisit "produces"
+
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
-    // The Java method will produce content identified by the MIME Media type "text/plain"
     @Produces("text/plain")
     public String getClichedMessage() {
         // Return some cliched textual content
@@ -36,7 +33,7 @@ public class Api {
     @Produces("application/json")
     public String getAllUsers() {
 
-        ArrayList<model.User> users = Logic.getUsers();
+        ArrayList<User> users = Logic.getUsers();
 
 
         //TODO; Hent brugere fra DB
@@ -60,9 +57,9 @@ public class Api {
     @Produces("application/json")
     public String getHighScore(String data) {
 
-        //TODO: ();Get method from logic to return highscores.
+        //TODO: Get method from logic to return highscores.
 
-        ArrayList<model.Score> Score = Logic.getHighscores();
+        ArrayList<Score> Score = Logic.getHighscores();
         return new Gson().toJson(Score);
 
     }
@@ -136,37 +133,16 @@ public class Api {
     }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/create")
+    @Path("/game")
     @Produces("text/plain")
-    public Response createGame(String json) {
-
-        //Initialize imported Java-class JSONParser as jsonParser object.
-        JSONParser jsonParser = new JSONParser();
-
-        String gameName = null;
-        User user = null;
-        try {
-
-            //Initialize Object class as json, parsed by jsonParsed.
-            Object obj = jsonParser.parse(json);
-
-            //Instantiate JSONObject class as jsonObject equal to obj object.
-            JSONObject jsonObject = (JSONObject) obj;
-
-            //Use set-methods for defifing static variables from json-file.
-            gameName = ((String) jsonObject.get("gameName"));
-
-            user = new Gson().fromJson(json, User.class);
+    public String createGame(String json) {
 
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (org.json.simple.parser.ParseException e) {
-            e.printStackTrace();
-        }
-
-        Game createGame = Logic.createGame(gameName, user);
-        return Response.status(200).entity("").build();
+        //TODO: Parse json and get userId and gameName.
+        //User host = Logic.getUser(userId);
+        //Game createGame = Logic.createGame(gameName, host);
+        //return new Gson().toJson(createGame);
+        return "";
     }
 
     @GET //GET-request: Opstart af nyt spil
@@ -200,6 +176,7 @@ public class Api {
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
         server.start();
+
 
         System.out.println("Server running");
         System.out.println("Visit: http://localhost:9998/api");
