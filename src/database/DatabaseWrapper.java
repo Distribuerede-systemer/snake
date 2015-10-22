@@ -13,16 +13,7 @@ import java.util.ArrayList;
  * The methods convert the data and return an object.
  */
 //
-
-// TODO: dynamicQuery (returning cachedrowset)
-// TODO: getScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
-// TODO: ???
-// TODO: USER objektet giver fejl
-// TODO: Create game i logik
-// TODO: Rette dbWrapper game-metoder saa de passer til det nye gamer objekt
-// TODO: Metode i logik som skal slette pending tid efter x antal dage
-
-
+    
 public class DatabaseWrapper {
 
     private Connection connection;
