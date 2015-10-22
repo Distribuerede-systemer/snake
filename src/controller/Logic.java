@@ -100,7 +100,8 @@ public class Logic {
     public static User getUser(int userId) {
 
         //TODO: Get specific user from DB via DB-wrapper
-        User user = new User();
+        User user = db.getUser(userId);
+
         return user;
 
     }
