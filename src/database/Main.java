@@ -1,10 +1,7 @@
 package database;
 
 
-import model.Game;
 import model.Gamer;
-import model.Score;
-import model.User;
 
 import java.util.ArrayList;
 
@@ -14,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         DatabaseWrapper db = new DatabaseWrapper();
 
-        ArrayList<Gamer> gamers = db.getHighScore();
+        ArrayList<Gamer> gamers = db.getScore();
 
         for(Gamer gamer : gamers){
             System.out.println("User: " + gamer.getUserName() + " Highscore: " + gamer.getTotalScore());

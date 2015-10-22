@@ -15,6 +15,7 @@ public class Score {
     private int gameId;
     private int score;
 
+    //TODO: Kan slettes?! Bruges ikke i wrapper længere.
     // Creates constructor
     public Score(int id, int userId, int gameId, int opponentId, int score)
     {
@@ -24,6 +25,8 @@ public class Score {
         this.opponentId = opponentId;
         this.score = score;
     }
+
+    public Score(){}
 
     // Creates get method which returns the highScore
 

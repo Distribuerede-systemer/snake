@@ -16,6 +16,7 @@ import model.User;
  */
 public class Logic {
     static DatabaseWrapper db = new DatabaseWrapper();
+    static Game game = new Game();
     private static boolean isAuthenticated = false;
 
 
@@ -29,9 +30,9 @@ public class Logic {
         // Define ArrayList to be used to add users and return them.
         DatabaseWrapper db = new DatabaseWrapper();
 
-        ArrayList<User> uj = db.getUsers();
+        ArrayList<User> Users = db.getUsers();
 
-        return uj;
+        return Users;
 
 
     }
@@ -57,11 +58,14 @@ public class Logic {
      */
     public static boolean createUser(User user) {
 
-        //TODO: Create user with DB-wrapper. If creation succeeded return true, if not return false
 
-        return true;
+        if (db.createUser(user))
 
-    }
+            return true;
+
+        else {
+            return false;
+        }}
 
     /**
      * Delete user
@@ -147,7 +151,7 @@ public class Logic {
     public static Score getHighscore(int userId) {
         //TODO: Get highscore from user
 
-        Score score = new Score();
+        Score score = db.getScore(userId);
         return score;
     }
 
@@ -242,18 +246,23 @@ public class Logic {
     public static Game createGame(String gameName, User host) {
 
         //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
-        Game game = new Game();
+
         game.setName(gameName);
         game.setHost(host);
-        game.setStatus("pending"); //1 is pending, 0 is done
+        game.setStatus("pending");
 
-
-//        game.setName(db.createGame(gameName));
         //TODO: Write game to db, and return game-id and set object before returning
 
         return game;
     }
 
+    //endgame() Called when game is over and pushes score data to the database for future use.
+    public static Game endGame (int gameId, Gamer host, Gamer opponent) {
+
+        game.setStatus("Finished");
+        db.createScore(gameId, host, opponent);
+        return game;
+    }
     /**
      * Delete game
      *

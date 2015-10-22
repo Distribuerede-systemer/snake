@@ -24,7 +24,7 @@ public class Game {
 
 
     //Creating the constructor and initiating the variables
-    public Game( int gameId, User winner, String hostControls, Date created, String name, int newGame, int endGame, User host, User
+    public Game(int gameId, User winner, String hostControls, Date created, String name, User host, User
             opponent, String status, int mapSize){
         this.mapSize = mapSize;
         this.gameId = gameId;
