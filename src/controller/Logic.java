@@ -75,7 +75,6 @@ public class Logic {
      */
     public static boolean deleteUser(int id) {
 
-        //TODO: Delete user via DB-wrapper
         return db.deleteUser(id);
 
     }
@@ -163,10 +162,8 @@ public class Logic {
      * @return ArrayList of games
      */
     public static ArrayList<Game> getGames() {
-
-        //TODO: Get ALL games via DB-wrapper
-
-        ArrayList<Game> games = null;
+        
+        ArrayList<Game> games = db.getGames();
         return games;
 
     }
