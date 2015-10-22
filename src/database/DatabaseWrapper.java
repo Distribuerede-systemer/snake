@@ -520,7 +520,7 @@ return true;
                 game.setHost(getUser(resultSet.getInt("host")));
                 game.setOpponent(getUser(resultSet.getInt("opponent")));
                 game.setStatus(resultSet.getString("status"));
-                game.setMapSize(resultSet.getInt("mapsize"));
+                game.setMapSize(resultSet.getInt("map_size"));
                 result.add(game);
             }
 
