@@ -1,13 +1,11 @@
 package tui;
 import java.util.*;
-
-import controller.Logic;
-import model.Game;
 import model.User;
 
 public class Tui {
 
     private Scanner input;
+    private User usr;
 
     public Tui(){
 
@@ -20,43 +18,44 @@ public class Tui {
             System.out.println("User: " + usr.getUserName());
         }
     }
-
+/*
     public void listGames(ArrayList<Game> gameList){
 
         for(Game gm : gameList){
             System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
         }
+        System.out.print("\n");
     }
+*/
 
     public void userMenu(){
 
-        while(Logic.isUserAuthenticated()) {
+        while(isAuthenticated) {
 
             int menu = userMenuScreen();
 
             switch (menu) {
 
                 case 1:
+                    // listUsers();
                     miscOut("Game List: ");
-                    ArrayList<Game> gameList = Logic.getGames();
-                    listGames(gameList);
                     break;
                 case 2:
                     miscOut("User List: ");
-                    ArrayList<User> userList = Logic.getUsers();
+                    ArrayList<User> userList = getUsers();
                     listUsers(userList);
                     break;
                 case 3:
                     miscOut("Create User: ");
-                   // Logic.createUser(); TODO: param efter db-wrap
+                    createUser();
                     break;
                 case 4:
                     miscOut("Delete User: ");
-                    Logic.deleteUser(Integer.parseInt(deleteUserScreen()));
+                    deleteUser();
                     break;
                 case 5:
                     miscOut("You Logged Out.");
-                    Logic.setIsUserAuthenticated(false);
+                    isAuthenticated = false;
                     break;
                 default:
                     miscOut("Unassigned key.");
@@ -77,7 +76,7 @@ public class Tui {
     }
 
     public String deleteUserScreen(){
-       // listUsers();
+        // listUsers();
 
         System.out.print("Type username you wish to delete: ");
         String username = input.next();
@@ -102,44 +101,24 @@ public class Tui {
     }
 
     public String enterFirstName(){
-        System.out.print("Please enter first name: "); // Brugeren bliver spurgt om fornavn
+        System.out.print("Please enter first name: "); // Brugeren bliver spurgt om password
         String firstName = input.next();
 
         return firstName;
     }
 
     public String enterLastName(){
-        System.out.print("Please enter last name: "); // Brugeren bliver spurgt om efternavn
+        System.out.print("Please enter last name: "); // Brugeren bliver spurgt om password
         String lastName = input.next();
 
         return lastName;
     }
 
     public String enterEmail(){
-        System.out.print("Please enter email: "); // Brugeren bliver spurgt om email
+        System.out.print("Please enter email: "); // Brugeren bliver spurgt om password
         String email = input.next();
 
         return email;
-    }
-
-    public String enterUserType(){
-        System.out.print("Please enter user type. can be api/server");
-        String userType = input.next();
-
-        if(!userType.equals("api") && !userType.equals("server")){
-
-            System.out.println("Type must be either api or server. please try again");
-            enterUsername();
-        }
-
-        return userType;
-    }
-
-    public User createUser(){
-
-        User usr = new User(enterFirstName(), enterLastName(), enterEmail(), enterUsername(), enterPassword(),enterUserType() );
-
-        return usr;
     }
 
     public void miscOut(String s){
