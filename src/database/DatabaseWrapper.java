@@ -15,7 +15,7 @@ import java.util.ArrayList;
 //
 
 // TODO: dynamicQuery (returning cachedrowset)
-// TODO: getHighScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
+// TODO: getScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
 // TODO: ???
 // TODO: USER objektet giver fejl
 // TODO: Create game i logik
@@ -339,7 +339,7 @@ public class DatabaseWrapper {
         }
     }
 
-    public void createUser(User user){
+    public boolean createUser(User user){
 
 //        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime()
 //                .getTime());
@@ -358,12 +358,18 @@ public class DatabaseWrapper {
             createUser.setString(7, user.getType());
 
             createUser.executeUpdate();
-        } catch (SQLException sqlException)
+        }
+        catch (SQLException sqlException)
+
         {
             sqlException.printStackTrace();
             dbDriver.close();
+            return false;
+
         }
-    }
+return true;
+
+   }
 
     public int createGame(Game game){
 
@@ -399,7 +405,7 @@ public class DatabaseWrapper {
         return id;
     }
 
-    public void createScore(int id, Gamer host, Gamer opponent){
+    public boolean createScore(int id, Gamer host, Gamer opponent){
 
         try
         {
@@ -424,7 +430,9 @@ public class DatabaseWrapper {
         {
             sqlException.printStackTrace();
             dbDriver.close();
+            return false;
         }
+   return true;
     }
 
 
@@ -560,7 +568,7 @@ public class DatabaseWrapper {
         return user;
     }
 
-    public ArrayList<Gamer> getHighScore(){
+    public ArrayList<Gamer> getScore(){
         ResultSet resultSet = null;
         PreparedStatement ps;
         ArrayList<Gamer> result = null;
