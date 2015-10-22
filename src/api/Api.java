@@ -7,10 +7,13 @@ import controller.Logic;
 import model.Game;
 import model.Score;
 import model.User;
-import tui.Tui;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,14 +21,42 @@ import java.util.Map;
 @Path("/api")
 public class Api {
 
-    //TODO: Revisit paths
-    //TODO: Revisit "produces"
-
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
-    @Produces("text/plain")
+    @Produces("application/json")
     public String getClichedMessage() {
         // Return some cliched textual content
         return "Hello World!";
+    }
+
+    @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
+    @Path("/login/")
+    @Produces("application/json")
+    public Response login(String data) {
+
+        try {
+
+            User user = new Gson().fromJson(data, User.class);
+
+            int result = Logic.userLogin(user.getUserName(), user.getPassword());
+
+            switch (result) {
+                case 0:
+                    return Response.status(400).entity("{\"User\"doens't exist\"}").build();
+
+                case 1:
+                    return Response.status(400).entity("{\"Wrong\"password\"}").build();
+
+                case 2:
+                    return Response.status(200).entity("{\"Login\"successful\"}").build();
+
+                default:
+                    return Response.status(400).entity("{\"Something\"went\"wrong\"}").build();
+            }
+
+        } catch (Exception e) {
+            return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+        }
+
     }
 
     @GET //"GET-request"
@@ -35,9 +66,31 @@ public class Api {
 
         ArrayList<User> users = Logic.getUsers();
 
-
-        //TODO; Hent brugere fra DB
         return new Gson().toJson(users);
+    }
+
+    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
+    @Path("/user/")
+    @Produces("application/json")
+    public String deleteUser(int userId) {
+
+        boolean deleteUser = Logic.deleteUser(userId);
+        return new Gson().toJson(deleteUser);
+    }
+
+    @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
+    @Path("/user/")
+    @Produces("application/json")
+    public Response createUser(String data) {
+        User user = null;
+
+        boolean createdUser = Logic.createUser(user);
+
+        if (createdUser) {
+            return Response.status(200).entity("{\"Success!\"user\"true\"}").build();
+        } else {
+            return Response.status(400).entity("{\"Failed\"}").build();
+        }
     }
 
     @GET //"GET-request"
@@ -53,11 +106,88 @@ public class Api {
     }
 
     @GET //"GET-request"
-    @Path("/highscore")
+    @Path("/games")
+    @Produces("application/json")
+    public String getGames() {
+
+        ArrayList<model.Game> games = Logic.getGames();
+        return new Gson().toJson(games);
+
+    }
+
+    @POST //POST-request: Nyt data; nyt spil oprettes
+    @Path("/game/")
+    @Produces("application/json")
+    public Response createGame(String json) {
+
+
+        //TODO: Parse json and get userId and gameName.
+        JSONParser jsonParser = new JSONParser();
+
+        String gameName = null;
+        User user = null;
+
+        try {
+
+            //Initialize Object class as json, parsed by jsonParsed.
+            Object obj = jsonParser.parse(json);
+
+            //Instantiate JSONObject class as jsonObject equal to obj object.
+            JSONObject jsonObject = (JSONObject) obj;
+
+            //Use set-methods for defifing static variables from json-file.
+            gameName = ((String) jsonObject.get("gameName"));
+            user = new Gson().fromJson(json, User.class);
+
+            Game createGame = Logic.createGame(gameName,user);
+
+            String gameJson = new Gson().toJson(createGame);
+
+            return Response.status(201).entity(gameJson).build();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (org.json.simple.parser.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return Response.status(500).entity("something went wrong").build();
+
+    }
+
+    @GET //GET-request: Opstart af nyt spil
+    @Path("/startgame/{gameid}")
+    @Produces("application/json")
+    public String startGame(@PathParam("gameid") int gameId) {
+
+        Map startGame = Logic.startGame(gameId);
+        return new Gson().toJson(startGame);
+
+    }
+
+    @DELETE //DELETE-request fjernelse af data(spillet slettes)
+    @Path("/game/{gameid}")
+    @Produces("appication/json")
+    public String deleteGame(@PathParam("gameid") int gameId) {
+
+        boolean deleteGame = Logic.deleteUser(gameId);
+        return new Gson().toJson(deleteGame);
+    }
+
+    @GET //"GET-request"
+    @Path("/result/{gameid}")
+    @Produces("application/json")
+    public String getGame(@PathParam("gameid") int gameid) {
+
+        Game game = Logic.getGame(gameid);
+        return new Gson().toJson(game);
+
+    }
+
+    @GET //"GET-request"
+    @Path("/highscore/")
     @Produces("application/json")
     public String getHighScore(String data) {
-
-        //TODO: Get method from logic to return highscores.
 
         ArrayList<Score> Score = Logic.getHighscores();
         return new Gson().toJson(Score);
@@ -72,105 +202,6 @@ public class Api {
         Score score = Logic.getHighscore(userid);
         return new Gson().toJson(score);
 
-    }
-
-    @GET //"GET-request"
-    @Path("/games")
-    @Produces("application/json")
-    public String getGames() {
-
-        ArrayList<model.Game> games = Logic.getGames();
-        return new Gson().toJson(games);
-
-    }
-
-    @GET //"GET-request"
-    @Path("/result/{gameid}")
-    @Produces("application/json")
-    public String getGame(@PathParam("gameid") int gameid) {
-
-        Game game = Logic.getGame(gameid);
-        return new Gson().toJson(game);
-
-    }
-
-    @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
-    @Path("/login/")
-    @Produces("application/json")
-    public Response login(String data) {
-
-        try {
-
-            User user = new Gson().fromJson(data, User.class);
-
-            int result = Logic.userLogin(user.getUserName(), user.getPassword());
-
-            //TODO: Use result to see if it is a success or not.
-            return Response.status(200).entity("{\"success\":\"true\"}").build();
-        } catch (Exception e) {
-            return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
-        }
-    }
-
-    @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
-    @Path("/user/")
-    @Produces("text/plain")
-    public String createUser(String data) {
-        //TODO: Needs to be fixed.
-        User user = null;
-
-        boolean createdUser = Logic.createUser(user);
-
-        if (createdUser) {
-
-        } else {
-
-        }
-
-        return "";
-        //return new Gson().toJson(createUser);
-
-    }
-
-    @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/game")
-    @Produces("text/plain")
-    public String createGame(String json) {
-
-
-        //TODO: Parse json and get userId and gameName.
-        //User host = Logic.getUser(userId);
-        //Game createGame = Logic.createGame(gameName, host);
-        //return new Gson().toJson(createGame);
-        return "";
-    }
-
-    @GET //GET-request: Opstart af nyt spil
-    @Path("/startgame/{gameid}")
-    @Produces("text/plain")
-    public String startGame(@PathParam("gameid") int gameId) {
-
-        Map startGame = Logic.startGame(gameId);
-        return new Gson().toJson(startGame);
-
-    }
-
-    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
-    @Path("/user/")
-    @Produces("text/plain")
-    public String deleteUser(int userId) {
-
-        boolean deleteUser = Logic.deleteUser(userId);
-        return new Gson().toJson(deleteUser);
-    }
-
-    @GET //DELETE-request fjernelse af data(spillet slettes)
-    @Path("/deleteGame/{gameid}")
-    @Produces("text/plain")
-    public String deleteGame(@PathParam("gameid") int gameId) {
-
-        boolean deleteGame = Logic.deleteUser(gameId);
-        return new Gson().toJson(deleteGame);
     }
 
     public static void main(String[] args) throws IOException {
