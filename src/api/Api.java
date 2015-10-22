@@ -8,7 +8,9 @@ import model.Game;
 import model.Score;
 import model.User;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+//TODO: Can't parse with this import. Maybe because the parser and object needs to be from same lib
+//import org.codehaus.jettison.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import javax.ws.rs.*;
@@ -77,7 +79,7 @@ public class Api {
         boolean deleteUser = Logic.deleteUser(userId);
 
         if (deleteUser) {
-            return Response.status(200).entity("{\"Success!\"user\"true\"}").build();
+            return Response.status(200).entity("{\"Success!\":\"true\"}").build();
         } else {
             return Response.status(400).entity("{\"Failed\"}").build();
         }
@@ -93,7 +95,7 @@ public class Api {
         boolean createdUser = Logic.createUser(user);
 
         if (createdUser) {
-            return Response.status(200).entity("{\"Success!\"user\"true\"}").build();
+            return Response.status(200).entity("{\"Success!\":\"true\"}").build();
         } else {
             return Response.status(400).entity("{\"Failed\"}").build();
         }
@@ -149,9 +151,10 @@ public class Api {
 
             return Response.status(201).entity(gameJson).build();
 
-        } catch (JSONException e) {
+            //TODO: changed JSONObject so it imports from org.json.simple.JSONObject instead of the codehaus lib
+        } /*catch (JSONException e) {
             e.printStackTrace();
-        } catch (org.json.simple.parser.ParseException e) {
+        }*/ catch (org.json.simple.parser.ParseException e) {
             e.printStackTrace();
         }
 

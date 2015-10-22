@@ -132,13 +132,13 @@ public class DatabaseWrapper {
 
             while (resultSet.next()) {
 
-                //TODO: host_id ≠ opponentId?
                 score = new Score();
                 score.setId(resultSet.getInt("id"));
                 score.setUserId(resultSet.getInt("user_id"));
                 score.setGameId(resultSet.getInt("game_id"));
-                score.setOpponentId(resultSet.getInt("host_id"));
+                score.setOpponentId(resultSet.getInt("opponent_id"));
                 score.setScore(resultSet.getInt("score"));
+
             }
 
         } catch (SQLException e) {
@@ -264,12 +264,11 @@ public class DatabaseWrapper {
             while (resultSet.next())
             {
 
-                //TODO: host_id ≠ opponentId?
                 Score score = new Score();
                 score.setId(resultSet.getInt("id"));
                 score.setUserId(resultSet.getInt("user_id"));
                 score.setGameId(resultSet.getInt("game_id"));
-                score.setOpponentId(resultSet.getInt("host_id"));
+                score.setOpponentId(resultSet.getInt("opponent_id"));
                 score.setScore(resultSet.getInt("score"));
 
                 result.add(score);

@@ -138,7 +138,7 @@ public class Logic {
      */
     public static ArrayList<Score> getHighscores() {
         //TODO: Get all highscores
-        ArrayList<Score> highScores = null;
+        ArrayList<Score> highScores = db.getScores();
         return highScores;
     }
 
@@ -178,7 +178,7 @@ public class Logic {
 
         //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
 
-        ArrayList<Game> games = null;
+        ArrayList<Game> games = db.getGames();
         return games;
 
     }
@@ -248,6 +248,8 @@ public class Logic {
         game.setName(gameName);
         game.setHost(host);
         game.setStatus("pending");
+
+        db.createGame(game);
 
         //TODO: Write game to db, and return game-id and set object before returning
 

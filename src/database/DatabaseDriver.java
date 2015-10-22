@@ -109,6 +109,7 @@ public class DatabaseDriver {
         return "select * from " + table + " WHERE id = ?";
     }
 
+
     /**
      * Querybuilder with a single parameter, which, when specified will get a table.
      * @param table
