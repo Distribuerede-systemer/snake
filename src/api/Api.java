@@ -77,20 +77,16 @@ public class Api {
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
     @Path("/user/")
     @Produces("application/json")
-    public String createUser(String data) {
-        //TODO: Needs to be fixed.
+    public Response createUser(String data) {
         User user = null;
 
         boolean createdUser = Logic.createUser(user);
 
         if (createdUser) {
-
+            return Response.status(200).entity("{\"Success!\"user\"true\"}").build();
         } else {
-
+            return Response.status(400).entity("{\"Failed\"}").build();
         }
-
-        return "";
-        //return new Gson().toJson(createUser);
     }
 
     @GET //"GET-request"
@@ -163,8 +159,6 @@ public class Api {
     @Path("/highscore/")
     @Produces("application/json")
     public String getHighScore(String data) {
-
-        //TODO: Get method from logic to return highscores.
 
         ArrayList<Score> Score = Logic.getHighscores();
         return new Gson().toJson(Score);
