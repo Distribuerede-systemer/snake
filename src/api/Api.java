@@ -185,7 +185,7 @@ public class Api {
     }
 
     @GET //"GET-request"
-    @Path("/result/{gameid}")
+    @Path("/game/{gameid}")
     @Produces("application/json")
     public String getGame(@PathParam("gameid") int gameid) {
 
