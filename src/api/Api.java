@@ -191,28 +191,32 @@ public class Api {
 
         Game game = Logic.getGame(gameid);
         return new Gson().toJson(game);
-
     }
 
     @GET //"GET-request"
     @Path("/scores/")
     @Produces("application/json")
-    public String getHighScore(String data) {
+    public String getHighscore(String data) {
 
-        ArrayList<Score> Score = Logic.getHighscores();
-        return new Gson().toJson(Score);
+        //ArrayList<Score> Score = Logic.getHighscore();
+        String bob = new Gson().toJson(Logic.getHighscore());
+
+        System.out.println(bob);
+        //return new Gson().toJson(Logic.getHighscore());
+        return bob;
 
     }
 
     @GET //"GET-request"
     @Path("/score/{userid}")
     @Produces("application/json")
-    public String getScore(@PathParam("userid") int userid) {
-
-        Score score = Logic.getHighscore(userid);
-        return new Gson().toJson(score);
-
-    }
+    // TODO: Rename method in wrapper + logic: getScoresByUserID
+//    public ArrayList<Score> getScoresByUserID(@PathParam("userid") int userid) {
+//
+//        Score score = Logic.getScoresByUserID(userid);
+//        return new Gson().toJson(score);
+//
+//    }
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");

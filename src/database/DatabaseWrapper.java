@@ -89,7 +89,6 @@ public class DatabaseWrapper {
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
-
             while (resultSet.next()) {
                 game = new Game();
                 game.setGameId(resultSet.getInt("id"));
@@ -120,24 +119,33 @@ public class DatabaseWrapper {
         return game;
     }
 
-    public Score getScore(int id) {
+    public Score getScoreByGameID(int id) {
         Score score = null;
         ResultSet resultSet = null;
         PreparedStatement ps;
 
         try {
-            ps = connection.prepareStatement(dbDriver.getSqlRecord("scores"));
+            ps = connection.prepareStatement(dbDriver.getSqlRecord("games"));
 
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
 
+                // Creating user object and setting user_id
+                User user = new User();
+                user.setId(resultSet.getInt("user_id"));
+
+                // Creating game object and setting game_id
+                Game game = new Game();
+                game.setGameId(resultSet.getInt("game_id"));
+
+                // Creating score objects and adding user + game object
                 score = new Score();
                 score.setId(resultSet.getInt("id"));
-                score.setUserId(resultSet.getInt("user_id"));
-                score.setGameId(resultSet.getInt("game_id"));
-                score.setOpponentId(resultSet.getInt("opponent_id"));
+                score.setUser(user);
+                score.setGame(game);
+                score.setOpponent(resultSet.getInt("opponent_id"));
                 score.setScore(resultSet.getInt("score"));
 
             }
@@ -252,27 +260,44 @@ public class DatabaseWrapper {
         return result;
     }
 
-    public ArrayList<Score> getScores() {
+    public ArrayList<Score> getHighscore() {
         ResultSet resultSet = null;
         PreparedStatement ps;
         ArrayList<Score> result = null;
 
         try {
-            ps = connection.prepareStatement(dbDriver.getSqlRecords("scores"));
+            ps = connection.prepareStatement(dbDriver.getHighScore());
             resultSet = ps.executeQuery();
             result = new ArrayList<Score>();
 
             while (resultSet.next())
             {
+                System.out.println(resultSet);
+                // Adding User object
+                User user = new User();
+                user.setUserName(resultSet.getString("username"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setId(resultSet.getInt("user_id"));
+
+                // Adding Game object
+                Game game = new Game();
+                game.setName(resultSet.getString("game_name"));
+                game.setGameId(resultSet.getInt("game_id"));
+                game.setCreated(resultSet.getDate("created"));
 
                 Score score = new Score();
-                score.setId(resultSet.getInt("id"));
-                score.setUserId(resultSet.getInt("user_id"));
-                score.setGameId(resultSet.getInt("game_id"));
-                score.setOpponentId(resultSet.getInt("opponent_id"));
-                score.setScore(resultSet.getInt("score"));
+                score.setId(resultSet.getInt("score_id"));
+                score.setUser(user);
+                score.setGame(game);
+
+                // Since Gson returns 0 for all unset int variables we are adding the opponent user_id.
+                score.setOpponent(resultSet.getInt("opponent"));
+                score.setScore(resultSet.getInt("highscore"));
 
                 result.add(score);
+
+
             }
 
         } catch (SQLException e) {
@@ -582,7 +607,7 @@ return true;
 
             result = new ArrayList<Gamer>();
 
-            // Indlaesser brugere i arrayListen
+            // Indlaeser brugere i arrayListen
             while (resultSet.next())
             {
                 Gamer gamer = new Gamer();
