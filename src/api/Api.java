@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.sun.net.httpserver.HttpServer;
 import controller.Logic;
+import model.Config;
 import model.Game;
 import model.Score;
 import model.User;
@@ -162,7 +163,7 @@ public class Api {
 
     }
 
-    @GET //GET-request: Opstart af nyt spil
+    @GET //GET-request: Afslutter spillet
     @Path("/startgame/{gameid}")
     @Produces("application/json")
     public String startGame(@PathParam("gameid") int gameId) {
@@ -194,7 +195,7 @@ public class Api {
     }
 
     @GET //"GET-request"
-    @Path("/highscore/")
+    @Path("/scores/")
     @Produces("application/json")
     public String getHighScore(String data) {
 
@@ -215,8 +216,8 @@ public class Api {
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
+        Config.init();
         server.start();
-
 
         System.out.println("Server running");
         System.out.println("Visit: http://localhost:9998/api");

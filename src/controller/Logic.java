@@ -247,8 +247,6 @@ public class Logic {
      */
     public static Game createGame(String gameName, User host) {
 
-        //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
-
         game.setName(gameName);
         game.setHost(host);
         game.setStatus("pending");

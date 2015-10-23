@@ -1,5 +1,8 @@
 package database;
 
+import model.Config;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,27 +13,29 @@ import java.sql.SQLException;
  *This class connects to the database - It also includes different prepared statements
  */
 public class DatabaseDriver {
-    /**
-     * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
-     */
-    private static String sqlUrl = "jdbc:mysql://localhost:3306/DBcon";
-    private static String sqlUser = "root";
-    private static String sqlPassword = "";
+
+    private static String sqlUrl = "jdbc:mysql://"+Config.getHost()+":"+Config.getPort()+"/"+Config.getDbname();
+    private static String sqlUser = Config.getUsername();
+    private static String sqlPassword = Config.getPassword();
 
     private Connection connection = null;
 
     /**
      * Connects to the database with the specified Url, User and Password.
      */
-    public DatabaseDriver()
-    {
+    public DatabaseDriver() {
+
+
+        /**
+         * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
+         */
+
         try
         {
             connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
 
         }
-        catch (SQLException e)
-        {
+        catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
         }
