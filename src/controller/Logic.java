@@ -74,8 +74,9 @@ public class Logic {
      * @return true success, false if failure
      */
     public static boolean deleteUser(int id) {
-
+       
         return db.deleteUser(id);
+        
 
     }
 
@@ -204,12 +205,14 @@ public class Logic {
      * @param controls
      * @return true if success, false if failure
      */
-    public static boolean joinGame(int gameId, User opponent, String controls) {
+    public static Game joinGame(int gameId, User opponent, String controls) {
 
-        //TODO: Find game by id
-        //TODO: Add opponent, with provided controls
+        game = db.getGame(gameId);
+        game.setOpponent(opponent);
+        game.setOpponentControls(controls);
+        //TODO: Find game and Add opponent, with provided controls
 
-        return true;
+        return game;
 
     }
 
@@ -245,10 +248,11 @@ public class Logic {
      * @param host
      * @return returns inriched game object
      */
-    public static Game createGame(String gameName, User host) {
+    public static Game createGame(String gameName, User host, String hostControls) {
 
         game.setName(gameName);
         game.setHost(host);
+        game.setHostControls(hostControls);
         game.setStatus("pending");
 
         db.createGame(game);

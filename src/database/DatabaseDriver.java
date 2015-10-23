@@ -2,7 +2,6 @@ package database;
 
 import model.Config;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,7 +12,9 @@ import java.sql.SQLException;
  *This class connects to the database - It also includes different prepared statements
  */
 public class DatabaseDriver {
-
+    /**
+     * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
+     */
     private static String sqlUrl = "jdbc:mysql://"+Config.getHost()+":"+Config.getPort()+"/"+Config.getDbname();
     private static String sqlUser = Config.getUsername();
     private static String sqlPassword = Config.getPassword();
@@ -23,19 +24,15 @@ public class DatabaseDriver {
     /**
      * Connects to the database with the specified Url, User and Password.
      */
-    public DatabaseDriver() {
-
-
-        /**
-         * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
-         */
-
+    public DatabaseDriver()
+    {
         try
         {
             connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPassword);
 
         }
-        catch (SQLException e) {
+        catch (SQLException e)
+        {
             e.printStackTrace();
             System.exit(1);
         }
@@ -113,7 +110,6 @@ public class DatabaseDriver {
 
         return "select * from " + table + " WHERE id = ?";
     }
-
 
     /**
      * Querybuilder with a single parameter, which, when specified will get a table.
