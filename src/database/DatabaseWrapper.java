@@ -183,7 +183,7 @@ public class DatabaseWrapper {
 
             result = new ArrayList<User>();
 
-            // Indlaesser brugere i arrayListen
+            // Indlaeser brugere i arrayListen
             while (resultSet.next())
             {
 
@@ -272,7 +272,6 @@ public class DatabaseWrapper {
 
             while (resultSet.next())
             {
-                System.out.println(resultSet);
                 // Adding User object
                 User user = new User();
                 user.setUserName(resultSet.getString("username"));
@@ -395,7 +394,7 @@ return true;
 
    }
 
-    public int createGame(Game game){
+    public int createGame(Game game) {
 
         int id = 0;
         try
@@ -403,10 +402,8 @@ return true;
             // Prepared statement til at tilfoeje en bruger
             PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame(),Statement.RETURN_GENERATED_KEYS );
 
-            createGame.setInt(1, 2);
-//            createGame.setInt(1, game.getHost().getId());
-            createGame.setInt(2, 3);
-//            createGame.setInt(2, game.getOpponent.getId());
+            createGame.setInt(1, game.getHost().getId());
+            createGame.setInt(2, game.getOpponent().getId());
             createGame.setString(3, game.getName());
             createGame.setString(4, game.getStatus());
             createGame.setString(5, game.getHostControls());

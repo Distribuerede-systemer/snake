@@ -74,9 +74,8 @@ public class Logic {
      * @return true success, false if failure
      */
     public static boolean deleteUser(int id) {
-       
+
         return db.deleteUser(id);
-        
 
     }
 
@@ -241,10 +240,11 @@ public class Logic {
      * @param host
      * @return returns inriched game object
      */
-    public static Game createGame(String gameName, User host, String hostControls) {
+    public static Game createGame(String gameName, User host, User opponent, String hostControls) {
 
         game.setName(gameName);
         game.setHost(host);
+        game.setOpponent(opponent);
         game.setHostControls(hostControls);
         game.setStatus("pending");
 

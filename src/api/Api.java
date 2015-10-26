@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.FileReader;
 import java.io.IOException;
@@ -132,7 +133,9 @@ public class Api {
         JSONParser jsonParser = new JSONParser();
 
         String gameName;
-        User user;
+        User host;
+        User opponent;
+        String hostControls;
 
         try {
 
@@ -142,16 +145,26 @@ public class Api {
             //Instantiate JSONObject class as jsonObject equal to obj object.
             JSONObject jsonObject = (JSONObject) obj;
 
-            //Use set-methods for defifing static variables from json-file.
+            //Getting values from our JSON objects and setting variables + fetching User objects host and opponent via db.getUser.
             gameName = ((String) jsonObject.get("gameName"));
-            user = new Gson().fromJson(json, User.class);
-            String hostControls = "afsafas";
+            hostControls = ((String) jsonObject.get("hostControls"));
 
-            Game createGame = Logic.createGame(gameName,user, hostControls);
+            host = new User();
+            host.setId(((Long) jsonObject.get("host")).intValue());
+
+            opponent = new User();
+            opponent.setId(((Long) jsonObject.get("opponent")).intValue());
+
+            //host = Logic.getUser(((Long) jsonObject.get("host")).intValue());
+            //opponent  = Logic.getUser(((Long) jsonObject.get("opponent")).intValue());
+
+            Game createGame = Logic.createGame(gameName,host,opponent,hostControls);
 
             String gameJson = new Gson().toJson(createGame);
 
-            return Response.status(201).entity(gameJson).build();
+            return Response.status(201).entity(gameJson)
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
 
             //TODO: changed JSONObject so it imports from org.json.simple.JSONObject instead of the codehaus lib
         } /*catch (JSONException e) {
@@ -199,12 +212,7 @@ public class Api {
     @Produces("application/json")
     public String getHighscore(String data) {
 
-        //ArrayList<Score> Score = Logic.getHighscore();
-        String bob = new Gson().toJson(Logic.getHighscore());
-
-        System.out.println(bob);
-        //return new Gson().toJson(Logic.getHighscore());
-        return bob;
+        return new Gson().toJson(Logic.getHighscore());
 
     }
 
@@ -225,6 +233,7 @@ public class Api {
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");
+
         Config.init();
         server.start();
 
