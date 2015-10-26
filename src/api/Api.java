@@ -44,20 +44,20 @@ public class Api {
 
             switch (result) {
                 case 0:
-                    return Response.status(400).entity("{\"User\"doens't exist\"}").build();
+                    return Response.status(400).entity("{\"message\":\"User doesn't exist\"}").build();
 
                 case 1:
-                    return Response.status(400).entity("{\"Wrong\"password\"}").build();
+                    return Response.status(400).entity("{\"message\":\"Wrong password\"}").build();
 
                 case 2:
-                    return Response.status(200).entity("{\"Login\"successful\"}").build();
+                    return Response.status(200).entity("{\"message\":\"Login successful\"}").build();
 
                 default:
-                    return Response.status(400).entity("{\"Something\"went\"wrong\"}").build();
+                    return Response.status(400).entity("{\"message\":\"Something went wrong\"}").build();
             }
 
         } catch (Exception e) {
-            return Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+            return Response.status(400).entity("{\"message\":\"Bad request\"}").build();
         }
 
     }
@@ -80,9 +80,9 @@ public class Api {
         boolean deleteUser = Logic.deleteUser(userId);
 
         if (deleteUser) {
-            return Response.status(200).entity("{\"Success!\":\"true\"}").build();
+            return Response.status(200).entity("{\"message\":\"User was deleted\"}").build();
         } else {
-            return Response.status(400).entity("{\"Failed\"}").build();
+            return Response.status(400).entity("{\"message\":\"Failed. User was not deleted\"}").build();
         }
 
     }
@@ -96,9 +96,9 @@ public class Api {
         boolean createdUser = Logic.createUser(user);
 
         if (createdUser) {
-            return Response.status(200).entity("{\"Success!\":\"true\"}").build();
+            return Response.status(200).entity("{\"message\":\"User was created\"}").build();
         } else {
-            return Response.status(400).entity("{\"Failed\"}").build();
+            return Response.status(400).entity("{\"message\":\"Failed. User was not created\"}").build();
         }
     }
 
