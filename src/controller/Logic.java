@@ -137,22 +137,11 @@ public class Logic {
      *
      * @return ArrayList of highscores
      */
-    public static ArrayList<Score> getHighscores() {
+    public static ArrayList<Score> getHighscore() {
         //TODO: Get all highscores
-        ArrayList<Score> highScores = db.getScores();
-        return highScores;
-    }
+        //ArrayList<Score> highScores = db.getHighscore();
 
-    /**
-     * Get a highscore from a specified user
-     *
-     * @param userId
-     * @return Score
-     */
-    public static Score getHighscore(int userId) {
-        //TODO: Get highscore from user
-
-        return db.getScore(userId);
+        return db.getHighscore();
     }
 
 
@@ -190,8 +179,6 @@ public class Logic {
      * @return Game object
      */
     public static Game getGame(int gameId) {
-
-        //TODO: Get specific game via DB-wrapper
 
         return db.getGame(gameId);
     }

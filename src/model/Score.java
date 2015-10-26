@@ -10,28 +10,19 @@ public class Score {
 
     // Declare highScore
     private int id;
-    private int userId;
-
-    public int getOpponentId() {
-        return opponentId;
-    }
-
-    public void setOpponentId(int opponentId) {
-        this.opponentId = opponentId;
-    }
-
-    private int opponentId;
-    private int gameId;
+    private User user;
+    private int opponent;
+    private Game game;
     private int score;
 
     //TODO: Kan slettes?! Bruges ikke i wrapper længere.
     // Creates constructor
-    public Score(int id, int userId, int gameId, int opponentId, int score)
+    public Score(int id, User user, Game game, int opponent, int score)
     {
         this.id = id;
-        this.userId = userId;
-        this.gameId = gameId;
-        this.opponentId = opponentId;
+        this.user = user;
+        this.game = game;
+        this.opponent = opponent;
         this.score = score;
     }
 
@@ -39,6 +30,9 @@ public class Score {
 
     // Creates get method which returns the highScore
 
+    public int getOpponent() { return opponent; }
+
+    public void setOpponent(int opponent) { this.opponent = opponent;  }
 
     public int getId() {
         return id;
@@ -48,25 +42,21 @@ public class Score {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getGameId() {
-        return gameId;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setGame(Game game) {
+        this.game = game;
     }
-
-
-
-
 
     public int getScore() {
         return score;

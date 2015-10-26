@@ -10,8 +10,6 @@ public class Game {
     //Creating the variables needed for the game
     private int gameId;
     private User winner;
-    private int newGame;
-    private int endGame;
     private String name;
     private String hostControls;
     private User host;
@@ -20,8 +18,6 @@ public class Game {
     private String status;
     private Date created;
     private int mapSize;
-
-
 
     //Creating the constructor and initiating the variables
     public Game(int gameId, User winner, String hostControls, Date created, String name, User host, User
@@ -32,8 +28,6 @@ public class Game {
         this.created = created;
         this.hostControls = hostControls;
         this.name = name;
-        this.newGame = newGame;
-        this.endGame = endGame;
         this.host = host;
         this.opponent = opponent;
         this.status = status;
@@ -78,9 +72,7 @@ public class Game {
         this.winner = winner;
     }
 
-    public void validate(){
-
-    }
+    public void validate(){    }
 
     //Creating get/set method for all the variables, so they can be used by other classes
     public int getGameId(){
@@ -91,30 +83,12 @@ public class Game {
         this.gameId = gameId;
     }
 
-
-
     public String getHostControls() {
         return hostControls;
     }
 
     public void setHostControls(String controls) {
         this.hostControls = controls;
-    }
-
-    public int getNewGame() {
-        return newGame;
-    }
-
-    public void setNewGame(int newGame){
-        this.newGame = newGame;
-    }
-
-    public int getEndGame(){
-        return endGame;
-    }
-
-    public void setEndGame(int endGame){
-        this.endGame = endGame;
     }
 
     public User getHost(){
