@@ -198,9 +198,7 @@ public class DatabaseDriver {
     }
 
     public String getGamesByUserID() {
-
-
-
+        return "select scores.*, games.name, users.username as Opponent_Name from scores, games, users where scores.user_id = '1' and games.id = scores.game_id and scores.opponent_id = users.id";
     }
 
 
