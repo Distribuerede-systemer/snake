@@ -2,12 +2,12 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Map;
+
 import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
 import model.Score;
 import model.User;
-
 
 /**
  * This class contains all methods that interact between the TUI / API and the data-layer in the Model package of the application.
@@ -15,7 +15,9 @@ import model.User;
  * @author Henrik Thorn
  */
 public class Logic {
-    static DatabaseWrapper db = new DatabaseWrapper();
+
+    private static boolean isAuthenticated = false;
+
 
     /**
      * Get all users
@@ -27,11 +29,24 @@ public class Logic {
         // Define ArrayList to be used to add users and return them.
         DatabaseWrapper db = new DatabaseWrapper();
 
-        ArrayList<User> Users = db.getUsers();
+        ArrayList<User> uj = db.getUsers();
 
-        return Users;
+        return uj;
 
 
+    }
+
+    /**
+     * Is user authenticated?
+     *
+     * @return true if yes, false if no
+     */
+    public static boolean isUserAuthenticated() {
+        return isAuthenticated;
+    }
+
+    public static void setIsUserAuthenticated(boolean auth) {
+        isAuthenticated = auth;
     }
 
     /**
@@ -42,14 +57,11 @@ public class Logic {
      */
     public static boolean createUser(User user) {
 
+        //TODO: Create user with DB-wrapper. If creation succeeded return true, if not return false
 
-        if (db.createUser(user))
+        return true;
 
-            return true;
-
-        else {
-            return false;
-        }}
+    }
 
     /**
      * Delete user
@@ -61,17 +73,6 @@ public class Logic {
 
         //TODO: Delete user via DB-wrapper
         return false;
-
-    }
-
-    /**
-     * Add user
-     *
-     * @param user
-     */
-    public static void addUser(User user) {
-
-        //TODO: Add user to DB via DB-wrapper
 
     }
 
@@ -99,6 +100,7 @@ public class Logic {
      */
     public static int userLogin(String username, String password) {
         User user;
+        DatabaseWrapper db = new DatabaseWrapper();
         user = db.authenticatedUser(username);
         if (user == null) {
             // User does not exists.
@@ -135,7 +137,7 @@ public class Logic {
     public static Score getHighscore(int userId) {
         //TODO: Get highscore from user
 
-        Score score = db.getScore(userId);
+        Score score = new Score();
         return score;
     }
 
@@ -225,7 +227,7 @@ public class Logic {
      *
      * @param gameName
      * @param host
-     * @return returns inriched game object
+     * @return returns enriched game object
      */
     public static Game createGame(String gameName, User host) {
 
@@ -233,21 +235,15 @@ public class Logic {
         Game game = new Game();
         game.setName(gameName);
         game.setHost(host);
-        game.setStatus("pending");
+        game.setStatus(1); //1 is pending, 0 is done
 
+        DatabaseWrapper db = new DatabaseWrapper();
+        game.setGameId(db.createGame(gameName));
         //TODO: Write game to db, and return game-id and set object before returning
 
         return game;
     }
 
-    //endgame() Called when game is over and pushes score data to the database for future use.
-    public static Game endGame (int gameId, Gamer host, Gamer opponent) {
-
-        Game game = new Game();
-        game.setStatus("Finished");
-        db.createScore(gameId, host, opponent);
-        return game;
-    }
     /**
      * Delete game
      *
