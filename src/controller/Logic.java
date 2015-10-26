@@ -144,6 +144,11 @@ public class Logic {
         return db.getHighscore();
     }
 
+    public static Score getScoresByUserID(int userID) {
+
+
+    return db.getScoresByUserID(userID);
+    }
 
     /**
      * Get all games
@@ -156,6 +161,7 @@ public class Logic {
         return games;
 
     }
+
 
     /**
      * Get specific game created by user

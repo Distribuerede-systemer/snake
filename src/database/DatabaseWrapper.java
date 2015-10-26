@@ -119,13 +119,13 @@ public class DatabaseWrapper {
         return game;
     }
 
-    public Score getScoreByGameID(int id) {
+    public Score  getScoresByUserID(int id) {
         Score score = null;
         ResultSet resultSet = null;
         PreparedStatement ps;
 
         try {
-            ps = connection.prepareStatement(dbDriver.getSqlRecord("games"));
+            ps = connection.prepareStatement(dbDriver.getScoresByUserID());
 
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
@@ -137,8 +137,8 @@ public class DatabaseWrapper {
                 user.setId(resultSet.getInt("user_id"));
 
                 // Creating game object and setting game_id
-                Game game = new Game();
-                game.setGameId(resultSet.getInt("game_id"));
+               Game game = new Game();
+               game.setGameId(resultSet.getInt("game_id"));
 
                 // Creating score objects and adding user + game object
                 score = new Score();

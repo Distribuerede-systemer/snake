@@ -145,8 +145,9 @@ public class Api {
             //Use set-methods for defifing static variables from json-file.
             gameName = ((String) jsonObject.get("gameName"));
             user = new Gson().fromJson(json, User.class);
+            String hostControls = "afsafas";
 
-            Game createGame = Logic.createGame(gameName,user);
+            Game createGame = Logic.createGame(gameName,user, hostControls);
 
             String gameJson = new Gson().toJson(createGame);
 
@@ -211,10 +212,14 @@ public class Api {
     @Path("/score/{userid}")
     @Produces("application/json")
     // TODO: Rename method in wrapper + logic: getScoresByUserID
-//    public ArrayList<Score> getScoresByUserID(@PathParam("userid") int userid) {
-//
-//        Score score = Logic.getScoresByUserID(userid);
-//        return new Gson().toJson(score);
+   public String getScoresByUserID(@PathParam("userid") int userid) {
+
+
+       Score score = Logic.getScoresByUserID(userid);
+        //udprint/hent/identificer af data omkring spillere
+
+        return new Gson().toJson(score);
+    }
 //
 //    }
 
