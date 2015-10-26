@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpServer;
 import controller.Logic;
 import model.Config;
 import model.Game;
+import model.Gamer;
 import model.Score;
 import model.User;
 import org.codehaus.jettison.json.JSONException;
@@ -133,9 +134,8 @@ public class Api {
         JSONParser jsonParser = new JSONParser();
 
         String gameName;
-        User host;
-        User opponent;
-        String hostControls;
+        Gamer host;
+        Gamer opponent;
 
         try {
 
@@ -147,18 +147,18 @@ public class Api {
 
             //Getting values from our JSON objects and setting variables + fetching User objects host and opponent via db.getUser.
             gameName = ((String) jsonObject.get("gameName"));
-            hostControls = ((String) jsonObject.get("hostControls"));
 
-            host = new User();
+            host = new Gamer();
             host.setId(((Long) jsonObject.get("host")).intValue());
+            host.setControls((String) jsonObject.get("hostControls"));
 
-            opponent = new User();
+            opponent = new Gamer();
             opponent.setId(((Long) jsonObject.get("opponent")).intValue());
 
             //host = Logic.getUser(((Long) jsonObject.get("host")).intValue());
             //opponent  = Logic.getUser(((Long) jsonObject.get("opponent")).intValue());
 
-            Game createGame = Logic.createGame(gameName,host,opponent,hostControls);
+            Game createGame = Logic.createGame(gameName,host,opponent);
 
             String gameJson = new Gson().toJson(createGame);
 
@@ -183,8 +183,6 @@ public class Api {
     public String startGame(@PathParam("gameid") int gameId) {
 
         Map startGame = Logic.startGame(gameId);
-
-
         return new Gson().toJson(startGame);
 
     }

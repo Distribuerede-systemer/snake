@@ -240,12 +240,12 @@ public class Logic {
      * @param host
      * @return returns inriched game object
      */
-    public static Game createGame(String gameName, User host, User opponent, String hostControls) {
+    public static Game createGame(String gameName, Gamer host, Gamer opponent) {
 
         game.setName(gameName);
         game.setHost(host);
         game.setOpponent(opponent);
-        game.setHostControls(hostControls);
+        game.setHostControls(host.getControls());
         game.setStatus("pending");
 
         db.createGame(game);
