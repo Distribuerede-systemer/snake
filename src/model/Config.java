@@ -30,7 +30,7 @@ public class Config {
 
             //Initialize imported Java-class FileReader as json object
             //with the specific path to the .json file.
-            FileReader json = new FileReader("src/config.json.dist");
+            FileReader json = new FileReader("src/config.json");
 
             //Initialize Object class as json, parsed by jsonParsed.
             Object obj = jsonParser.parse(json);
