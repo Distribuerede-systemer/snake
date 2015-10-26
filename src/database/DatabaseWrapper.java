@@ -90,17 +90,28 @@ public class DatabaseWrapper {
             resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
+                Gamer host = new Gamer();
+                host.setId(resultSet.getInt("host"));
+
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent"));
+
                 game = new Game();
                 game.setGameId(resultSet.getInt("id"));
                 game.setWinner(getUser(resultSet.getInt("winner")));
                 game.setHostControls(resultSet.getString("host_controls"));
                 game.setCreated(resultSet.getDate("created"));
                 game.setName(resultSet.getString("name"));
-                game.setHost(getUser(resultSet.getInt("host")));
-                game.setOpponent(getUser(resultSet.getInt("opponent")));
+
                 game.setStatus(resultSet.getString("status"));
                 game.setOpponentControls(resultSet.getString("opponent_controls"));
                 game.setMapSize(resultSet.getInt("map_size"));
+
+                // Adding Gamer objects opponent and host to our game object
+                game.setOpponent(opponent);
+                game.setHost(host);
+
+
             }
 
         } catch (SQLException e) {
@@ -119,7 +130,7 @@ public class DatabaseWrapper {
         return game;
     }
 
-    public Score  getScoresByUserID(int id) {
+    public Score getScoresByUserID(int id) {
         Score score = null;
         ResultSet resultSet = null;
         PreparedStatement ps;
@@ -132,21 +143,27 @@ public class DatabaseWrapper {
 
             while (resultSet.next()) {
 
-                // Creating user object and setting user_id
-                User user = new User();
+                // Creating Gamer object (user) and setting user_id
+                Gamer user = new Gamer();
                 user.setId(resultSet.getInt("user_id"));
 
-                // Creating game object and setting game_id
-               Game game = new Game();
-               game.setGameId(resultSet.getInt("game_id"));
+                // Creating Gamer object (opponent) and setting user_id
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent_id"));
+
+                // Creating game object (game) and setting game_id
+                Game game = new Game();
+                game.setGameId(resultSet.getInt("game_id"));
 
                 // Creating score objects and adding user + game object
                 score = new Score();
                 score.setId(resultSet.getInt("id"));
+                score.setScore(resultSet.getInt("score"));
+
+                // Adding objects to our Score object
                 score.setUser(user);
                 score.setGame(game);
-                score.setOpponent(resultSet.getInt("opponent_id"));
-                score.setScore(resultSet.getInt("score"));
+                score.setOpponent(opponent);
 
             }
 
@@ -234,16 +251,29 @@ public class DatabaseWrapper {
 
 
             while (resultSet.next()) {
+
+                // Creating new Gamer object (host)
+                Gamer host = new Gamer();
+                host.setId(resultSet.getInt("host"));
+
+                // Creating new Gamer object (opponent)
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent"));
+
+                // Initiating new Game object (game)
                 Game game = new Game();
                 game.setGameId(resultSet.getInt("id"));
                 game.setWinner(getUser(resultSet.getInt("winner")));
                 game.setHostControls(resultSet.getString("host_controls"));
                 game.setCreated(resultSet.getDate("created"));
                 game.setName(resultSet.getString("name"));
-                game.setHost(getUser(resultSet.getInt("host")));
-                game.setOpponent(getUser(resultSet.getInt("opponent")));
                 game.setStatus(resultSet.getString("status"));
                 game.setMapSize(resultSet.getInt("map_size"));
+
+                // Setting our host and opponent objects into our game object
+                game.setHost(host);
+                game.setOpponent(opponent);
+
                 result.add(game);
             }
         } catch (SQLException e) {
@@ -272,12 +302,16 @@ public class DatabaseWrapper {
 
             while (resultSet.next())
             {
-                // Adding User object
-                User user = new User();
-                user.setUserName(resultSet.getString("username"));
-                user.setFirstName(resultSet.getString("first_name"));
-                user.setLastName(resultSet.getString("last_name"));
-                user.setId(resultSet.getInt("user_id"));
+                // Adding host object
+                Gamer host = new Gamer();
+                host.setUserName(resultSet.getString("username"));
+                host.setFirstName(resultSet.getString("first_name"));
+                host.setLastName(resultSet.getString("last_name"));
+                host.setId(resultSet.getInt("user_id"));
+
+                // Adding Opponent object
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent"));
 
                 // Adding Game object
                 Game game = new Game();
@@ -287,11 +321,11 @@ public class DatabaseWrapper {
 
                 Score score = new Score();
                 score.setId(resultSet.getInt("score_id"));
-                score.setUser(user);
+                score.setUser(host);
                 score.setGame(game);
+                score.setOpponent(opponent);
 
                 // Since Gson returns 0 for all unset int variables we are adding the opponent user_id.
-                score.setOpponent(resultSet.getInt("opponent"));
                 score.setScore(resultSet.getInt("highscore"));
 
                 result.add(score);
@@ -534,17 +568,30 @@ return true;
 
             // Indlaesser brugere i arrayListen
             while (resultSet.next()) {
-                Game game = new Game();
 
+                // Creating new Gamer object (host)
+                Gamer host = new Gamer();
+                host.setId(resultSet.getInt("host"));
+
+                // Creating new Gamer object (opponent)
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent"));
+
+                // Creating Game object (game)
+                Game game = new Game();
                 game.setGameId(resultSet.getInt("id"));
                 game.setWinner(getUser(resultSet.getInt("winner")));
                 game.setHostControls(resultSet.getString("host_controls"));
                 game.setCreated(resultSet.getDate("created"));
                 game.setName(resultSet.getString("name"));
-                game.setHost(getUser(resultSet.getInt("host")));
-                game.setOpponent(getUser(resultSet.getInt("opponent")));
+
                 game.setStatus(resultSet.getString("status"));
                 game.setMapSize(resultSet.getInt("map_size"));
+
+                // Adding host and opponent objects to our game object
+                game.setHost(host);
+                game.setOpponent(opponent);
+
                 result.add(game);
             }
 
@@ -575,7 +622,6 @@ return true;
             while (resultSet.next()) {
 
                 user = new User();
-
                 user.setId(resultSet.getInt("id"));
                 user.setFirstName(resultSet.getString("first_name"));
                 user.setLastName(resultSet.getString("last_name"));
@@ -585,6 +631,7 @@ return true;
                 user.setCreated(resultSet.getDate("created"));
                 user.setStatus(resultSet.getString("status"));
                 user.setType(resultSet.getString("type"));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();

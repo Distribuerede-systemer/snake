@@ -194,12 +194,13 @@ public class DatabaseDriver {
     }
     public String getHighScore() {
         return "select games.id as game_id, games.created, games.opponent, games.name as game_name, scores.id as score_id, scores.user_id as user_id, max(scores.score) as highscore, users.first_name, users.last_name, users.username from scores, users, games where scores.user_id = users.id and scores.game_id = games.id group by user_id order by highscore desc";
-
     }
 
     public String getGamesByUserID() {
-        return "select scores.*, games.name, users.username as Opponent_Name from scores, games, users where scores.user_id = '1' and games.id = scores.game_id and scores.opponent_id = users.id";
+        return "select scores.*, games.name, users.username as oppponent_name from scores, games, users where scores.user_id = '1' and games.id = scores.game_id and scores.opponent_id = users.id";
     }
+
+
 
 
 }
