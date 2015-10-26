@@ -26,11 +26,14 @@ public class Logic {
      */
     public static ArrayList<User> getUsers() {
 
+
+        //Add a new commenet
         // Define ArrayList to be used to add users and return them.
         DatabaseWrapper db = new DatabaseWrapper();
 
         ArrayList<User> uj = db.getUsers();
 
+        //Returns the ArrayList of users.
         return uj;
 
 
@@ -84,10 +87,14 @@ public class Logic {
      */
     public static User getUser(int userId) {
 
-        //TODO: Get specific user from DB via DB-wrapper
-        User user = new User();
-        return user;
+        //Initializes dbWrap object as type DatabaseWrapper
+        DatabaseWrapper dbWrap = new DatabaseWrapper();
 
+        //Instantiates ArrayList of type User as uj with the value from getUsers method in DatabaseWrapper.
+        User user = dbWrap.getUser(userId);
+
+        //Returns the ArrayList of users.
+        return user;
     }
 
     /**
@@ -162,11 +169,14 @@ public class Logic {
      * @param userId
      * @return ArrayList of matched games
      */
-    public static ArrayList<Game> getGames(int userId) {
+    public static ArrayList<Game> getGames(int type, int id) {
 
         //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
 
-        ArrayList<Game> games = null;
+        DatabaseWrapper dbWrap = new DatabaseWrapper();
+
+        ArrayList<Game> games = dbWrap.getGamesByUserId(type, id);
+
         return games;
 
     }
