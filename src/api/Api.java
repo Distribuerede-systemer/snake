@@ -25,9 +25,9 @@ public class Api {
 
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
     @Produces("application/json")
-    public String getClichedMessage() {
+    public Response getClichedMessage() {
         // Return some cliched textual content
-        return "Hello World!";
+        return Response.status(200).entity("{\"Login\"successful\"}").build();
     }
 
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
@@ -115,10 +115,17 @@ public class Api {
     @GET //"GET-request"
     @Path("/game")
     @Produces("application/json")
-    public String getGames() {
+    public String getGame() {
 
         ArrayList<model.Game> games = Logic.getGames();
-        return new Gson().toJson(games);
+        if (true) {
+
+            return new Gson().toJson(games);
+        }
+        else {
+
+            return new Gson().toJson("No games available");
+        }
 
     }
 
@@ -190,6 +197,7 @@ public class Api {
 
         Game game = Logic.getGame(gameid);
         return new Gson().toJson(game);
+
 
     }
 
