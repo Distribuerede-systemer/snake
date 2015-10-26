@@ -16,9 +16,6 @@ import model.User;
  */
 public class Logic {
 
-    private static boolean isAuthenticated = false;
-
-
     /**
      * Get all users
      *
@@ -37,19 +34,6 @@ public class Logic {
         return uj;
 
 
-    }
-
-    /**
-     * Is user authenticated?
-     *
-     * @return true if yes, false if no
-     */
-    public static boolean isUserAuthenticated() {
-        return isAuthenticated;
-    }
-
-    public static void setIsUserAuthenticated(boolean auth) {
-        isAuthenticated = auth;
     }
 
     /**
