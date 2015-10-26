@@ -197,7 +197,7 @@ public class Logic {
      * @param controls
      * @return true if success, false if failure
      */
-    public static Game joinGame(int gameId, User opponent, String controls) {
+    public static Game joinGame(int gameId, Gamer opponent, String controls) {
 
         game = db.getGame(gameId);
         game.setOpponent(opponent);

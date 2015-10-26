@@ -1,5 +1,6 @@
 package api;
 
+import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.sun.net.httpserver.HttpServer;
@@ -14,13 +15,12 @@ import org.codehaus.jettison.json.JSONException;
 //import org.codehaus.jettison.json.JSONObject;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import java.io.FileReader;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
 
 @Path("/api")
@@ -220,12 +220,12 @@ public class Api {
     // TODO: Rename method in wrapper + logic: getScoresByUserID
    public String getScoresByUserID(@PathParam("userid") int userid) {
 
-
        Score score = Logic.getScoresByUserID(userid);
         //udprint/hent/identificer af data omkring spillere
 
         return new Gson().toJson(score);
     }
+
 //
 //    }
 

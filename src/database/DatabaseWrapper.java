@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * This class contains methods which use prepared statements from the DatabaseDriver class to retrieve data from the database.
  * The methods convert the data and return an object.
  */
-//
     
 public class DatabaseWrapper {
 
@@ -107,11 +106,9 @@ public class DatabaseWrapper {
                 game.setOpponentControls(resultSet.getString("opponent_controls"));
                 game.setMapSize(resultSet.getInt("map_size"));
 
-                // Adding Gamer objects opponent and host to our game object
+                // Adding Gamer objects (opponent and host) to our game object
                 game.setOpponent(opponent);
                 game.setHost(host);
-
-
             }
 
         } catch (SQLException e) {
@@ -464,7 +461,7 @@ return true;
 
         try
         {
-            // Prepared statement til at tilfoeje en brugera
+            // Prepared statement til at tilfoeje en bruger
             PreparedStatement createScore = connection.prepareStatement(dbDriver.createSqlScore());
 
             createScore.setInt(1, host.getId());
@@ -563,10 +560,9 @@ return true;
             }
 
             resultSet = ps.executeQuery();
-
             result = new ArrayList<Game>();
 
-            // Indlaesser brugere i arrayListen
+            // Running through our resultset and adding to array
             while (resultSet.next()) {
 
                 // Creating new Gamer object (host)
@@ -638,6 +634,8 @@ return true;
         }
         return user;
     }
+
+
 
     public ArrayList<Gamer> getScore(){
         ResultSet resultSet = null;
