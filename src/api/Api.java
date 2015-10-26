@@ -12,14 +12,16 @@ import org.codehaus.jettison.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+
 @Path("/api")
 public class Api {
+
 
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
     @Produces("application/json")
@@ -62,11 +64,16 @@ public class Api {
     @GET //"GET-request"
     @Path("/user/") //USER-path - identifice det inden for metoden
     @Produces("application/json")
-    public String getAllUsers() {
+    public Response getAllUsers() {
 
         ArrayList<User> users = Logic.getUsers();
 
-        return new Gson().toJson(users);
+
+        return Response
+                .status(200)
+                .entity(new Gson().toJson(users))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
     }
 
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
@@ -106,7 +113,7 @@ public class Api {
     }
 
     @GET //"GET-request"
-    @Path("/games")
+    @Path("/game")
     @Produces("application/json")
     public String getGames() {
 
@@ -125,10 +132,14 @@ public class Api {
         String gameName;
         User user;
 
+        int a = 0;
+
         try {
 
             //Initialize Object class as json, parsed by jsonParsed.
             Object obj = jsonParser.parse(json);
+
+            int i = 0;
 
             //Instantiate JSONObject class as jsonObject equal to obj object.
             JSONObject jsonObject = (JSONObject) obj;
@@ -137,7 +148,7 @@ public class Api {
             gameName = ((String) jsonObject.get("gameName"));
             user = new Gson().fromJson(json, User.class);
 
-            Game createGame = Logic.createGame(gameName,user);
+            Game createGame = Logic.createGame(gameName, user);
 
             String gameJson = new Gson().toJson(createGame);
 

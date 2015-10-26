@@ -9,7 +9,7 @@ public class Tui {
 
 
     //TODO: Make this class use static methods
-
+/*
     private Scanner input;
 
     public Tui(){
@@ -128,7 +128,8 @@ public class Tui {
     }
 
     public String enterUserType(){
-        System.out.print("Please enter user type. can be api/server");
+        System.out.print("Please enter user type. can be
+        api/server");
         String userType = input.next();
 
         if(!userType.equals("api") && !userType.equals("server")){
@@ -150,5 +151,5 @@ public class Tui {
 
     public void miscOut(String s){
         System.out.println(s);
-    }
+    }*/
 }

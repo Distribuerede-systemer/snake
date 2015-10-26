@@ -13,9 +13,9 @@ public class DatabaseDriver {
     /**
      * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
      */
-    private static String sqlUrl = "jdbc:mysql://localhost:3306/DBcon";
+    private static String sqlUrl = "jdbc:mysql://localhost:3306/snake";
     private static String sqlUser = "root";
-    private static String sqlPassword = "root";
+    private static String sqlPassword = "ukamm19";
 
     private Connection connection = null;
 

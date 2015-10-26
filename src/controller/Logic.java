@@ -16,9 +16,6 @@ import model.User;
  */
 public class Logic {
     static DatabaseWrapper db = new DatabaseWrapper();
-    static Game game = new Game();
-    private static boolean isAuthenticated = false;
-
 
     /**
      * Get all users
@@ -35,19 +32,6 @@ public class Logic {
         return Users;
 
 
-    }
-
-    /**
-     * Is user authenticated?
-     *
-     * @return true if yes, false if no
-     */
-    public static boolean isUserAuthenticated() {
-        return isAuthenticated;
-    }
-
-    public static void setIsUserAuthenticated(boolean auth) {
-        isAuthenticated = auth;
     }
 
     /**
@@ -246,7 +230,7 @@ public class Logic {
     public static Game createGame(String gameName, User host) {
 
         //int gameId, int result, String controls, int newGame, int endGame, String host, String opponent, String status
-
+        Game game = new Game();
         game.setName(gameName);
         game.setHost(host);
         game.setStatus("pending");
@@ -259,6 +243,7 @@ public class Logic {
     //endgame() Called when game is over and pushes score data to the database for future use.
     public static Game endGame (int gameId, Gamer host, Gamer opponent) {
 
+        Game game = new Game();
         game.setStatus("Finished");
         db.createScore(gameId, host, opponent);
         return game;
