@@ -118,7 +118,14 @@ public class Api {
     public String getGame() {
 
         ArrayList<model.Game> games = Logic.getGames();
-        return new Gson().toJson(games);
+        if (true) {
+
+            return new Gson().toJson(games);
+        }
+        else {
+
+            return new Gson().toJson("No games available");
+        }
 
     }
 
@@ -190,6 +197,7 @@ public class Api {
 
         Game game = Logic.getGame(gameid);
         return new Gson().toJson(game);
+
 
     }
 
