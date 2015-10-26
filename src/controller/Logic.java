@@ -154,25 +154,9 @@ public class Logic {
      *
      * @return ArrayList of games
      */
-    public static ArrayList<Game> getGames() {
+    public static ArrayList<Score> getGamesByUserID(int id) {
         
-        ArrayList<Game> games = db.getGames();
-        return games;
-
-    }
-
-
-    /**
-     * Get specific game created by user
-     *
-     * @param userId
-     * @return ArrayList of matched games
-     */
-    public static ArrayList<Game> getGames(int userId) {
-
-        //TODO: Get ALL games createdBy by specified userId, via DB-wrapper
-
-        ArrayList<Game> games = db.getGames();
+        ArrayList<Score> games = db.getGamesByUserID(id);
         return games;
 
     }

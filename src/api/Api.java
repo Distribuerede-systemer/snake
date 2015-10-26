@@ -1,5 +1,6 @@
 package api;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
@@ -116,15 +117,15 @@ public class Api {
         return new Gson().toJson(user);
     }
 
-    @GET //"GET-request"
-    @Path("/games")
-    @Produces("application/json")
-    public String getGames() {
-
-        ArrayList<model.Game> games = Logic.getGames();
-        return new Gson().toJson(games);
-
-    }
+//    @GET //"GET-request"
+//    @Path("/games")
+//    @Produces("application/json")
+//    public String getGames() {
+//
+//        ArrayList<model.Game> games = Logic.getGames();
+//        return new Gson().toJson(games);
+//
+//    }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
     @Path("/game/")
@@ -215,15 +216,16 @@ public class Api {
     }
 
     @GET //"GET-request"
-    @Path("/score/{userid}")
+    @Path("/games/{userid}")
     @Produces("application/json")
     // TODO: Rename method in wrapper + logic: getScoresByUserID
-   public String getScoresByUserID(@PathParam("userid") int userid) {
+   public Response getGamesByUserID(@PathParam("userid") int userid) {
 
-       Score score = Logic.getScoresByUserID(userid);
-        //udprint/hent/identificer af data omkring spillere
+        ArrayList<Score> score = Logic.getGamesByUserID(userid);
 
-        return new Gson().toJson(score);
+        return Response.status(201).entity(new Gson().toJson(score))
+                .header("Access-Control-Allow-Headers", "*")
+                .build();
     }
 
 //

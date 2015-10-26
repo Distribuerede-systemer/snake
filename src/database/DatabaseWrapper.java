@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * This class contains methods which use prepared statements from the DatabaseDriver class to retrieve data from the database.
  * The methods convert the data and return an object.
  */
+//
     
 public class DatabaseWrapper {
 
@@ -20,8 +21,8 @@ public class DatabaseWrapper {
     public static final int ALLGAMESBYID = 0;
     public static final int ALLPENDINGGAMESBYID = 1;
     public static final int PENDINGINVITESBYID = 2;
-    public static final int COMPLETEDGAMESBYID = 3;
-
+    public static final int GAMESBYUSERID = 3;
+    public static final int ALLGAMES = 4;
 
     /**
      * The connection from DatabaseDriver is initialized in the class
@@ -95,9 +96,12 @@ public class DatabaseWrapper {
                 Gamer opponent = new Gamer();
                 opponent.setId(resultSet.getInt("opponent"));
 
+                Gamer winner = new Gamer();
+                winner.setId(resultSet.getInt("winner"));
+
                 game = new Game();
                 game.setGameId(resultSet.getInt("id"));
-                game.setWinner(getUser(resultSet.getInt("winner")));
+                game.setWinner(winner);
                 game.setHostControls(resultSet.getString("host_controls"));
                 game.setCreated(resultSet.getDate("created"));
                 game.setName(resultSet.getString("name"));
@@ -230,48 +234,52 @@ public class DatabaseWrapper {
         return result;
     }
 
-    public ArrayList<Game> getGames() {
+    public ArrayList<Score> getGamesByUserID(int id) {
         ResultSet resultSet = null;
         PreparedStatement ps;
-        ArrayList<Game> result = null;
+        ArrayList<Score> result = null;
 
         try {
-            ps = connection.prepareStatement(dbDriver.getSqlRecords("games"));
+
+            ps = connection.prepareStatement(dbDriver.getSQLAllGamesByUserID());
+            ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
-
-            result = new ArrayList<Game>();
+            result = new ArrayList<Score>();
 
             // Indlaesser brugere i arrayListen
-
-
-
 
             while (resultSet.next()) {
 
                 // Creating new Gamer object (host)
-                Gamer host = new Gamer();
-                host.setId(resultSet.getInt("host"));
+                Gamer user = new Gamer();
+                user.setId(id);
 
                 // Creating new Gamer object (opponent)
                 Gamer opponent = new Gamer();
-                opponent.setId(resultSet.getInt("opponent"));
+                opponent.setId(resultSet.getInt("opponent_id"));
+                opponent.setUserName(resultSet.getString("opponent_name"));
+                opponent.setFirstName(resultSet.getString("opponent_first_name"));
+                opponent.setLastName(resultSet.getString("opponent_last_name"));
+
+                // Creating new Gamer object (winner)
+                Gamer winner = new Gamer();
+                winner.setId(resultSet.getInt("winner"));
 
                 // Initiating new Game object (game)
                 Game game = new Game();
                 game.setGameId(resultSet.getInt("id"));
-                game.setWinner(getUser(resultSet.getInt("winner")));
-                game.setHostControls(resultSet.getString("host_controls"));
-                game.setCreated(resultSet.getDate("created"));
                 game.setName(resultSet.getString("name"));
-                game.setStatus(resultSet.getString("status"));
-                game.setMapSize(resultSet.getInt("map_size"));
+                game.setWinner(winner);
 
-                // Setting our host and opponent objects into our game object
-                game.setHost(host);
-                game.setOpponent(opponent);
+                // Setting our host, opponent and winner objects into our game object
+                Score score = new Score();
+                score.setOpponent(opponent);
+                score.setUser(user);
+                score.setGame(game);
+                score.setScore(resultSet.getInt("score"));
 
-                result.add(game);
+                result.add(score);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -530,7 +538,8 @@ return true;
         return true;
     }
 
-    public ArrayList<Game> getGamesByUserID(int type, int id) {
+
+    public ArrayList<Game> getPendingGamesByUserID(int type, int id) {
         ResultSet resultSet = null;
         PreparedStatement ps = null;
         ArrayList<Game> result = null;
@@ -539,23 +548,19 @@ return true;
 
             switch (type){
                 case ALLGAMESBYID:
-                    ps = connection.prepareStatement(dbDriver.getSqlAllGamesByUserID());
+                    ps = connection.prepareStatement(dbDriver.getSQLAllGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
                     break;
                 case ALLPENDINGGAMESBYID:
-                    ps = connection.prepareStatement(dbDriver.getSqlPendingGamesByUserID());
+                    ps = connection.prepareStatement(dbDriver.getSQLPendingGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
                     break;
                 case PENDINGINVITESBYID:
-                    ps = connection.prepareStatement(dbDriver.getSqlCompletedGamesByUserID());
+                    ps = connection.prepareStatement(dbDriver.getSQLCompletedGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
-                    break;
-                case COMPLETEDGAMESBYID:
-                    ps = connection.prepareStatement(dbDriver.getSqlGameInvitesByUserID());
-                    ps.setInt(1, id);
                     break;
             }
 
@@ -565,18 +570,22 @@ return true;
             // Running through our resultset and adding to array
             while (resultSet.next()) {
 
-                // Creating new Gamer object (host)
+                // Creating Gamer object (host)
                 Gamer host = new Gamer();
                 host.setId(resultSet.getInt("host"));
 
-                // Creating new Gamer object (opponent)
+                // Creating Gamer object (opponent)
                 Gamer opponent = new Gamer();
                 opponent.setId(resultSet.getInt("opponent"));
+
+                // Creating Gammer object (winner)
+                Gamer winner = new Gamer();
+                winner.setId(resultSet.getInt("winner"));
 
                 // Creating Game object (game)
                 Game game = new Game();
                 game.setGameId(resultSet.getInt("id"));
-                game.setWinner(getUser(resultSet.getInt("winner")));
+                game.setWinner(winner);
                 game.setHostControls(resultSet.getString("host_controls"));
                 game.setCreated(resultSet.getDate("created"));
                 game.setName(resultSet.getString("name"));

@@ -9,7 +9,7 @@ import java.sql.Date;
 public class Game {
     //Creating the variables needed for the game
     private int gameId;
-    private User winner;
+    private Gamer winner;
     private String name;
     private String hostControls;
     private Gamer host;
@@ -20,7 +20,7 @@ public class Game {
     private int mapSize;
 
     //Creating the constructor and initiating the variables
-    public Game(int gameId, User winner, String hostControls, Date created, String name, Gamer host, Gamer
+    public Game(int gameId, Gamer winner, String hostControls, Date created, String name, Gamer host, Gamer
             opponent, String status, int mapSize){
         this.mapSize = mapSize;
         this.gameId = gameId;
@@ -68,7 +68,7 @@ public class Game {
         return winner;
     }
 
-    public void setWinner(User winner) {
+    public void setWinner(Gamer winner) {
         this.winner = winner;
     }
 

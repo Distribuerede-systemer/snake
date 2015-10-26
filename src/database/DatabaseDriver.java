@@ -163,20 +163,20 @@ public class DatabaseDriver {
         return "UPDATE Games SET status = ? WHERE id = ?";
     }
 
-    public String getSqlAllGamesByUserID() {
-        return "select * from games where status <> 'deleted' (host = ? OR opponent = ?)";
-    }
+//    public String getSQLAllGamesByUserID() {
+//        return "select * from games where status <> 'deleted' (host = ? OR opponent = ?)";
+//    }
 
-    public String getSqlPendingGamesByUserID() {
+    public String getSQLPendingGamesByUserID() {
         return "select * from games WHERE status = 'pending' and (host = ? OR opponent = ?)";
     }
 
-    public String getSqlCompletedGamesByUserID() {
+    public String getSQLCompletedGamesByUserID() {
 
         return "select * from games where status = 'completed' and (host = ? OR opponent = ?)";
     }
 
-    public String getSqlGameInvitesByUserID() {
+    public String getSQLGameInvitesByUserID() {
         return "select * from games WHERE status = 'pending' and opponent = ?";
     }
 
@@ -196,11 +196,8 @@ public class DatabaseDriver {
         return "select games.id as game_id, games.created, games.opponent, games.name as game_name, scores.id as score_id, scores.user_id as user_id, max(scores.score) as highscore, users.first_name, users.last_name, users.username from scores, users, games where scores.user_id = users.id and scores.game_id = games.id group by user_id order by highscore desc";
     }
 
-    public String getGamesByUserID() {
-        return "select scores.*, games.name, users.username as oppponent_name from scores, games, users where scores.user_id = '1' and games.id = scores.game_id and scores.opponent_id = users.id";
+    public String getSQLAllGamesByUserID() {
+        return "select games.id, games.name, users.username as opponent_name, users.first_name as opponent_first_name, users.last_name as opponent_last_name, users.id as opponent_id, scores.score, games.winner from scores, games, users where scores.user_id = ? and games.id = scores.game_id and scores.opponent_id = users.id";
     }
-
-
-
 
 }
