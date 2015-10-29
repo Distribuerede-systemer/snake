@@ -1,21 +1,28 @@
 package api;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.sun.net.httpserver.HttpServer;
 import controller.Logic;
-import model.*;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-
+import model.Config;
+import model.Game;
+import model.Gamer;
+import model.Score;
+import model.User;
+import org.codehaus.jettison.json.JSONException;
 //TODO: Can't parse with this import. Maybe because the parser and object needs to be from same lib
 //import org.codehaus.jettison.json.JSONObject;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import java.io.FileReader;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.Map;
 
 @Path("/api")
 public class Api {
@@ -70,6 +77,8 @@ public class Api {
                 .entity(new Gson().toJson(users))
                 .header("Access-Control-Allow-Origin", "*")
                 .build();
+
+        //return new Gson().toJson(users);
     }
 
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
@@ -88,28 +97,23 @@ public class Api {
     }
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
-    @Path("/user")
+    @Path("/user/")
     @Produces("application/json")
     public Response createUser(String data) {
-
-        User user = new Gson().fromJson(data, User.class);
+        User user = null;
 
         boolean createdUser = Logic.createUser(user);
 
-
-
         if (createdUser) {
             return Response
-                    .status(201)
+                    .status(200)
                     .entity("{\"message\":\"User was created\"}")
                     .header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Methods", "PUT, GET, POST")
+                    .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
                     .build();
         } else {
-            return Response
-                    .status(400)
-                    .entity("{\"message\":\"Failed. User was not created\"}")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .build();
+            return Response.status(400).entity("{\"message\":\"Failed. User was not created\"}").build();
         }
     }
 
@@ -164,17 +168,15 @@ public class Api {
             opponent = new Gamer();
             opponent.setId(((Long) jsonObject.get("opponent")).intValue());
 
-            //host = Logic.getUser(((Long) jsonObject.get("host")).intValue());
-            //opponent  = Logic.getUser(((Long) jsonObject.get("opponent")).intValue());
-
             Game createGame = Logic.createGame(gameName,host,opponent);
 
             String gameJson = new Gson().toJson(createGame);
 
-            return Response.status(201).entity(gameJson)
-                    .header("Access-Control-Allow-Headers", "*")
+            return Response
+                    .status(201)
+                    .entity("{\"message\":\"Game was created\"}")
+                    .header("Access-Control-Allow-Origin", "*")
                     .build();
-
             //TODO: changed JSONObject so it imports from org.json.simple.JSONObject instead of the codehaus lib
         } /*catch (JSONException e) {
             e.printStackTrace();
