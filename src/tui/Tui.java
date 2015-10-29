@@ -10,27 +10,34 @@ public class Tui {
 
     //TODO: Make this class use static methods - DONE
     private static Scanner input = new Scanner(System.in);
+    private static boolean isAuthenticated = false;
+
 
     public Tui(){
     }
 
-    public static void listUsers(ArrayList<User> userList){
+    public void login(){
+        miscOut("Please log in.");
 
-        for(User usr : userList){
-            System.out.println("User: " + usr.getUserName());
+       int answer = Logic.userLogin(enterUsername(),enterPassword());
+        if(answer == 0)
+            miscOut("User does not exist.");
+        else if(answer == 1) {
+            miscOut("Success.");
+            isAuthenticated = true;
         }
+        else if(answer == 2)
+            miscOut("Wrong password.");
+
     }
 
-    public static void listGames(ArrayList<Game> gameList){
-
-        for(Game gm : gameList){
-            System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
-        }
+    public static boolean isUserAuthenticated() {
+        return isAuthenticated;
     }
 
     public static void userMenu(){
 
-        while(Logic.isUserAuthenticated()) {
+        while(isAuthenticated) {
 
             int menu = userMenuScreen();
 
@@ -56,7 +63,7 @@ public class Tui {
                     break;
                 case 5:
                     miscOut("You Logged Out.");
-                    Logic.setIsUserAuthenticated(false);
+                    isAuthenticated = false;
                     break;
                 default:
                     miscOut("Unassigned key.");
@@ -74,6 +81,19 @@ public class Tui {
         System.out.println("5: Log out");
 
         return input.nextInt();
+    }
+    public static void listUsers(ArrayList<User> userList){
+
+        for(User usr : userList){
+            System.out.println("User: " + usr.getUserName());
+        }
+    }
+
+    public static void listGames(ArrayList<Game> gameList){
+
+        for(Game gm : gameList){
+            System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
+        }
     }
 
     public static String deleteUserScreen(){
