@@ -92,7 +92,7 @@ public class Tui {
     public static void listGames(ArrayList<Game> gameList){
 
         for(Game gm : gameList){
-            System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
+            System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " /*+gm.getResult()*/);
         }
     }
 

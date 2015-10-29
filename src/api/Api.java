@@ -168,7 +168,7 @@ public class Api {
             opponent = new Gamer();
             opponent.setId(((Long) jsonObject.get("opponent")).intValue());
 
-            Game createGame = Logic.createGame(gameName,host,opponent);
+            Game createGame = Logic.createGame(gameName,host);
 
             String gameJson = new Gson().toJson(createGame);
 
@@ -221,7 +221,8 @@ public class Api {
     @Produces("application/json")
     public String getHighscore(String data) {
 
-        return new Gson().toJson(Logic.getHighscore());
+        int id = 0;
+        return new Gson().toJson(Logic.getHighscore(id));
 
     }
 
@@ -231,7 +232,7 @@ public class Api {
     // TODO: Rename method in wrapper + logic: getScoresByUserID
    public Response getGamesByUserID(@PathParam("userid") int userid) {
 
-        ArrayList<Score> score = Logic.getGamesByUserID(userid);
+        ArrayList<Score> score = null; /*Logic.getGamesByUserID(userid);*/
 
         return Response.status(201).entity(new Gson().toJson(score))
                 .header("Access-Control-Allow-Headers", "*")
