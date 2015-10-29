@@ -13,26 +13,16 @@ import java.util.ArrayList;
  * The methods convert the data and return an object.
  */
 //
-
-// TODO: dynamicQuery (returning cachedrowset)
-// TODO: getHighScore (select users.*, sum(scores.score) as HighScore from users join scores where users.id = scores.user_id group by users.username order by HighScore desc)
-// TODO: ???
-// TODO: USER objektet giver fejl
-// TODO: Create game i logik
-// TODO: Rette dbWrapper game-metoder saa de passer til det nye gamer objekt
-// TODO: Metode i logik som skal slette pending tid efter x antal dage
-
-
+    
 public class DatabaseWrapper {
 
-    private ResultSet resultSet = null;
     private Connection connection;
     DatabaseDriver dbDriver = new DatabaseDriver();
     public static final int ALLGAMESBYID = 0;
     public static final int ALLPENDINGGAMESBYID = 1;
     public static final int PENDINGINVITESBYID = 2;
-    public static final int COMPLETEDGAMESBYID = 3;
-
+    public static final int GAMESBYUSERID = 3;
+    public static final int ALLGAMES = 4;
 
     /**
      * The connection from DatabaseDriver is initialized in the class
@@ -59,17 +49,18 @@ public class DatabaseWrapper {
             resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                user = new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("email"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("status"),
-                        resultSet.getString("type")
-                );
+
+                user = new User();
+
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setUserName(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+                user.setCreated(resultSet.getDate("created"));
+                user.setStatus(resultSet.getString("status"));
+                user.setType(resultSet.getString("type"));
             }
 
         } catch (SQLException e) {
@@ -98,18 +89,30 @@ public class DatabaseWrapper {
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
-
             while (resultSet.next()) {
+                Gamer host = new Gamer();
+                host.setId(resultSet.getInt("host"));
+
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent"));
+
+                Gamer winner = new Gamer();
+                winner.setId(resultSet.getInt("winner"));
+
                 game = new Game();
                 game.setGameId(resultSet.getInt("id"));
-                game.setWinner(getUser(resultSet.getInt("winner")));
+                game.setWinner(winner);
                 game.setHostControls(resultSet.getString("host_controls"));
                 game.setCreated(resultSet.getDate("created"));
                 game.setName(resultSet.getString("name"));
-                game.setHost(getUser(resultSet.getInt("host")));
-                game.setOpponent(getUser(resultSet.getInt("opponent")));
+
                 game.setStatus(resultSet.getString("status"));
-                game.setMapSize(resultSet.getInt("mapsize"));
+                game.setOpponentControls(resultSet.getString("opponent_controls"));
+                game.setMapSize(resultSet.getInt("map_size"));
+
+                // Adding Gamer objects (opponent and host) to our game object
+                game.setOpponent(opponent);
+                game.setHost(host);
             }
 
         } catch (SQLException e) {
@@ -128,25 +131,41 @@ public class DatabaseWrapper {
         return game;
     }
 
-    public Score getScore(int id) {
+    public Score getScoresByUserID(int id) {
         Score score = null;
         ResultSet resultSet = null;
         PreparedStatement ps;
 
         try {
-            ps = connection.prepareStatement(dbDriver.getSqlRecord("scores"));
+            ps = connection.prepareStatement(dbDriver.getScoresByUserID());
 
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                score = new Score(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getInt("game_id"),
-                        resultSet.getInt("host_id"),
-                        resultSet.getInt("score")
-                );
+
+                // Creating Gamer object (user) and setting user_id
+                Gamer user = new Gamer();
+                user.setId(resultSet.getInt("user_id"));
+
+                // Creating Gamer object (opponent) and setting user_id
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent_id"));
+
+                // Creating game object (game) and setting game_id
+                Game game = new Game();
+                game.setGameId(resultSet.getInt("game_id"));
+
+                // Creating score objects and adding user + game object
+                score = new Score();
+                score.setId(resultSet.getInt("id"));
+                score.setScore(resultSet.getInt("score"));
+
+                // Adding objects to our Score object
+                score.setUser(user);
+                score.setGame(game);
+                score.setOpponent(opponent);
+
             }
 
         } catch (SQLException e) {
@@ -172,6 +191,7 @@ public class DatabaseWrapper {
     public ArrayList<User> getUsers() {
         ResultSet resultSet = null;
         PreparedStatement ps;
+        User user = null;
         ArrayList<User> result = null;
 
         try {
@@ -181,20 +201,23 @@ public class DatabaseWrapper {
 
             result = new ArrayList<User>();
 
-            // Indlaesser brugere i arrayListen
+            // Indlaeser brugere i arrayListen
             while (resultSet.next())
             {
-                result.add(new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("email"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("status"),
-                        resultSet.getString("type")
-                ));
+
+                user = new User();
+
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setUserName(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+                user.setCreated(resultSet.getDate("created"));
+                user.setStatus(resultSet.getString("status"));
+                user.setType(resultSet.getString("type"));
+
+                result.add(user);
             }
 
         } catch (SQLException e) {
@@ -211,69 +234,108 @@ public class DatabaseWrapper {
         return result;
     }
 
-    public ArrayList<Game> getGames() {
-        ResultSet resultSet = null;
-        PreparedStatement ps;
-        ArrayList<Game> result = null;
-
-        try {
-            ps = connection.prepareStatement(dbDriver.getSqlRecords("games"));
-            resultSet = ps.executeQuery();
-
-
-            result = new ArrayList<Game>();
-
-            // Indlaesser brugere i arrayListen
-
-
-
-
-            while (resultSet.next()) {
-                Game game = new Game();
-                game.setGameId(resultSet.getInt("id"));
-                game.setWinner(getUser(resultSet.getInt("winner")));
-                game.setHostControls(resultSet.getString("host_controls"));
-                game.setCreated(resultSet.getDate("created"));
-                game.setName(resultSet.getString("name"));
-                game.setHost(getUser(resultSet.getInt("host")));
-                game.setOpponent(getUser(resultSet.getInt("opponent")));
-                game.setStatus(resultSet.getString("status"));
-                game.setMapSize(resultSet.getInt("mapsize"));
-                result.add(game);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                resultSet.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                dbDriver.close();
-            }
-        }
-
-        return result;
-    }
-
-    public ArrayList<Score> getScores() {
+    public ArrayList<Score> getGamesByUserID(int id) {
         ResultSet resultSet = null;
         PreparedStatement ps;
         ArrayList<Score> result = null;
 
         try {
-            ps = connection.prepareStatement(dbDriver.getSqlRecords("scores"));
+
+            ps = connection.prepareStatement(dbDriver.getSQLAllGamesByUserID());
+            ps.setInt(1, id);
+            resultSet = ps.executeQuery();
+
+            result = new ArrayList<Score>();
+
+            // Indlaesser brugere i arrayListen
+
+            while (resultSet.next()) {
+
+                // Creating new Gamer object (host)
+                Gamer user = new Gamer();
+                user.setId(id);
+
+                // Creating new Gamer object (opponent)
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent_id"));
+                opponent.setUserName(resultSet.getString("opponent_name"));
+                opponent.setFirstName(resultSet.getString("opponent_first_name"));
+                opponent.setLastName(resultSet.getString("opponent_last_name"));
+
+                // Creating new Gamer object (winner)
+                Gamer winner = new Gamer();
+                winner.setId(resultSet.getInt("winner"));
+
+                // Initiating new Game object (game)
+                Game game = new Game();
+                game.setGameId(resultSet.getInt("id"));
+                game.setName(resultSet.getString("name"));
+                game.setWinner(winner);
+
+                // Setting our host, opponent and winner objects into our game object
+                Score score = new Score();
+                score.setOpponent(opponent);
+                score.setUser(user);
+                score.setGame(game);
+                score.setScore(resultSet.getInt("score"));
+
+                result.add(score);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                dbDriver.close();
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<Score> getHighscore() {
+        ResultSet resultSet = null;
+        PreparedStatement ps;
+        ArrayList<Score> result = null;
+
+        try {
+            ps = connection.prepareStatement(dbDriver.getHighScore());
             resultSet = ps.executeQuery();
             result = new ArrayList<Score>();
 
             while (resultSet.next())
             {
-                result.add(new Score(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getInt("game_id"),
-                        resultSet.getInt("host_id"),
-                        resultSet.getInt("score")
-                ));
+                // Adding host object
+                Gamer host = new Gamer();
+                host.setUserName(resultSet.getString("username"));
+                host.setFirstName(resultSet.getString("first_name"));
+                host.setLastName(resultSet.getString("last_name"));
+                host.setId(resultSet.getInt("user_id"));
+
+                // Adding Opponent object
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent"));
+
+                // Adding Game object
+                Game game = new Game();
+                game.setName(resultSet.getString("game_name"));
+                game.setGameId(resultSet.getInt("game_id"));
+                game.setCreated(resultSet.getDate("created"));
+
+                Score score = new Score();
+                score.setId(resultSet.getInt("score_id"));
+                score.setUser(host);
+                score.setGame(game);
+                score.setOpponent(opponent);
+
+                // Since Gson returns 0 for all unset int variables we are adding the opponent user_id.
+                score.setScore(resultSet.getInt("highscore"));
+
+                result.add(score);
+
+
             }
 
         } catch (SQLException e) {
@@ -339,7 +401,7 @@ public class DatabaseWrapper {
         }
     }
 
-    public void createUser(User user){
+    public boolean createUser(User user){
 
 //        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime()
 //                .getTime());
@@ -358,14 +420,20 @@ public class DatabaseWrapper {
             createUser.setString(7, user.getType());
 
             createUser.executeUpdate();
-        } catch (SQLException sqlException)
+        }
+        catch (SQLException sqlException)
+
         {
             sqlException.printStackTrace();
             dbDriver.close();
-        }
-    }
+            return false;
 
-    public int createGame(Game game){
+        }
+return true;
+
+   }
+
+    public int createGame(Game game) {
 
         int id = 0;
         try
@@ -373,10 +441,8 @@ public class DatabaseWrapper {
             // Prepared statement til at tilfoeje en bruger
             PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame(),Statement.RETURN_GENERATED_KEYS );
 
-            createGame.setInt(1, 2);
-//            createGame.setInt(1, game.getHost().getId());
-            createGame.setInt(2, 3);
-//            createGame.setInt(2, game.getOpponent.getId());
+            createGame.setInt(1, game.getHost().getId());
+            createGame.setInt(2, game.getOpponent().getId());
             createGame.setString(3, game.getName());
             createGame.setString(4, game.getStatus());
             createGame.setString(5, game.getHostControls());
@@ -399,11 +465,11 @@ public class DatabaseWrapper {
         return id;
     }
 
-    public void createScore(int id, Gamer host, Gamer opponent){
+    public boolean createScore(int id, Gamer host, Gamer opponent){
 
         try
         {
-            // Prepared statement til at tilfoeje en brugera
+            // Prepared statement til at tilfoeje en bruger
             PreparedStatement createScore = connection.prepareStatement(dbDriver.createSqlScore());
 
             createScore.setInt(1, host.getId());
@@ -424,11 +490,13 @@ public class DatabaseWrapper {
         {
             sqlException.printStackTrace();
             dbDriver.close();
+            return false;
         }
+   return true;
     }
 
 
-    public void deleteUser(int id)
+    public boolean deleteUser(int id)
     {
         try
         {
@@ -443,11 +511,13 @@ public class DatabaseWrapper {
         {
             sqlException.printStackTrace();
             dbDriver.close();
+            return false;
         }
+        return true;
     }
 
 
-    public void deleteGame(int id)
+    public boolean deleteGame(int id)
     {
         try
         {
@@ -458,14 +528,18 @@ public class DatabaseWrapper {
 
 
             ps.executeUpdate();
-        } catch (SQLException sqlException)
+        }
+        catch (SQLException sqlException)
         {
             sqlException.printStackTrace();
             dbDriver.close();
+            return false;
         }
+        return true;
     }
 
-    public ArrayList<Game> getGamesByUserID(int type, int id) {
+
+    public ArrayList<Game> getPendingGamesByUserID(int type, int id) {
         ResultSet resultSet = null;
         PreparedStatement ps = null;
         ArrayList<Game> result = null;
@@ -474,43 +548,55 @@ public class DatabaseWrapper {
 
             switch (type){
                 case ALLGAMESBYID:
-                    ps = connection.prepareStatement(dbDriver.getSqlAllGamesByUserID());
+                    ps = connection.prepareStatement(dbDriver.getSQLAllGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
                     break;
                 case ALLPENDINGGAMESBYID:
-                    ps = connection.prepareStatement(dbDriver.getSqlPendingGamesByUserID());
+                    ps = connection.prepareStatement(dbDriver.getSQLPendingGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
                     break;
                 case PENDINGINVITESBYID:
-                    ps = connection.prepareStatement(dbDriver.getSqlCompletedGamesByUserID());
+                    ps = connection.prepareStatement(dbDriver.getSQLCompletedGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
-                    break;
-                case COMPLETEDGAMESBYID:
-                    ps = connection.prepareStatement(dbDriver.getSqlGameInvitesByUserID());
-                    ps.setInt(1, id);
                     break;
             }
 
             resultSet = ps.executeQuery();
-
             result = new ArrayList<Game>();
 
-            // Indlaesser brugere i arrayListen
+            // Running through our resultset and adding to array
             while (resultSet.next()) {
-                Game game = new Game();
 
+                // Creating Gamer object (host)
+                Gamer host = new Gamer();
+                host.setId(resultSet.getInt("host"));
+
+                // Creating Gamer object (opponent)
+                Gamer opponent = new Gamer();
+                opponent.setId(resultSet.getInt("opponent"));
+
+                // Creating Gammer object (winner)
+                Gamer winner = new Gamer();
+                winner.setId(resultSet.getInt("winner"));
+
+                // Creating Game object (game)
+                Game game = new Game();
                 game.setGameId(resultSet.getInt("id"));
-                game.setWinner(getUser(resultSet.getInt("winner")));
+                game.setWinner(winner);
                 game.setHostControls(resultSet.getString("host_controls"));
                 game.setCreated(resultSet.getDate("created"));
                 game.setName(resultSet.getString("name"));
-                game.setHost(getUser(resultSet.getInt("host")));
-                game.setOpponent(getUser(resultSet.getInt("opponent")));
+
                 game.setStatus(resultSet.getString("status"));
-                game.setMapSize(resultSet.getInt("mapsize"));
+                game.setMapSize(resultSet.getInt("map_size"));
+
+                // Adding host and opponent objects to our game object
+                game.setHost(host);
+                game.setOpponent(opponent);
+
                 result.add(game);
             }
 
@@ -530,26 +616,27 @@ public class DatabaseWrapper {
 
     public User authenticatedUser(String username) {
         User user = null;
-        ResultSet resultset = null;
+        ResultSet resultSet = null;
         PreparedStatement ps;
 
         try {
             ps = connection.prepareStatement(dbDriver.authenticatedSql());
             ps.setString(1, username);
-            resultset = ps.executeQuery();
+            resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-                user = new User(
-                        resultSet.getInt("id"),
-                        resultSet.getString("firstname"),
-                        resultSet.getString("lastname"),
-                        resultSet.getString("email"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        resultSet.getDate("created"),
-                        resultSet.getString("status"),
-                        resultSet.getString("type")
-                );
+
+                user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setUserName(resultSet.getString("username"));
+                user.setPassword(resultSet.getString("password"));
+                user.setCreated(resultSet.getDate("created"));
+                user.setStatus(resultSet.getString("status"));
+                user.setType(resultSet.getString("type"));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -557,7 +644,9 @@ public class DatabaseWrapper {
         return user;
     }
 
-    public ArrayList<Gamer> getHighScore(){
+
+
+    public ArrayList<Gamer> getScore(){
         ResultSet resultSet = null;
         PreparedStatement ps;
         ArrayList<Gamer> result = null;
@@ -569,7 +658,7 @@ public class DatabaseWrapper {
 
             result = new ArrayList<Gamer>();
 
-            // Indlaesser brugere i arrayListen
+            // Indlaeser brugere i arrayListen
             while (resultSet.next())
             {
                 Gamer gamer = new Gamer();

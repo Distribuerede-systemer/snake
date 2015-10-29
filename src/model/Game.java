@@ -9,22 +9,18 @@ import java.sql.Date;
 public class Game {
     //Creating the variables needed for the game
     private int gameId;
-    private User winner;
-    private int newGame;
-    private int endGame;
+    private Gamer winner;
     private String name;
     private String hostControls;
-    private User host;
-    private User opponent;
+    private Gamer host;
+    private Gamer opponent;
     private String opponentControls;
     private String status;
     private Date created;
     private int mapSize;
 
-
-
     //Creating the constructor and initiating the variables
-    public Game( int gameId, User winner, String hostControls, Date created, String name, int newGame, int endGame, User host, User
+    public Game(int gameId, Gamer winner, String hostControls, Date created, String name, Gamer host, Gamer
             opponent, String status, int mapSize){
         this.mapSize = mapSize;
         this.gameId = gameId;
@@ -32,8 +28,6 @@ public class Game {
         this.created = created;
         this.hostControls = hostControls;
         this.name = name;
-        this.newGame = newGame;
-        this.endGame = endGame;
         this.host = host;
         this.opponent = opponent;
         this.status = status;
@@ -74,13 +68,11 @@ public class Game {
         return winner;
     }
 
-    public void setWinner(User winner) {
+    public void setWinner(Gamer winner) {
         this.winner = winner;
     }
 
-    public void validate(){
-
-    }
+    public void validate(){    }
 
     //Creating get/set method for all the variables, so they can be used by other classes
     public int getGameId(){
@@ -91,8 +83,6 @@ public class Game {
         this.gameId = gameId;
     }
 
-
-
     public String getHostControls() {
         return hostControls;
     }
@@ -101,35 +91,19 @@ public class Game {
         this.hostControls = controls;
     }
 
-    public int getNewGame() {
-        return newGame;
-    }
-
-    public void setNewGame(int newGame){
-        this.newGame = newGame;
-    }
-
-    public int getEndGame(){
-        return endGame;
-    }
-
-    public void setEndGame(int endGame){
-        this.endGame = endGame;
-    }
-
-    public User getHost(){
+    public Gamer getHost(){
         return host;
     }
 
-    public void setHost(User host){
+    public void setHost(Gamer host){
         this.host = host;
     }
 
-    public User getOpponent(){
+    public Gamer getOpponent(){
         return opponent;
     }
 
-    public void setOpponent(User opponent){
+    public void setOpponent(Gamer opponent){
         this.opponent = opponent;
     }
 

@@ -1,5 +1,7 @@
 package database;
 
+import model.Config;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,9 +15,9 @@ public class DatabaseDriver {
     /**
      * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
      */
-    private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
-    private static String sqlUser = "dataguy";
-    private static String sqlPassword = "QjcUayHA3axeGLns";
+    private static String sqlUrl = "jdbc:mysql://"+Config.getHost()+":"+Config.getPort()+"/"+Config.getDbname();
+    private static String sqlUser = Config.getUsername();
+    private static String sqlPassword = Config.getPassword();
 
     private Connection connection = null;
 
@@ -139,8 +141,8 @@ public class DatabaseDriver {
     }
 
     public String createSqlUser() {
-        return "Insert into users (first_name, last_name, email, user_name, password, status, type) " +
-                "values (?, ?, ?, ?, ?, ?, ?, )";
+        return "Insert into users (first_name, last_name, email, username, password, status, type) " +
+                "values (?, ?, ?, ?, ?, ?, ?)";
     }
 
     public String createSqlGame() {
@@ -161,20 +163,20 @@ public class DatabaseDriver {
         return "UPDATE Games SET status = ? WHERE id = ?";
     }
 
-    public String getSqlAllGamesByUserID() {
-        return "select * from games where status <> 'deleted' (host = ? OR opponent = ?)";
-    }
+//    public String getSQLAllGamesByUserID() {
+//        return "select * from games where status <> 'deleted' (host = ? OR opponent = ?)";
+//    }
 
-    public String getSqlPendingGamesByUserID() {
+    public String getSQLPendingGamesByUserID() {
         return "select * from games WHERE status = 'pending' and (host = ? OR opponent = ?)";
     }
 
-    public String getSqlCompletedGamesByUserID() {
+    public String getSQLCompletedGamesByUserID() {
 
         return "select * from games where status = 'completed' and (host = ? OR opponent = ?)";
     }
 
-    public String getSqlGameInvitesByUserID() {
+    public String getSQLGameInvitesByUserID() {
         return "select * from games WHERE status = 'pending' and opponent = ?";
     }
 
@@ -186,4 +188,16 @@ public class DatabaseDriver {
         return "select users.*, sum(scores.score) as TotalScore from users " +
                 "join scores where users.id = scores.user_id group by users.username order by TotalScore desc";
     }
+
+    public String  getScoresByUserID() {
+        return " select * from scores where user_id = ?";
+    }
+    public String getHighScore() {
+        return "select games.id as game_id, games.created, games.opponent, games.name as game_name, scores.id as score_id, scores.user_id as user_id, max(scores.score) as highscore, users.first_name, users.last_name, users.username from scores, users, games where scores.user_id = users.id and scores.game_id = games.id group by user_id order by highscore desc";
+    }
+
+    public String getSQLAllGamesByUserID() {
+        return "select games.id, games.name, users.username as opponent_name, users.first_name as opponent_first_name, users.last_name as opponent_last_name, users.id as opponent_id, scores.score, games.winner from scores, games, users where scores.user_id = ? and games.id = scores.game_id and scores.opponent_id = users.id";
+    }
+
 }
