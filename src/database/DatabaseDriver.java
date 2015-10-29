@@ -146,7 +146,7 @@ public class DatabaseDriver {
     }
 
     public String createSqlGame() {
-        return "Insert into games (host, opponent, name, status, host_controls, map_size) " +
+        return "Insert into games (host, opponent, status, name, host_controls, map_size) " +
                 "values (?, ?, ?, ?, ?, ?)";
     }
 
@@ -189,7 +189,7 @@ public class DatabaseDriver {
                 "join scores where users.id = scores.user_id group by users.username order by TotalScore desc";
     }
 
-    public String  getScoresByUserID() {
+    public String getScoresByUserID() {
         return " select * from scores where user_id = ?";
     }
     public String getHighScore() {

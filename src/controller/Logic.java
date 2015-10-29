@@ -28,12 +28,9 @@ public class Logic {
      */
     public static ArrayList<User> getUsers() {
 
-        // Define ArrayList to be used to add users and return them.
-        DatabaseWrapper db = new DatabaseWrapper();
+        ArrayList<User> users = db.getUsers();
 
-        ArrayList<User> Users = db.getUsers();
-
-        return Users;
+        return users;
 
 
     }
@@ -147,23 +144,27 @@ public class Logic {
         return db.getHighscore();
     }
 
-    public static Score getScoresByUserID(int userID) {
-
-
-    return db.getScoresByUserID(userID);
-    }
 
     /**
      * Get all games
      *
      * @return ArrayList of games
      */
-    public static ArrayList<Score> getGamesByUserID(int id) {
+    public static ArrayList<Score> getScoresByUserID(int id) {
         
-        ArrayList<Score> games = db.getGamesByUserID(id);
+        ArrayList<Score> scores = db.getScoresByUserID(id);
+        return scores;
+
+    }
+
+    public static ArrayList<Game> getGames(int id) {
+
+        ArrayList<Game> games = db.getScoresByUserID(id);
         return games;
 
     }
+
+
 
     /***
      * Get specific game
@@ -227,6 +228,11 @@ public class Logic {
      * @return returns inriched game object
      */
     public static Game createGame(Game game) {
+
+        if(game.getOpponent()!=null)
+            game.setStatus("pending");
+        else
+            game.setStatus("open");
 
         db.createGame(game);
 

@@ -236,15 +236,64 @@ public class Api {
     }
 
     @GET //"GET-request"
-    @Path("/games/{userid}")
+    @Path("/games/open/")
     @Produces("application/json")
     // TODO: Rename method in wrapper + logic: getScoresByUserID
-   public Response getGamesByUserID(@PathParam("userid") int userid) {
+   public Response getOpenGames(@PathParam("userid") int userid) {
 
         ArrayList<Score> score = Logic.getGamesByUserID(userid);
 
-        return Response.status(201).entity(new Gson().toJson(score))
-                .header("Access-Control-Allow-Headers", "*")
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(score))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    @GET //"GET-request"
+    @Path("/games/pending/")
+    @Produces("application/json")
+    // TODO: Rename method in wrapper + logic: getScoresByUserID
+    public Response getOpenGames(@PathParam("userid") int userid) {
+
+        ArrayList<Score> score = Logic.getGamesByUserID(userid);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(score))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    @GET //"GET-request"
+    @Path("/games/pending/")
+    @Produces("application/json")
+    // TODO: Rename method in wrapper + logic: getScoresByUserID
+    public Response getOpenGames(@PathParam("userid") int userid) {
+
+        ArrayList<Score> score = Logic.getGamesByUserID(userid);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(score))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+
+
+    @GET //"GET-request"
+    @Path("/scores/")
+    @Produces("application/json")
+    // TODO: Rename method in wrapper + logic: getScoresByUserID
+    public Response getScoresByUserID(@PathParam("userid") int userid) {
+
+        ArrayList<Score> score = Logic.getScoresByUserID(userid);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(score))
+                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 
