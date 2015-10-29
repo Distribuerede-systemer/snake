@@ -1,34 +1,41 @@
 package tui;
 import java.util.*;
+
+import controller.Logic;
+import model.Game;
 import model.User;
 
 public class Tui {
 
-    private Scanner input;
-    private User usr;
+
+    //TODO: Make this class use static methods - DONE
+    private static Scanner input = new Scanner(System.in);
+    private static boolean isAuthenticated = false;
+
 
     public Tui(){
-
-        input = new Scanner(System.in);
     }
 
-    public void listUsers(ArrayList<User> userList){
+    public void login(){
+        miscOut("Please log in.");
 
-        for(User usr : userList){
-            System.out.println("User: " + usr.getUserName());
+       int answer = Logic.userLogin(enterUsername(),enterPassword());
+        if(answer == 0)
+            miscOut("User does not exist.");
+        else if(answer == 1) {
+            miscOut("Success.");
+            isAuthenticated = true;
         }
-    }
-/*
-    public void listGames(ArrayList<Game> gameList){
+        else if(answer == 2)
+            miscOut("Wrong password.");
 
-        for(Game gm : gameList){
-            System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
-        }
-        System.out.print("\n");
     }
-*/
-/*
-    public void userMenu(){
+
+    public static boolean isUserAuthenticated() {
+        return isAuthenticated;
+    }
+
+    public static void userMenu(){
 
         while(isAuthenticated) {
 
@@ -37,21 +44,22 @@ public class Tui {
             switch (menu) {
 
                 case 1:
-                    // listUsers();
                     miscOut("Game List: ");
+                    ArrayList<Game> gameList = Logic.getGames();
+                    listGames(gameList);
                     break;
                 case 2:
                     miscOut("User List: ");
-                    ArrayList<User> userList = getUsers();
+                    ArrayList<User> userList = Logic.getUsers();
                     listUsers(userList);
                     break;
                 case 3:
                     miscOut("Create User: ");
-                    createUser();
+                    createUser(); // TODO: param efter db-wrap - DONE
                     break;
                 case 4:
                     miscOut("Delete User: ");
-                    deleteUser();
+                    Logic.deleteUser(Integer.parseInt(deleteUserScreen()));
                     break;
                 case 5:
                     miscOut("You Logged Out.");
@@ -63,8 +71,8 @@ public class Tui {
 
             }
         }
-    }*/
-    public int userMenuScreen(){
+    }
+    public static int userMenuScreen(){
 
         System.out.println("\n1: List all games");
         System.out.println("2: List all users");
@@ -74,9 +82,22 @@ public class Tui {
 
         return input.nextInt();
     }
+    public static void listUsers(ArrayList<User> userList){
 
-    public String deleteUserScreen(){
-        // listUsers();
+        for(User usr : userList){
+            System.out.println("User: " + usr.getUserName());
+        }
+    }
+
+    public static void listGames(ArrayList<Game> gameList){
+
+        for(Game gm : gameList){
+            System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " + gm.getResult());
+        }
+    }
+
+    public static String deleteUserScreen(){
+       // listUsers();
 
         System.out.print("Type username you wish to delete: ");
         String username = input.next();
@@ -84,7 +105,7 @@ public class Tui {
         return username;
     }
 
-    public String enterUsername(){
+    public static String enterUsername(){
 
         System.out.print("Please enter username: "); // Brugeren bliver spurgt om username
         String username = input.next();
@@ -92,7 +113,7 @@ public class Tui {
         return username;
     }
 
-    public String enterPassword(){
+    public static String enterPassword(){
 
         System.out.print("Please enter password: "); // Brugeren bliver spurgt om password
         String password = input.next();
@@ -100,28 +121,55 @@ public class Tui {
         return password;
     }
 
-    public String enterFirstName(){
-        System.out.print("Please enter first name: "); // Brugeren bliver spurgt om password
+    public static String enterFirstName(){
+        System.out.print("Please enter first name: "); // Brugeren bliver spurgt om fornavn
         String firstName = input.next();
 
         return firstName;
     }
 
-    public String enterLastName(){
-        System.out.print("Please enter last name: "); // Brugeren bliver spurgt om password
+    public static String enterLastName(){
+        System.out.print("Please enter last name: "); // Brugeren bliver spurgt om efternavn
         String lastName = input.next();
 
         return lastName;
     }
 
-    public String enterEmail(){
-        System.out.print("Please enter email: "); // Brugeren bliver spurgt om password
+    public static String enterEmail(){
+        System.out.print("Please enter email: "); // Brugeren bliver spurgt om email
         String email = input.next();
 
         return email;
     }
 
-    public void miscOut(String s){
+    public static String enterUserType(){
+        System.out.print("Please enter user type; admin or user.");
+        String userType = input.next();
+
+        if(!userType.equals("admin") && !userType.equals("user")){
+
+            System.out.println("Type must be either admin or user. P try again");
+            enterUsername();
+        }
+        return userType;
+    }
+
+    public static void createUser(){
+
+        //TODO: This should work! - DONE
+        User usr = new User();
+        usr.setFirstName(enterFirstName());
+        usr.setLastName(enterLastName());
+        usr.setEmail(enterEmail());
+        usr.setPassword(enterPassword());
+        usr.setUserName(enterUsername());
+        usr.setPassword(enterPassword());
+        usr.setType(enterUserType());
+
+        Logic.createUser(usr);
+    }
+
+    public static void miscOut(String s){
         System.out.println(s);
     }
 }
