@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.sun.net.httpserver.HttpServer;
 import controller.Logic;
+import controller.Security;
 import model.Config;
 import model.Game;
 import model.Gamer;
@@ -43,30 +44,47 @@ public class Api {
 
             User user = new Gson().fromJson(data, User.class);
 
-            int result = Logic.userLogin(user.getUserName(), user.getPassword());
+            int[] result = Logic.userLogin(user.getUsername(), user.getPassword());
 
-            switch (result) {
+            switch (result[0]) {
                 case 0:
-                    return Response.status(400).entity("{\"message\":\"User doesn't exist\"}").build();
+                    return Response
+                            .status(400)
+                            .entity("{\"message\":\"User doesn't exist\"}")
+                            .header("Access-Control-Allow-Headers", "*")
+                            .build();
 
                 case 1:
-                    return Response.status(400).entity("{\"message\":\"Wrong password\"}").build();
+                    return Response
+                            .status(400)
+                            .entity("{\"message\":\"Wrong password\"}")
+                            .header("Access-Control-Allow-Headers", "*")
+                            .build();
 
                 case 2:
-                    return Response.status(200).entity("{\"message\":\"Login successful\"}").build();
+                    return Response
+                            .status(200)
+                            .entity("{\"message\":\"Login successful\", \"userid\":" + result[1] + "}")
+                            .header("Access-Control-Allow-Headers", "*")
+                            .build();
 
                 default:
-                    return Response.status(400).entity("{\"message\":\"Something went wrong\"}").build();
+                    return Response
+                            .status(400)
+                            .entity("{\"message\":\"Something went wrong\"}")
+                            .header("Access-Control-Allow-Headers", "*")
+                            .build();
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             return Response.status(400).entity("{\"message\":\"Bad request\"}").build();
         }
 
     }
 
     @GET //"GET-request"
-    @Path("/user/") //USER-path - identifice det inden for metoden
+    @Path("/users/") //USER-path - identifice det inden for metoden
     @Produces("application/json")
     public Response getAllUsers() {
 
@@ -81,17 +99,26 @@ public class Api {
         //return new Gson().toJson(users);
     }
 
-    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
-    @Path("/user/")
+    @POST //DELETE-request fjernelse af data (bruger): Slet bruger
+    @Path("/users/delete/")
     @Produces("application/json")
-    public Response deleteUser(int userId) {
+    public Response deleteUser(String userId) {
 
-        boolean deleteUser = Logic.deleteUser(userId);
+        User user = new Gson().fromJson(userId, User.class);
+        int deleteUser = Logic.deleteUser(user.getId());
 
-        if (deleteUser) {
-            return Response.status(200).entity("{\"message\":\"User was deleted\"}").build();
+        if (deleteUser == 1) {
+            return Response
+                    .status(200)
+                    .entity("{\"message\":\"User was deleted\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
         } else {
-            return Response.status(400).entity("{\"message\":\"Failed. User was not deleted\"}").build();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Failed. User was not deleted\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
         }
 
     }
@@ -101,6 +128,8 @@ public class Api {
     @Produces("application/json")
     public Response createUser(String data) {
         User user = null;
+
+
 
         boolean createdUser = Logic.createUser(user);
 
@@ -121,12 +150,16 @@ public class Api {
     @Path("/user/{userId}")
     @Produces("application/json")
     // JSON: {"userId": [userid]}
-    public String getUser(@PathParam("userId") int userId) {
+    public Response getUser(@PathParam("userId") int userId) {
 
         User user = Logic.getUser(userId);
         //udprint/hent/identificer af data omkring spillere
 
-        return new Gson().toJson(user);
+        return Response
+                .status(200)
+                .entity(new Gson().toJson(user))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
     }
 
 //    @GET //"GET-request"
@@ -144,33 +177,12 @@ public class Api {
     @Produces("application/json")
     public Response createGame(String json) {
 
-        JSONParser jsonParser = new JSONParser();
-
-        String gameName;
-        Gamer host;
-        Gamer opponent;
-
         try {
 
-            //Initialize Object class as json, parsed by jsonParsed.
-            Object obj = jsonParser.parse(json);
+            Game game = new Gson().fromJson(json, Game.class);
+            game.setHostControls(game.getHost().getControls());
 
-            //Instantiate JSONObject class as jsonObject equal to obj object.
-            JSONObject jsonObject = (JSONObject) obj;
-
-            //Getting values from our JSON objects and setting variables + fetching User objects host and opponent via db.getUser.
-            gameName = ((String) jsonObject.get("gameName"));
-
-            host = new Gamer();
-            host.setId(((Long) jsonObject.get("host")).intValue());
-            host.setControls((String) jsonObject.get("hostControls"));
-
-            opponent = new Gamer();
-            opponent.setId(((Long) jsonObject.get("opponent")).intValue());
-
-            Game createGame = Logic.createGame(gameName,host,opponent);
-
-            String gameJson = new Gson().toJson(createGame);
+            Logic.createGame(game);
 
             return Response
                     .status(201)
@@ -178,9 +190,7 @@ public class Api {
                     .header("Access-Control-Allow-Origin", "*")
                     .build();
             //TODO: changed JSONObject so it imports from org.json.simple.JSONObject instead of the codehaus lib
-        } /*catch (JSONException e) {
-            e.printStackTrace();
-        }*/ catch (org.json.simple.parser.ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -203,7 +213,7 @@ public class Api {
     @Produces("appication/json")
     public String deleteGame(@PathParam("gameid") int gameId) {
 
-        boolean deleteGame = Logic.deleteUser(gameId);
+        int deleteGame = Logic.deleteUser(gameId);
         return new Gson().toJson(deleteGame);
     }
 

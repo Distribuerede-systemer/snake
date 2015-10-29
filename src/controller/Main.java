@@ -1,4 +1,5 @@
 package controller;
+import model.Config;
 import model.Gamer;
 
 import java.util.Map;
@@ -6,6 +7,7 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
+
 
         Gamer gamer1 = new Gamer();
         gamer1.setControls("awdawdawd");

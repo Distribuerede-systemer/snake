@@ -15,7 +15,7 @@ public class Tui {
     public void listUsers(ArrayList<User> userList){
 
         for(User usr : userList){
-            System.out.println("User: " + usr.getUserName());
+            System.out.println("User: " + usr.getUsername());
         }
     }
 /*

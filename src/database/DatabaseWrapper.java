@@ -56,7 +56,7 @@ public class DatabaseWrapper {
                 user.setFirstName(resultSet.getString("first_name"));
                 user.setLastName(resultSet.getString("last_name"));
                 user.setEmail(resultSet.getString("email"));
-                user.setUserName(resultSet.getString("username"));
+                user.setUsername(resultSet.getString("username"));
                 user.setPassword(resultSet.getString("password"));
                 user.setCreated(resultSet.getDate("created"));
                 user.setStatus(resultSet.getString("status"));
@@ -211,8 +211,7 @@ public class DatabaseWrapper {
                 user.setFirstName(resultSet.getString("first_name"));
                 user.setLastName(resultSet.getString("last_name"));
                 user.setEmail(resultSet.getString("email"));
-                user.setUserName(resultSet.getString("username"));
-                user.setPassword(resultSet.getString("password"));
+                user.setUsername(resultSet.getString("username"));
                 user.setCreated(resultSet.getDate("created"));
                 user.setStatus(resultSet.getString("status"));
                 user.setType(resultSet.getString("type"));
@@ -258,7 +257,7 @@ public class DatabaseWrapper {
                 // Creating new Gamer object (opponent)
                 Gamer opponent = new Gamer();
                 opponent.setId(resultSet.getInt("opponent_id"));
-                opponent.setUserName(resultSet.getString("opponent_name"));
+                opponent.setUsername(resultSet.getString("opponent_name"));
                 opponent.setFirstName(resultSet.getString("opponent_first_name"));
                 opponent.setLastName(resultSet.getString("opponent_last_name"));
 
@@ -309,7 +308,7 @@ public class DatabaseWrapper {
             {
                 // Adding host object
                 Gamer host = new Gamer();
-                host.setUserName(resultSet.getString("username"));
+                host.setUsername(resultSet.getString("username"));
                 host.setFirstName(resultSet.getString("first_name"));
                 host.setLastName(resultSet.getString("last_name"));
                 host.setId(resultSet.getInt("user_id"));
@@ -414,7 +413,7 @@ public class DatabaseWrapper {
             createUser.setString(1, user.getFirstName());
             createUser.setString(2, user.getLastName());
             createUser.setString(3, user.getEmail());
-            createUser.setString(4, user.getUserName());
+            createUser.setString(4, user.getUsername());
             createUser.setString(5, user.getPassword());
             createUser.setString(6, user.getStatus());
             createUser.setString(7, user.getType());
@@ -442,10 +441,14 @@ return true;
             PreparedStatement createGame = connection.prepareStatement(dbDriver.createSqlGame(),Statement.RETURN_GENERATED_KEYS );
 
             createGame.setInt(1, game.getHost().getId());
+            if(game.getOpponent()!=null)
             createGame.setInt(2, game.getOpponent().getId());
+            else
+            createGame.setInt(2, 0);
             createGame.setString(3, game.getName());
             createGame.setString(4, game.getStatus());
             createGame.setString(5, game.getHostControls());
+            createGame.setInt(6, game.getMapSize());
 
             createGame.executeUpdate();
 
@@ -496,24 +499,23 @@ return true;
     }
 
 
-    public boolean deleteUser(int id)
-    {
-        try
-        {
-            PreparedStatement ps = connection.prepareStatement(dbDriver.deleteSqlUser());
+    public int deleteUser(int id) {
+
+        PreparedStatement ps;
+        try {
+            ps = connection.prepareStatement(dbDriver.deleteSqlUser());
 
             ps.setString(1, "deleted");
             ps.setInt(2, id);
 
+            System.out.println(ps.executeUpdate());
+            return ps.executeUpdate();
 
-            ps.executeUpdate();
-        } catch (SQLException sqlException)
-        {
+        } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             dbDriver.close();
-            return false;
+            return 0;
         }
-        return true;
     }
 
 
@@ -628,14 +630,8 @@ return true;
 
                 user = new User();
                 user.setId(resultSet.getInt("id"));
-                user.setFirstName(resultSet.getString("first_name"));
-                user.setLastName(resultSet.getString("last_name"));
-                user.setEmail(resultSet.getString("email"));
-                user.setUserName(resultSet.getString("username"));
+                user.setUsername(resultSet.getString("username"));
                 user.setPassword(resultSet.getString("password"));
-                user.setCreated(resultSet.getDate("created"));
-                user.setStatus(resultSet.getString("status"));
-                user.setType(resultSet.getString("type"));
 
             }
         } catch (SQLException e) {
@@ -666,7 +662,7 @@ return true;
                 gamer.setFirstName(resultSet.getString("first_name"));
                 gamer.setLastName(resultSet.getString("last_name"));
                 gamer.setEmail(resultSet.getString("email"));
-                gamer.setUserName(resultSet.getString("username"));
+                gamer.setUsername(resultSet.getString("username"));
                 gamer.setCreated(resultSet.getDate("created"));
                 gamer.setStatus(resultSet.getString("status"));
                 gamer.setTotalScore(resultSet.getInt("TotalScore"));

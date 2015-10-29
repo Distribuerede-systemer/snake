@@ -1,5 +1,6 @@
 package controller;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import database.DatabaseWrapper;
@@ -73,7 +74,7 @@ public class Logic {
      * @param id
      * @return true success, false if failure
      */
-    public static boolean deleteUser(int id) {
+    public static int deleteUser(int id) {
 
         return db.deleteUser(id);
 
@@ -113,22 +114,25 @@ public class Logic {
      * @param password
      * @return 2 if auth successful, 1 if user exists but password is incorrect, 0 if failed
      */
-    public static int userLogin(String username, String password) {
+    public static int [] userLogin(String username, String password) {
         User user;
+        int [] result = new int [2];
         user = db.authenticatedUser(username);
         if (user == null) {
             // User does not exists.
-            return 0;
+            result [0] = 0;
         } else {
             if (password.equals(user.getPassword())) {
                 // Return 2 if user exists and password is correct. Success.
-                return 2;
+                result [0] = 2;
+                result [1] = user.getId();
 
             } else {
                 //Return 1 if user exists but password is wrong.
-                return 1;
+                result [0] = 1;
             }
         }
+        return result;
     }
 
     /**
@@ -220,17 +224,9 @@ public class Logic {
     /**
      * Create a game
      *
-     * @param gameName
-     * @param host
      * @return returns inriched game object
      */
-    public static Game createGame(String gameName, Gamer host, Gamer opponent) {
-
-        game.setName(gameName);
-        game.setHost(host);
-        game.setOpponent(opponent);
-        game.setHostControls(host.getControls());
-        game.setStatus("pending");
+    public static Game createGame(Game game) {
 
         db.createGame(game);
 

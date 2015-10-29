@@ -146,8 +146,8 @@ public class DatabaseDriver {
     }
 
     public String createSqlGame() {
-        return "Insert into games (host, opponent, name, status, host_controls) " +
-                "values (?, ?, ?, ?, ?)";
+        return "Insert into games (host, opponent, name, status, host_controls, map_size) " +
+                "values (?, ?, ?, ?, ?, ?)";
     }
 
     public String createSqlScore() {
@@ -181,7 +181,7 @@ public class DatabaseDriver {
     }
 
     public String authenticatedSql() {
-        return "Select * from users where username = ?";
+        return "Select * from users where username = ? AND status <> 'deleted'";
     }
 
     public String getSqlHighScore() {

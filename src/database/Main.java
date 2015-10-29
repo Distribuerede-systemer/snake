@@ -14,7 +14,7 @@ public class Main {
         ArrayList<Gamer> gamers = db.getScore();
 
         for(Gamer gamer : gamers){
-            System.out.println("User: " + gamer.getUserName() + " Highscore: " + gamer.getTotalScore());
+            System.out.println("User: " + gamer.getUsername() + " Highscore: " + gamer.getTotalScore());
         }
 //        Game game = new Game("asasa", "Fifth Snake Game", db.getUser(1), db.getUser(3), "pending");
 //
