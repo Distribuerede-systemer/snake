@@ -68,11 +68,17 @@ public class Api {
     @GET //"GET-request"
     @Path("/user/") //USER-path - identifice det inden for metoden
     @Produces("application/json")
-    public String getAllUsers() {
+    public Response getAllUsers() {
 
         ArrayList<User> users = Logic.getUsers();
 
-        return new Gson().toJson(users);
+        return Response
+                .status(200)
+                .entity(new Gson().toJson(users))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+
+        //return new Gson().toJson(users);
     }
 
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
@@ -99,7 +105,13 @@ public class Api {
         boolean createdUser = Logic.createUser(user);
 
         if (createdUser) {
-            return Response.status(200).entity("{\"message\":\"User was created\"}").build();
+            return Response
+                    .status(200)
+                    .entity("{\"message\":\"User was created\"}")
+                    .header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Methods", "PUT, GET, POST")
+                    .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+                    .build();
         } else {
             return Response.status(400).entity("{\"message\":\"Failed. User was not created\"}").build();
         }
@@ -156,17 +168,15 @@ public class Api {
             opponent = new Gamer();
             opponent.setId(((Long) jsonObject.get("opponent")).intValue());
 
-            //host = Logic.getUser(((Long) jsonObject.get("host")).intValue());
-            //opponent  = Logic.getUser(((Long) jsonObject.get("opponent")).intValue());
-
             Game createGame = Logic.createGame(gameName,host,opponent);
 
             String gameJson = new Gson().toJson(createGame);
 
-            return Response.status(201).entity(gameJson)
-                    .header("Access-Control-Allow-Headers", "*")
+            return Response
+                    .status(201)
+                    .entity("{\"message\":\"Game was created\"}")
+                    .header("Access-Control-Allow-Origin", "*")
                     .build();
-
             //TODO: changed JSONObject so it imports from org.json.simple.JSONObject instead of the codehaus lib
         } /*catch (JSONException e) {
             e.printStackTrace();
