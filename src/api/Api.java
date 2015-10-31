@@ -1,5 +1,6 @@
 package api;
 
+import java.lang.invoke.SwitchPoint;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import com.google.gson.Gson;
@@ -17,12 +18,15 @@ import org.codehaus.jettison.json.JSONException;
 //import org.codehaus.jettison.json.JSONObject;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import sun.rmi.runtime.Log;
+
 import java.io.FileReader;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Map;
 
 @Path("/api")
@@ -235,57 +239,108 @@ public class Api {
 
     }
 
+    /*
+    Getting games by userid
+     */
+    @GET //"GET-request"
+    @Path("/games/{userid}/")
+    @Produces("application/json")
+    public Response getGamesByUserID(@PathParam("userid") int userid) {
+
+        ArrayList<Game> games = Logic.getGamesByID(userid);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    /*
+    Getting games by game status and user id
+     */
+    @GET //"GET-request"
+    @Path("/games/{status}/{userid}")
+    @Produces("application/json")
+   public Response getGamesByStatusAndUserID(@PathParam("status") String status,@PathParam("userid") int userid) {
+
+        ArrayList<Game> games = new ArrayList<>();
+
+        switch (status){
+            case "pending":
+                games = Logic.getPendingGamesByID(userid);
+                break;
+            case "open":
+                games = Logic.getOpenGamesByID(userid);
+                break;
+            case "finished":
+                games = Logic.getCompletedGamesByID(userid);
+                break;
+        }
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    //Gets all games where the user is invited
+    @GET
+    @Path("/games/guest/{userid}/")
+    @Produces("application/json")
+    public Response getGamesInvitedByID(@PathParam("userid") int userid){
+
+        ArrayList<Game> games = Logic.getGamesInvitedByID(userid);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    //Gets all games hosted by the user
+    @GET
+    @Path("/games/host/{userid}/")
+    @Produces("application/json")
+    public Response getGamesHostedByID(@PathParam("userid") int userid){
+
+        ArrayList<Game> games = Logic.getGamesHostedByID(userid);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+
+    /*
+    Getting a list of all open games
+     */
     @GET //"GET-request"
     @Path("/games/open/")
     @Produces("application/json")
-    // TODO: Rename method in wrapper + logic: getScoresByUserID
-   public Response getOpenGames(@PathParam("userid") int userid) {
+    public Response getOpenGames() {
 
-        ArrayList<Score> score = Logic.getGamesByUserID(userid);
-
-        return Response
-                .status(201)
-                .entity(new Gson().toJson(score))
-                .header("Access-Control-Allow-Origin", "*")
-                .build();
-    }
-
-    @GET //"GET-request"
-    @Path("/games/pending/")
-    @Produces("application/json")
-    // TODO: Rename method in wrapper + logic: getScoresByUserID
-    public Response getOpenGames(@PathParam("userid") int userid) {
-
-        ArrayList<Score> score = Logic.getGamesByUserID(userid);
+        ArrayList<Game> games = Logic.getOpenGames();
 
         return Response
                 .status(201)
-                .entity(new Gson().toJson(score))
-                .header("Access-Control-Allow-Origin", "*")
-                .build();
-    }
-
-    @GET //"GET-request"
-    @Path("/games/pending/")
-    @Produces("application/json")
-    // TODO: Rename method in wrapper + logic: getScoresByUserID
-    public Response getOpenGames(@PathParam("userid") int userid) {
-
-        ArrayList<Score> score = Logic.getGamesByUserID(userid);
-
-        return Response
-                .status(201)
-                .entity(new Gson().toJson(score))
+                .entity(new Gson().toJson(games))
                 .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 
 
-
+    /*
+    Getting all scores by user id
+    Used for showing all finished games and scores for the user
+     */
     @GET //"GET-request"
-    @Path("/scores/")
+    @Path("/scores/{userid}")
     @Produces("application/json")
-    // TODO: Rename method in wrapper + logic: getScoresByUserID
     public Response getScoresByUserID(@PathParam("userid") int userid) {
 
         ArrayList<Score> score = Logic.getScoresByUserID(userid);
@@ -296,9 +351,6 @@ public class Api {
                 .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
-
-//
-//    }
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServerFactory.create("http://localhost:9998/");

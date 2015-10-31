@@ -3,6 +3,8 @@ package controller;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
+
+import com.sun.xml.bind.v2.TODO;
 import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
@@ -154,14 +156,54 @@ public class Logic {
         
         ArrayList<Score> scores = db.getScoresByUserID(id);
         return scores;
-
     }
 
-    public static ArrayList<Game> getGames(int id) {
+    //Used for showing a user's games
+    public static ArrayList<Game> getGamesByID(int id) {
 
-        ArrayList<Game> games = db.getScoresByUserID(id);
+        ArrayList<Game> games = db.getGames(db.GAMES_BY_ID, id);
         return games;
+    }
 
+    //Used for showing all pending games the user has as host or opponent
+    public static ArrayList<Game> getPendingGamesByID(int id) {
+
+        ArrayList<Game> games = db.getGames(db.PENDING_BY_ID, id);
+        return games;
+    }
+
+    //Used for showing all pending games the user has been invited to play
+    public static ArrayList<Game> getGamesInvitedByID(int id) {
+
+        ArrayList<Game> games = db.getGames(db.PENDING_INVITED_BY_ID, id);
+        return games;
+    }
+
+    //Used for showing all pending games hosted by the user
+    public static ArrayList<Game> getGamesHostedByID(int id){
+        ArrayList<Game> games = db.getGames(db.PENDING_HOSTED_BY_ID, id);
+        return games;
+    }
+
+    //Used for showing the open games created by the user
+    public static ArrayList<Game> getOpenGamesByID(int id) {
+
+        ArrayList<Game> games = db.getGames(db.OPEN_BY_ID, id);
+        return games;
+    }
+
+    //Shows all completed games for the user
+    public static ArrayList<Game> getCompletedGamesByID(int id){
+        ArrayList<Game> games = db.getGames(db.COMPLETED_BY_ID, id);
+        return games;
+    }
+
+    //Used for showing all open games, when a user wants to join a game
+    public static ArrayList<Game> getOpenGames() {
+
+        //Setting id to 0 because this method doesn't return games by user ID
+        ArrayList<Game> games = db.getGames(db.OPEN_GAMES, 0);
+        return games;
     }
 
 

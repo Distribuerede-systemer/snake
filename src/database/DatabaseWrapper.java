@@ -18,9 +18,15 @@ public class DatabaseWrapper {
 
     private Connection connection;
     DatabaseDriver dbDriver = new DatabaseDriver();
-    public static final int ALLGAMESBYID = 0;
-    public static final int ALLPENDINGBYID = 1;
-    public static final int ALLOPENGAMES = 2;
+
+    //used for switch in getGames
+    public static final int GAMES_BY_ID = 0;
+    public static final int PENDING_BY_ID = 1;
+    public static final int PENDING_INVITED_BY_ID = 2;
+    public static final int PENDING_HOSTED_BY_ID = 3;
+    public static final int OPEN_BY_ID = 4;
+    public static final int COMPLETED_BY_ID = 5;
+    public static final int OPEN_GAMES = 6;
 
     /**
      * The connection from DatabaseDriver is initialized in the class
@@ -236,7 +242,7 @@ public class DatabaseWrapper {
 
         try {
 
-            ps = connection.prepareStatement(dbDriver.getSQLAllGamesByUserID());
+            ps = connection.prepareStatement(dbDriver.getSQLAllFinishedGamesByUserID());
             ps.setInt(1, id);
             resultSet = ps.executeQuery();
 
@@ -547,20 +553,39 @@ return true;
         try {
 
             switch (type){
-                case ALLGAMESBYID:
+                case GAMES_BY_ID:
                     ps = connection.prepareStatement(dbDriver.getSQLAllGamesByUserID());
                     ps.setInt(1, id);
                     ps.setInt(2, id);
                     break;
-                case ALLPENDINGBYID:
-                    ps = connection.prepareStatement(dbDriver.getSQLCompletedGamesByUserID());
-                    ps.setInt(1, id);
+                case PENDING_BY_ID:
+                    ps = connection.prepareStatement(dbDriver.getSQLGamesByStatusAndUserID());
+                    ps.setString(1, "pending");
                     ps.setInt(2, id);
+                    ps.setInt(3, id);
                     break;
-                case ALLOPENGAMES:
-                    ps = connection.prepareStatement(dbDriver.getSQLPendingGamesByUserID());
+                case PENDING_INVITED_BY_ID:
+                    ps = connection.prepareStatement(dbDriver.getSQLGamesInvitedByUserID());
                     ps.setInt(1, id);
+                    break;
+                case PENDING_HOSTED_BY_ID:
+                    ps = connection.prepareStatement(dbDriver.getSQLGamesHostedByUserID());
+                    ps.setInt(1, id);
+                    break;
+                case OPEN_BY_ID:
+                    ps = connection.prepareStatement(dbDriver.getSQLGamesByStatusAndUserID());
+                    ps.setString(1, "open");
                     ps.setInt(2, id);
+                    ps.setInt(3, id);
+                    break;
+                case COMPLETED_BY_ID:
+                    ps = connection.prepareStatement(dbDriver.getSQLGamesByStatusAndUserID());
+                    ps.setString(1, "finished");
+                    ps.setInt(2, id);
+                    ps.setInt(3, id);
+                    break;
+                case OPEN_GAMES:
+                    ps = connection.prepareStatement(dbDriver.getSQLOpenGames());
                     break;
             }
 
