@@ -131,9 +131,8 @@ public class Api {
     @Path("/user/")
     @Produces("application/json")
     public Response createUser(String data) {
-        User user = null;
 
-
+        User user = new Gson().fromJson(data, User.class);
 
         boolean createdUser = Logic.createUser(user);
 

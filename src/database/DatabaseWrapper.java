@@ -205,8 +205,9 @@ public class DatabaseWrapper {
             result = new ArrayList<>();
 
             // Indlaeser brugere i arrayListen
-            while (resultSet.next() && !resultSet.getString("status").equals("deleted"))
-            {
+            while (resultSet.next()) {
+
+                if (!resultSet.getString("status").equals("deleted")) {
                     user = new User();
 
                     user.setId(resultSet.getInt("id"));
@@ -219,6 +220,7 @@ public class DatabaseWrapper {
                     user.setType(resultSet.getString("type"));
 
                     result.add(user);
+                }
             }
 
         } catch (SQLException e) {
