@@ -15,8 +15,8 @@ import model.User;
  * @author Henrik Thorn
  */
 public class Logic {
+
     static DatabaseWrapper db = new DatabaseWrapper();
-    private static boolean isAuthenticated = false;
 
 
     /**
@@ -35,19 +35,7 @@ public class Logic {
 
 
     }
-
-    /**
-     * Is user authenticated?
-     *
-     * @return true if yes, false if no
-     */
-    public static boolean isUserAuthenticated() {
-        return isAuthenticated;
-    }
-
-    public static void setIsUserAuthenticated(boolean auth) {
-        isAuthenticated = auth;
-    }
+    
 
     /**
      * Create user
