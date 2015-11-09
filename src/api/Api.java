@@ -1,96 +1,29 @@
 package api;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import com.google.gson.Gson;
-import com.sun.jersey.api.container.httpserver.HttpServerFactory;
-import com.sun.net.httpserver.HttpServer;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import controller.Logic;
+import controller.Security;
 import model.Game;
 import model.Score;
 import model.User;
+import org.codehaus.jettison.json.JSONException;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
 
-// The Java class will be hosted at the URI path "/helloworld more comment"
-@Path("/api") // apis Path, oprettes. Der annoterer URI Path. Der skal identificere den enkelte metode!.
+@Path("/api")
 public class Api {
 
-    // The Java method will process HTTP GET requests
     @GET //"GET-Request" gør at vi kan forspørge en specifik data
-    // The Java method will produce content identified by the MIME Media type "text/plain"
-    @Produces("text/plain")
+    @Produces("application/json")
     public String getClichedMessage() {
         // Return some cliched textual content
         return "Hello World!";
-    }
-
-    @GET //"GET-request"
-    @Path("/user/") //USER-path - identifice det inden for metoden
-    @Produces("application/json")
-    public String getAllUsers() {
-
-        ArrayList<model.User> users = Logic.getUsers();
-
-
-        //TODO; Hent brugere fra DB
-        return new Gson().toJson(users);
-    }
-
-    @GET //"GET-request"
-    @Path("/user/{userId}")
-    @Produces("application/json")
-    // JSON: {"userId": [userid]}
-    public String getUser(@PathParam("userId") int userId) {
-
-        User user = Logic.getUser(userId);
-        //udprint/hent/identificer af data omkring spillere
-
-        return new Gson().toJson(user);
-    }
-
-    @GET //"GET-request"
-    @Path("/highscore")
-    @Produces("application/json")
-    public String getHighScore(String data) {
-
-        //TODO: ();Get method from logic to return highscores.
-
-         ArrayList<model.Score> Score = Logic.getHighscores();
-         return new Gson().toJson(Score);
-
-    }
-
-    @GET //"GET-request"
-    @Path("/score/{userid}")
-    @Produces("application/json")
-    public String getScore(@PathParam("userid") int userid) {
-
-        Score score = Logic.getHighscore(userid);
-        return new Gson().toJson(score);
-
-    }
-
-    @GET //"GET-request"
-    @Path("/games")
-    @Produces("application/json")
-    public String getGames() {
-
-        ArrayList<model.Game> games = Logic.getGames();
-        return new Gson().toJson(games);
-
-    }
-
-    @GET //"GET-request"
-    @Path("/result/{gameid}")
-    @Produces("application/json")
-    public String getGame(@PathParam("gameid") int gameid) {
-
-        Game game = Logic.getGame(gameid);
-        return new Gson().toJson(game);
-
     }
 
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
@@ -98,93 +31,398 @@ public class Api {
     @Produces("application/json")
     public Response login(String data) {
 
-        try{
+        try {
 
             User user = new Gson().fromJson(data, User.class);
+            user.setPassword(Security.hashing(user.getPassword()));
 
-            int result = Logic.userLogin(user.getUserName(), user.getPassword());
+            int[] result = Logic.authenticateUser(user.getUsername(), user.getPassword());
+            //Sets index 0 to 0, so user cannot login as admin
 
-            //TODO: Use result to see if it is a success or not.
-            return Response.status(200).entity("{\"success\":\"true\"}").build();
-        }catch (Exception e) {
-            return  Response.status(400).entity("{\"Bad\"request\"true\"}").build();
+            if (result[0] == 0) {
+                result[1] = 0;
+            }
+
+            switch (result[1]) {
+                case 0:
+                    return Response
+                            .status(400)
+                            .entity("{\"message\":\"Wrong username or password\"}")
+                            .header("Access-Control-Allow-Headers", "*")
+                            .build();
+
+                case 1:
+                    return Response
+                            .status(400)
+                            .entity("{\"message\":\"Wrong username or password\"}")
+                            .header("Access-Control-Allow-Headers", "*")
+                            .build();
+
+                case 2:
+                    return Response
+                            .status(200)
+                            .entity("{\"message\":\"Login successful\", \"userid\":" + result[2] + "}")
+                            .header("Access-Control-Allow-Headers", "*")
+                            .build();
+                default:
+                    return Response
+                            .status(500)
+                            .entity("{\"message\":\"Unknown error. Please contact Henrik Thorn at: henrik@itkartellet.dk\"}")
+                            .header("Access-Control-Allow-Headers", "*")
+                            .build();
+            }
+
+        } catch (JsonSyntaxException | NullPointerException e) {
+            e.printStackTrace();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        }
+
+    }
+
+    @GET //"GET-request"
+    @Path("/users/") //USER-path - identifice det inden for metoden
+    @Produces("application/json")
+    public Response getAllUsers() {
+
+        ArrayList<User> users = Logic.getUsers();
+
+        return Response
+                .status(200)
+                .entity(new Gson().toJson(users))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    /*
+    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
+    @Path("/users/{userid}")
+    @Produces("application/json")
+    public Response deleteUser(@PathParam("userid") int userId) {
+
+        int deleteUser = Logic.deleteUser(userId);
+
+        if (deleteUser == 1) {
+            return Response
+                    .status(200)
+                    .entity("{\"message\":\"User was deleted\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        } else {
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Failed. User was not deleted\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        }
+
+    }
+*/
+
+    @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
+    @Path("/users/")
+    @Produces("application/json")
+    public Response createUser(String data) {
+
+        User user;
+
+        try {
+            user = new Gson().fromJson(data, User.class);
+
+            user.setType(1);
+
+            boolean createdUser = Logic.createUser(user);
+
+            if (createdUser) {
+
+                return Response
+                        .status(200)
+                        .entity("{\"message\":\"User was created\"}")
+                        .header("Access-Control-Allow-Headers", "*")
+                        .build();
+            } else {
+                return Response.status(400).entity("{\"message\":\"Username or email already exists\"}").build();
+            }
+        } catch (JsonSyntaxException | NullPointerException e) {
+            e.printStackTrace();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
         }
     }
 
-    @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
-    @Path("/user/")
-    @Produces("text/plain")
-    public String createUser(String data) {
-        //TODO: Needs to be fixed.
-        User user = null;
+    @GET //"GET-request"
+    @Path("/users/{userId}")
+    @Produces("application/json")
+    // JSON: {"userId": [userid]}
+    public Response getUser(@PathParam("userId") int userId) {
 
-        boolean createdUser = Logic.createUser(user);
-
-        if(createdUser){
-
+        User user = Logic.getUser(userId);
+        //udprint/hent/identificer af data omkring spillere
+        if (user != null) {
+            return Response
+                    .status(200)
+                    .entity(new Gson().toJson(user))
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         } else {
-
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"User was not found\"}")
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
         }
-
-        return "";
-        //return new Gson().toJson(createUser);
-
     }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/create")
-    @Produces("text/plain")
-    public String createGame(String json) {
+    @Path("/games/")
+    @Produces("application/json")
+    public Response createGame(String json) {
 
+        try {
+            Game game = Logic.createGame(new Gson().fromJson(json, Game.class));
 
-        //TODO: Parse json and get userId and gameName.
-        //User host = Logic.getUser(userId);
-        //Game createGame = Logic.createGame(gameName, host);
-        //return new Gson().toJson(createGame);
-        return "";
+            if (game != null) {
+                return Response
+                        .status(201)
+                        .entity(new Gson().toJson(game))
+                        .header("Access-Control-Allow-Headers", "*")
+                        .build();
+            } else {
+                return Response
+                        .status(400)
+                        .entity("{\"message\":\"something went wrong\"}")
+                        .header("Access-Control-Allow-Headers", "*")
+                        .build();
+            }
+        } catch (JsonSyntaxException | NullPointerException e) {
+            e.printStackTrace();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        }
     }
 
-    @GET //GET-request: Opstart af nyt spil
-    @Path("/startgame/{gameid}")
-    @Produces("text/plain")
-    public String startGame(@PathParam("gameid") int gameId) {
+    @PUT
+    @Path("/games/join/")
+    @Produces("application/json")
+    public Response joinGame(String json) {
 
-        Map startGame = Logic.startGame(gameId);
-        return new Gson().toJson(startGame);
+        try {
+            Game game = new Gson().fromJson(json, Game.class);
+
+            if (Logic.joinGame(game)) {
+                return Response
+                        .status(201)
+                        .entity("{\"message\":\"Game was joined\"}")
+                        .header("Access-Control-Allow-Origin", "*")
+                        .build();
+            } else {
+                return Response
+                        .status(400)
+                        .entity("{\"message\":\"Game closed\"}")
+                        .header("Access-Control-Allow-Headers", "*")
+                        .build();
+            }
+        } catch (JsonSyntaxException | NullPointerException e) {
+            e.printStackTrace();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        }
+    }
+
+
+    @PUT
+    @Path("/games/start/")
+    @Produces("application/json")
+    public Response startGame(String json) {
+
+        try {
+            Game game = Logic.startGame(new Gson().fromJson(json, Game.class));
+
+            if (game != null) {
+                return Response
+                        .status(201)
+                        .entity(new Gson().toJson(game))
+                        .header("Access-Control-Allow-Origin", "*")
+                        .build();
+            } else {
+                return Response
+                        .status(400)
+                        .entity("something went wrong")
+                        .build();
+            }
+        } catch (JsonSyntaxException | NullPointerException e) {
+            e.printStackTrace();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        }
 
     }
 
-    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
-    @Path("/user/")
-    @Produces("text/plain")
-    public String deleteUser(int userId) {
+    @DELETE //DELETE-request fjernelse af data(spillet slettes)
+    @Path("/games/{gameid}")
+    @Produces("appication/json")
+    public Response deleteGame(@PathParam("gameid") int gameId) {
 
-        boolean deleteUser = Logic.deleteUser(userId);
-        return new Gson().toJson(deleteUser);
+        int deleteGame = Logic.deleteGame(gameId);
+
+        if (deleteGame == 1) {
+            return Response
+                    .status(200)
+                    .entity("{\"message\":\"Game was deleted\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        } else {
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Failed. Game was not deleted\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        }
     }
 
-    @GET //DELETE-request fjernelse af data(spillet slettes)
-    @Path("/deleteGame/{gameid}")
-    @Produces("text/plain")
-    public String deleteGame(@PathParam("gameid") int gameId) {
+    @GET //"GET-request"
+    @Path("/game/{gameid}")
+    @Produces("application/json")
+    public String getGame(@PathParam("gameid") int gameid) {
 
-        boolean deleteGame = Logic.deleteUser(gameId);
-        return new Gson().toJson(deleteGame);
+        Game game = Logic.getGame(gameid);
+        return new Gson().toJson(game);
     }
 
-    public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServerFactory.create("http://localhost:9998/");
-        server.start();
+    @GET //"GET-request"
+    @Path("/scores/")
+    @Produces("application/json")
+    public String getHighscore(String data) {
 
-        System.out.println("Server running");
-        System.out.println("Visit: http://localhost:9998/api");
-        System.out.println("Hit return to stop...");
-        System.in.read();
-        System.out.println("Stopping server");
-        server.stop(0);
-        System.out.println("Server stopped");
+        return new Gson().toJson(Logic.getHighscore());
 
-        System.out.println();
     }
 
+    /*
+    Getting games by userid
+     */
+    @GET //"GET-request"
+    @Path("/games/{userid}/")
+    @Produces("application/json")
+    public Response getGamesByUserID(@PathParam("userid") int userId) {
+
+        ArrayList<Game> games = Logic.getGames(Logic.GAMES_BY_ID, userId);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    /*
+    Getting games by game status and user id
+     */
+    @GET //"GET-request"
+    @Path("/games/{status}/{userid}")
+    @Produces("application/json")
+    public Response getGamesByStatusAndUserID(@PathParam("status") String status, @PathParam("userid") int userId) {
+
+        ArrayList<Game> games = null;
+        switch (status) {
+            case "pending":
+                games = Logic.getGames(Logic.PENDING_BY_ID, userId);
+                break;
+            case "open":
+                games = Logic.getGames(Logic.OPEN_BY_ID, userId);
+                break;
+            case "finished":
+                games = Logic.getGames(Logic.COMPLETED_BY_ID, userId);
+                break;
+        }
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    //Gets all games where the user is invited
+    @GET
+    @Path("/games/opponent/{userid}/")
+    @Produces("application/json")
+    public Response getGamesInvitedByID(@PathParam("userid") int userId) {
+
+        ArrayList<Game> games = Logic.getGames(Logic.PENDING_INVITED_BY_ID, userId);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+
+    //Gets all games hosted by the user
+    @GET
+    @Path("/games/host/{userid}/")
+    @Produces("application/json")
+    public Response getGamesHostedByID(@PathParam("userid") int userId) {
+
+        ArrayList<Game> games = Logic.getGames(Logic.PENDING_HOSTED_BY_ID, userId);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+    /*
+    Getting a list of all open games
+     */
+    @GET //"GET-request"
+    @Path("/games/open/")
+    @Produces("application/json")
+    public Response getOpenGames() {
+
+
+        ArrayList<Game> games = Logic.getGames(Logic.OPEN_GAMES, 0);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(games))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
+
+
+    /*
+    Getting all scores by user id
+    Used for showing all finished games and scores for the user
+     */
+    @GET //"GET-request"
+    @Path("/scores/{userid}")
+    @Produces("application/json")
+    public Response getScoresByUserID(@PathParam("userid") int userid) {
+
+        ArrayList<Score> score = Logic.getScoresByUserID(userid);
+
+        return Response
+                .status(201)
+                .entity(new Gson().toJson(score))
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
 }

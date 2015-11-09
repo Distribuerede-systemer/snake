@@ -1,8 +1,9 @@
 package database;
 
+import model.Config;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -13,11 +14,15 @@ public class DatabaseDriver {
     /**
      * Specifies the connection to the server - Url, User and password needs to be adjusted to the individual database.
      */
-    private static String sqlUrl = "jdbc:mysql://localhost:3306/dbcon";
-    private static String sqlUser = "dataguy";
-    private static String sqlPassword = "QjcUayHA3axeGLns";
+    private static String sqlUrl = "jdbc:mysql://"+Config.getHost()+":"+Config.getPort()+"/"+Config.getDbname();
+    private static String sqlUser = Config.getUsername();
+    private static String sqlPassword = Config.getPassword();
 
     private Connection connection = null;
+
+    //used for switch in updateGame
+    public static final int JOIN = 0;
+    public static final int FINISHED = 1;
 
     /**
      * Connects to the database with the specified Url, User and Password.
@@ -106,7 +111,7 @@ public class DatabaseDriver {
 
     public String getSqlRecord(String table) {
 
-        return "select * from " + table + " WHERE id = ?";
+        return "select * from " + table + " WHERE id = ? AND status <> 'deleted'";
     }
 
     /**
@@ -133,19 +138,24 @@ public class DatabaseDriver {
      * Querybuilder with seven parameters, which, when specified will update the value of the shown columns in the 'games' table
      * @return SqlStatement
      */
-    public String updateSqlGame(){
-        return "UPDATE Games SET name = ?, status = ?, winner = ?, host_controls = ?, " +
-                "opponent_controls = ? WHERE id = ?";
+    public String updateSqlGame(int type){
+        switch (type){
+            case JOIN:
+                return "UPDATE Games SET status = ?, opponent = ? WHERE id = ?";
+            case FINISHED:
+                return "UPDATE Games SET status = ?, winner = ?, opponent_controls = ? WHERE id = ?";
+        }
+        return null;
     }
 
     public String createSqlUser() {
-        return "Insert into users (first_name, last_name, email, user_name, password, status, type) " +
-                "values (?, ?, ?, ?, ?, ?, ?, )";
+        return "Insert into users (first_name, last_name, email, username, password, type) " +
+                "values (?, ?, ?, ?, ?, ?)";
     }
 
     public String createSqlGame() {
-        return "Insert into games (host, opponent, name, status, host_controls) " +
-                "values (?, ?, ?, ?, ?)";
+        return "Insert into games (host, opponent, status, name, host_controls, map_size) " +
+                "values (?, ?, ?, ?, ?, ?)";
     }
 
     public String createSqlScore() {
@@ -153,37 +163,49 @@ public class DatabaseDriver {
                 "values (?, ?, ?, ?)";
     }
 
-    public String deleteSqlUser() {
-        return "UPDATE Users SET status = ? WHERE id = ?";
+    public String deleteSql(String table) {
+        return "UPDATE " + table + " SET status = ? WHERE id = ?";
     }
 
-    public String deleteSqlGame() {
-        return "UPDATE Games SET status = ? WHERE id = ?";
+    public String getSQLAllGamesByUserID() {
+        return "select * from games where host = ? OR opponent = ?";
     }
 
-    public String getSqlAllGamesByUserID() {
-        return "select * from games where status <> 'deleted' (host = ? OR opponent = ?)";
+    public String getSQLGamesByStatusAndUserID(){
+        return "SELECT * FROM Games WHERE status = ? AND (host = ? OR opponent = ?)";
     }
 
-    public String getSqlPendingGamesByUserID() {
-        return "select * from games WHERE status = 'pending' and (host = ? OR opponent = ?)";
+    public String getSQLOpenGames() {
+        return "select * from games WHERE status = 'open'";
     }
 
-    public String getSqlCompletedGamesByUserID() {
-
-        return "select * from games where status = 'completed' and (host = ? OR opponent = ?)";
-    }
-
-    public String getSqlGameInvitesByUserID() {
+    public String getSQLGamesInvitedByUserID() {
         return "select * from games WHERE status = 'pending' and opponent = ?";
     }
 
+    public String getSQLGamesHostedByUserID(){
+        return "SELECT * FROM Games WHERE status = 'pending' AND host = ?";
+    }
+
     public String authenticatedSql() {
-        return "Select * from users where username = ?";
+        return "Select * from users where username = ? AND status <> 'deleted'";
     }
 
     public String getSqlHighScore() {
         return "select users.*, sum(scores.score) as TotalScore from users " +
                 "join scores where users.id = scores.user_id group by users.username order by TotalScore desc";
     }
+
+    public String getScoresByUserID() {
+        return " select * from scores where user_id = ?";
+    }
+    public String getHighScore() {
+        return "select games.id as game_id, games.created, games.opponent, games.name as game_name, scores.id as score_id, scores.user_id as user_id, max(scores.score) as highscore, users.first_name, users.last_name, users.username from scores, users, games where scores.user_id = users.id and scores.game_id = games.id group by user_id order by highscore desc";
+    }
+
+    //Used for returning a specific users finished games with scores
+    public String getSQLAllFinishedGamesByUserID() {
+        return "select games.id, games.name, users.username as opponent_name, users.first_name as opponent_first_name, users.last_name as opponent_last_name, users.id as opponent_id, scores.score, games.winner from scores, games, users where scores.user_id = ? and games.id = scores.game_id and scores.opponent_id = users.id";
+    }
+
 }
