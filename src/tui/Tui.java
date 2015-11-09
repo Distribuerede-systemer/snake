@@ -11,24 +11,48 @@ import model.User;
 public class Tui {
 
     private static Scanner input = new Scanner(System.in);
+    private static boolean adminIsAuthenticated = false;
 
-    public void login() {
+    public static void serverMenu(){
+        boolean serverRunning = true;
+        while (serverRunning) {
+
+            Tui.miscOut("\n***Welcome to the Snake server***\n");
+            Tui.miscOut("What do you want to do?");
+            Tui.miscOut("1) Login as admin");
+            Tui.miscOut("2) Stop server");
+
+            switch (input.nextInt()) {
+                case 1:
+                    login();
+                    break;
+                case 2:
+                    serverRunning = false;
+
+                    break;
+                default:
+                    Tui.miscOut("Unassigned key.");
+            }
+        }
+    }
+
+    public static void login() {
         miscOut("Please log in.");
 
-        int[] result = Logic.authenticateUser(enterUsername(), Security.hashing(enterPassword()));
-        //Sets index 0 to 0, so user cannot login as admin
-        if (result[0] == 1) {
-            result[1] = 0;
+        HashMap <String, Integer> hashMap = Logic.authenticateUser(enterUsername(), Security.hashing(enterPassword()));
+
+        if (hashMap.get("usertype") == 1) {
+            hashMap.put("code", 0);
         }
 
-        int code = result[1];
+        int code = hashMap.get("code");
         if (code == 0)
             miscOut("User does not exist.");
         else if (code == 1) {
             miscOut("Wrong password.");
         } else if (code == 2) {
             miscOut("Success.");
-            Logic.adminIsAuthenticated = true;
+            adminIsAuthenticated = true;
             userMenu();
         }
 
@@ -36,7 +60,7 @@ public class Tui {
 
     public static void userMenu() {
 
-        while (Logic.adminIsAuthenticated) {
+        while (adminIsAuthenticated) {
 
             int menu = userMenuScreen();
 
@@ -61,7 +85,7 @@ public class Tui {
                     break;
                 case 5:
                     miscOut("You Logged Out.");
-                    Logic.adminIsAuthenticated = false;
+                    adminIsAuthenticated = false;
                     break;
                 default:
                     miscOut("Unassigned key.");
