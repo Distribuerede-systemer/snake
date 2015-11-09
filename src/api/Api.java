@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import controller.Logic;
 import controller.Security;
 import model.Game;
@@ -28,18 +29,16 @@ public class Api {
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
     @Path("/login/")
     @Produces("application/json")
-    public Response login(String data) throws JSONException {
+    public Response login(String data) {
 
         try {
 
             User user = new Gson().fromJson(data, User.class);
             user.setPassword(Security.hashing(user.getPassword()));
 
-            System.out.println(user.getUsername() + user.getPassword());
             int[] result = Logic.authenticateUser(user.getUsername(), user.getPassword());
             //Sets index 0 to 0, so user cannot login as admin
 
-            System.out.println(result[0]);
             if (result[0] == 0) {
                 result[1] = 0;
             }
@@ -48,14 +47,14 @@ public class Api {
                 case 0:
                     return Response
                             .status(400)
-                            .entity("{\"message\":\"User doesn't exist\"}")
+                            .entity("{\"message\":\"Wrong username or password\"}")
                             .header("Access-Control-Allow-Headers", "*")
                             .build();
 
                 case 1:
                     return Response
                             .status(400)
-                            .entity("{\"message\":\"Wrong password\"}")
+                            .entity("{\"message\":\"Wrong username or password\"}")
                             .header("Access-Control-Allow-Headers", "*")
                             .build();
 
@@ -65,20 +64,20 @@ public class Api {
                             .entity("{\"message\":\"Login successful\", \"userid\":" + result[2] + "}")
                             .header("Access-Control-Allow-Headers", "*")
                             .build();
-
                 default:
                     return Response
-                            .status(400)
-                            .entity("{\"message\":\"Something went wrong\"}")
+                            .status(500)
+                            .entity("{\"message\":\"Unknown error. Please contact Henrik Thorn at: henrik@itkartellet.dk\"}")
                             .header("Access-Control-Allow-Headers", "*")
                             .build();
             }
 
-        } catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException | NullPointerException e) {
             e.printStackTrace();
             return Response
                     .status(400)
-                    .entity("{\"message\":\"Bad request\"}")
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
                     .build();
         }
 
@@ -98,6 +97,7 @@ public class Api {
                 .build();
     }
 
+    /*
     @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
     @Path("/users/{userid}")
     @Produces("application/json")
@@ -120,13 +120,14 @@ public class Api {
         }
 
     }
+*/
 
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
-    @Path("/user/")
+    @Path("/users/")
     @Produces("application/json")
-    public Response createUser(String data) throws IOException {
+    public Response createUser(String data) {
 
-        User user = null;
+        User user;
 
         try {
             user = new Gson().fromJson(data, User.class);
@@ -136,22 +137,21 @@ public class Api {
             boolean createdUser = Logic.createUser(user);
 
             if (createdUser) {
-                System.out.println("4");
+
                 return Response
                         .status(200)
                         .entity("{\"message\":\"User was created\"}")
-                        .header("Access-Control-Allow-Origin", "*")
-                        .header("Access-Control-Allow-Methods", "PUT, GET, POST")
-                        .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+                        .header("Access-Control-Allow-Headers", "*")
                         .build();
             } else {
-                return Response.status(400).entity("{\"message\":\"Failed. User was not created\"}").build();
+                return Response.status(400).entity("{\"message\":\"Username or email already exists\"}").build();
             }
-        } catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException | NullPointerException e) {
             e.printStackTrace();
             return Response
                     .status(400)
-                    .entity("{\"message\":\"Bad request\"}")
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
                     .build();
         }
     }
@@ -164,33 +164,20 @@ public class Api {
 
         User user = Logic.getUser(userId);
         //udprint/hent/identificer af data omkring spillere
-        if(user != null){
+        if (user != null) {
             return Response
                     .status(200)
                     .entity(new Gson().toJson(user))
                     .header("Access-Control-Allow-Origin", "*")
                     .build();
-        }
-        else{
+        } else {
             return Response
-                    .status(200)
+                    .status(400)
                     .entity("{\"message\":\"User was not found\"}")
                     .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
-
-
     }
-
-//    @GET //"GET-request"
-//    @Path("/games")
-//    @Produces("application/json")
-//    public String getGames() {
-//
-//        ArrayList<model.Game> games = Logic.getGames();
-//        return new Gson().toJson(games);
-//
-//    }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
     @Path("/games/")
@@ -204,21 +191,22 @@ public class Api {
                 return Response
                         .status(201)
                         .entity(new Gson().toJson(game))
-                        .header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Headers", "*")
                         .build();
             } else {
                 return Response
-                        .status(500)
-                        .entity("something went wrong")
+                        .status(400)
+                        .entity("{\"message\":\"something went wrong\"}")
+                        .header("Access-Control-Allow-Headers", "*")
                         .build();
             }
-        } catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException | NullPointerException e) {
             e.printStackTrace();
             return Response
                     .status(400)
-                    .entity("{\"message\":\"Bad request\"}")
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
                     .build();
-
         }
     }
 
@@ -243,17 +231,17 @@ public class Api {
                         .header("Access-Control-Allow-Headers", "*")
                         .build();
             }
-        } catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException | NullPointerException e) {
             e.printStackTrace();
             return Response
                     .status(400)
-                    .entity("{\"message\":\"Bad request\"}")
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
                     .build();
-
         }
     }
 
-    //TODO: PUT/POST det samme som join
+
     @PUT
     @Path("/games/start/")
     @Produces("application/json")
@@ -270,15 +258,16 @@ public class Api {
                         .build();
             } else {
                 return Response
-                        .status(500)
+                        .status(400)
                         .entity("something went wrong")
                         .build();
             }
-        } catch (JsonSyntaxException e) {
+        } catch (JsonSyntaxException | NullPointerException e) {
             e.printStackTrace();
             return Response
                     .status(400)
-                    .entity("{\"message\":\"Bad request\"}")
+                    .entity("{\"message\":\"Error in JSON\"}")
+                    .header("Access-Control-Allow-Headers", "*")
                     .build();
         }
 
@@ -350,7 +339,6 @@ public class Api {
     public Response getGamesByStatusAndUserID(@PathParam("status") String status, @PathParam("userid") int userId) {
 
         ArrayList<Game> games = null;
-        System.out.println("test");
         switch (status) {
             case "pending":
                 games = Logic.getGames(Logic.PENDING_BY_ID, userId);

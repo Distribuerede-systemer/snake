@@ -1,5 +1,6 @@
 package database;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import model.Game;
 import model.Gamer;
 import model.Score;
@@ -214,7 +215,8 @@ public class DatabaseWrapper {
             // Indlaeser brugere i arrayListen
             while (resultSet.next()) {
 
-                if (!resultSet.getString("status").equals("deleted")) {
+                if (!resultSet.getString("status").equals("deleted") &&
+                        resultSet.getType()!=0) {
                     user = new User();
 
                     user.setId(resultSet.getInt("id"));
@@ -389,7 +391,7 @@ public class DatabaseWrapper {
 
     public int updateGame(Game game, int type) {
         try {
-            PreparedStatement ps = null;
+            PreparedStatement ps;
             String status = getGame(game.getGameId()).getStatus();
 
             switch (type) {
@@ -438,12 +440,14 @@ public class DatabaseWrapper {
             createUser.setString(3, user.getEmail());
             createUser.setString(4, user.getUsername());
             createUser.setString(5, user.getPassword());
-            createUser.setString(6, "Active");
-            createUser.setInt(7, user.getType());
+            createUser.setInt(6, user.getType());
 
             createUser.executeUpdate();
-        } catch (SQLException sqlException)
-
+        } catch(MySQLIntegrityConstraintViolationException m){
+            m.printStackTrace();
+            return false;
+        }
+        catch (SQLException sqlException)
         {
             sqlException.printStackTrace();
             dbDriver.close();

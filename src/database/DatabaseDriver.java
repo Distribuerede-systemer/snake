@@ -149,8 +149,8 @@ public class DatabaseDriver {
     }
 
     public String createSqlUser() {
-        return "Insert into users (first_name, last_name, email, username, password, status, type) " +
-                "values (?, ?, ?, ?, ?, ?, ?)";
+        return "Insert into users (first_name, last_name, email, username, password, type) " +
+                "values (?, ?, ?, ?, ?, ?)";
     }
 
     public String createSqlGame() {
@@ -168,7 +168,7 @@ public class DatabaseDriver {
     }
 
     public String getSQLAllGamesByUserID() {
-        return "select * from games where host = ? OR opponent = ?)";
+        return "select * from games where host = ? OR opponent = ?";
     }
 
     public String getSQLGamesByStatusAndUserID(){
@@ -176,7 +176,7 @@ public class DatabaseDriver {
     }
 
     public String getSQLOpenGames() {
-        return "select * from games WHERE status = 'open')";
+        return "select * from games WHERE status = 'open'";
     }
 
     public String getSQLGamesInvitedByUserID() {

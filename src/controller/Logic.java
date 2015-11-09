@@ -34,18 +34,17 @@ public class Logic {
     public static boolean adminIsAuthenticated = false;
 
 
-    public static void serverController(){
-        System.out.println("test");
+    public static void serverController() {
         Scanner input = new Scanner(System.in);
         boolean serverRunning = true;
-        while(serverRunning){
+        while (serverRunning) {
 
             Tui.miscOut("\n***Welcome to the Snake server***\n");
             Tui.miscOut("What do you want to do?");
             Tui.miscOut("1) Login as admin");
             Tui.miscOut("2) Stop server");
 
-            switch (input.nextInt()){
+            switch (input.nextInt()) {
                 case 1:
                     tui.login();
                     break;
@@ -75,6 +74,7 @@ public class Logic {
      */
     public static boolean createUser(User user) {
         user.setPassword(Security.hashing(user.getPassword()));
+
         if (db.createUser(user))
             return true;
         else {
@@ -108,6 +108,7 @@ public class Logic {
      * Index 0: User type (0 = admin), (1 = user)
      * Index 1: Error/Succes code (0 = user doesnt exists), (1 = password is wrong), (2 = successful login)
      * Index 2: Contain the authenticated users id
+     *
      * @param username
      * @param password
      * @return int[] with user type, error/succes code, userid
@@ -120,10 +121,9 @@ public class Logic {
             // User does not exists.
             result[1] = 0;
         } else {
+            result[0] = user.getType();
             if (password.equals(user.getPassword())) {
                 // Return 2 if user exists and password is correct. Success.
-                System.out.println(user.getType());
-                result[0] = user.getType();
                 result[1] = 2;
                 result[2] = user.getId();
 
@@ -148,14 +148,15 @@ public class Logic {
 
     /**
      * Getting a speific list of games by type and userId
+     *
      * @param type
      * @param userId
      * @return ArrayList<Game>
      */
-    public static ArrayList<Game> getGames(int type, int userId){
+    public static ArrayList<Game> getGames(int type, int userId) {
         ArrayList<Game> games = null;
 
-        switch (type){
+        switch (type) {
             case GAMES_BY_ID:
                 //Used for showing a user's games
                 games = db.getGames(db.GAMES_BY_ID, userId);
@@ -201,20 +202,22 @@ public class Logic {
      */
     public static Game createGame(Game game) {
 
-        if (db.createGame(game)) {
-            if (game.getOpponent() != null) {
-                game.setStatus("pending");
-            } else {
-                game.setStatus("open");
+        if (game.getHost() != null) {
+            if (db.createGame(game)) {
+                if (game.getOpponent() != null) {
+                    game.setStatus("pending");
+                } else {
+                    game.setStatus("open");
+                }
+                return game;
             }
-            return game;
         }
         return null;
     }
 
     public static boolean joinGame(Game game) {
 
-        if (db.updateGame(game, DatabaseWrapper.JOIN_GAME)==1)
+        if (db.updateGame(game, DatabaseWrapper.JOIN_GAME) == 1)
             return true;
         else
             return false;
@@ -223,6 +226,7 @@ public class Logic {
 
     /**
      * Starting the game
+     *
      * @param requestGame
      * @return Object Game
      */
@@ -230,7 +234,14 @@ public class Logic {
 
         //gameid, opponentcontrolls
         Game game = db.getGame(requestGame.getGameId());
-        game.getOpponent().setControls(requestGame.getOpponent().getControls());
+
+        if(game.getOpponent() == null)
+        {
+            game.setOpponent(requestGame.getOpponent());
+        }
+        else{
+            game.getOpponent().setControls(requestGame.getOpponent().getControls());
+        }
 
         Map gamers = GameEngine.playGame(game);
 
@@ -243,11 +254,9 @@ public class Logic {
     //endgame() Called when game is over and pushes score data to the database for future use.
     public static Game endGame(Map gamers, Game game) {
 
-        if(((Gamer)gamers.get('h')).isWinner()){
+        if (((Gamer) gamers.get('h')).isWinner()) {
             game.setWinner(game.getHost());
-        }
-
-        else if(((Gamer)gamers.get('o')).isWinner()){
+        } else if (((Gamer) gamers.get('o')).isWinner()) {
             game.setWinner(game.getOpponent());
         }
 
@@ -260,6 +269,7 @@ public class Logic {
 
     /**
      * Delete game
+     *
      * @param gameId
      * @return rows affected
      */

@@ -3,6 +3,7 @@ package controller;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import model.Config;
 import sun.misc.BASE64Encoder;
 import sun.misc.BASE64Decoder;
 /**
@@ -22,8 +23,7 @@ public class Security {
     public static String hashing(String input) {
 
         MessageDigest digester = null;
-        //TODO: Replace with Config.
-        String salt = "123456";
+        String salt = Config.getHashingSalt();
         String inputhash = input+salt;
         try {
             digester = MessageDigest.getInstance("SHA-256");
