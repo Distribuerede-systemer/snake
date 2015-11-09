@@ -1,33 +1,19 @@
 package api;
 
-import java.lang.invoke.SwitchPoint;
-import java.lang.reflect.Array;
+import java.io.IOException;
 import java.util.ArrayList;
+
 import com.google.gson.Gson;
-import com.sun.jersey.api.container.httpserver.HttpServerFactory;
-import com.sun.net.httpserver.HttpServer;
+import com.google.gson.JsonSyntaxException;
 import controller.Logic;
 import controller.Security;
-import model.Config;
 import model.Game;
-import model.Gamer;
 import model.Score;
 import model.User;
 import org.codehaus.jettison.json.JSONException;
-//TODO: Can't parse with this import. Maybe because the parser and object needs to be from same lib
-//import org.codehaus.jettison.json.JSONObject;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import sun.rmi.runtime.Log;
-
-import java.io.FileReader;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Map;
 
 @Path("/api")
 public class Api {
@@ -42,15 +28,20 @@ public class Api {
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
     @Path("/login/")
     @Produces("application/json")
-    public Response login(String data) {
+    public Response login(String data) throws JSONException {
 
         try {
 
             User user = new Gson().fromJson(data, User.class);
+            //user.setPassword(Security.hashing(user.getPassword()));
 
-            int[] result = Logic.userLogin(user.getUsername(), user.getPassword());
+            int[] result = Logic.authenticateUser(user.getUsername(), user.getPassword());
+            //Sets index 0 to 0, so user cannot login as admin
+            if (result[0] == 0) {
+                result[1] = 0;
+            }
 
-            switch (result[0]) {
+            switch (result[1]) {
                 case 0:
                     return Response
                             .status(400)
@@ -68,7 +59,7 @@ public class Api {
                 case 2:
                     return Response
                             .status(200)
-                            .entity("{\"message\":\"Login successful\", \"userid\":" + result[1] + "}")
+                            .entity("{\"message\":\"Login successful\", \"userid\":" + result[2] + "}")
                             .header("Access-Control-Allow-Headers", "*")
                             .build();
 
@@ -80,9 +71,12 @@ public class Api {
                             .build();
             }
 
-        } catch (Exception e) {
+        } catch (JsonSyntaxException e) {
             e.printStackTrace();
-            return Response.status(400).entity("{\"message\":\"Bad request\"}").build();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Bad request\"}")
+                    .build();
         }
 
     }
@@ -99,17 +93,14 @@ public class Api {
                 .entity(new Gson().toJson(users))
                 .header("Access-Control-Allow-Origin", "*")
                 .build();
-
-        //return new Gson().toJson(users);
     }
 
-    @POST //DELETE-request fjernelse af data (bruger): Slet bruger
-    @Path("/users/delete/")
+    @DELETE //DELETE-request fjernelse af data (bruger): Slet bruger
+    @Path("/users/{userid}")
     @Produces("application/json")
-    public Response deleteUser(String userId) {
+    public Response deleteUser(@PathParam("userid") int userId) {
 
-        User user = new Gson().fromJson(userId, User.class);
-        int deleteUser = Logic.deleteUser(user.getId());
+        int deleteUser = Logic.deleteUser(userId);
 
         if (deleteUser == 1) {
             return Response
@@ -130,27 +121,40 @@ public class Api {
     @POST //POST-request: Ny data der skal til serveren; En ny bruger oprettes
     @Path("/user/")
     @Produces("application/json")
-    public Response createUser(String data) {
+    public Response createUser(String data) throws IOException {
 
-        User user = new Gson().fromJson(data, User.class);
+        User user = null;
 
-        boolean createdUser = Logic.createUser(user);
+        try {
+            user = new Gson().fromJson(data, User.class);
 
-        if (createdUser) {
+            user.setType(1);
+
+            boolean createdUser = Logic.createUser(user);
+
+            if (createdUser) {
+                System.out.println("4");
+                return Response
+                        .status(200)
+                        .entity("{\"message\":\"User was created\"}")
+                        .header("Access-Control-Allow-Origin", "*")
+                        .header("Access-Control-Allow-Methods", "PUT, GET, POST")
+                        .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+                        .build();
+            } else {
+                return Response.status(400).entity("{\"message\":\"Failed. User was not created\"}").build();
+            }
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
             return Response
-                    .status(200)
-                    .entity("{\"message\":\"User was created\"}")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "PUT, GET, POST")
-                    .header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+                    .status(400)
+                    .entity("{\"message\":\"Bad request\"}")
                     .build();
-        } else {
-            return Response.status(400).entity("{\"message\":\"Failed. User was not created\"}").build();
         }
     }
 
     @GET //"GET-request"
-    @Path("/user/{userId}")
+    @Path("/users/{userId}")
     @Produces("application/json")
     // JSON: {"userId": [userid]}
     public Response getUser(@PathParam("userId") int userId) {
@@ -181,43 +185,112 @@ public class Api {
     public Response createGame(String json) {
 
         try {
+            Game game = Logic.createGame(new Gson().fromJson(json, Game.class));
 
-            Game game = new Gson().fromJson(json, Game.class);
-            game.setHostControls(game.getHost().getControls());
-
-            Logic.createGame(game);
-
-            return Response
-                    .status(201)
-                    .entity("{\"message\":\"Game was created\"}")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .build();
-            //TODO: changed JSONObject so it imports from org.json.simple.JSONObject instead of the codehaus lib
-        } catch (Exception e) {
+            if (game != null) {
+                return Response
+                        .status(201)
+                        .entity(new Gson().toJson(game))
+                        .header("Access-Control-Allow-Origin", "*")
+                        .build();
+            } else {
+                return Response
+                        .status(500)
+                        .entity("something went wrong")
+                        .build();
+            }
+        } catch (JsonSyntaxException e) {
             e.printStackTrace();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Bad request\"}")
+                    .build();
+
         }
-
-        return Response.status(500).entity("something went wrong").build();
-
     }
 
-    @GET //GET-request: Afslutter spillet
-    @Path("/startgame/{gameid}")
+    @PUT
+    @Path("/games/join/")
     @Produces("application/json")
-    public String startGame(@PathParam("gameid") int gameId) {
+    public Response joinGame(String json) {
 
-        Map startGame = Logic.startGame(gameId);
-        return new Gson().toJson(startGame);
+        try {
+            Game game = new Gson().fromJson(json, Game.class);
+
+            if (Logic.joinGame(game)) {
+                return Response
+                        .status(201)
+                        .entity("{\"message\":\"Game was joined\"}")
+                        .header("Access-Control-Allow-Origin", "*")
+                        .build();
+            } else {
+                return Response
+                        .status(400)
+                        .entity("{\"message\":\"Game closed\"}")
+                        .header("Access-Control-Allow-Headers", "*")
+                        .build();
+            }
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Bad request\"}")
+                    .build();
+
+        }
+    }
+
+    //TODO: PUT/POST det samme som join
+    @PUT
+    @Path("/games/start/")
+    @Produces("application/json")
+    public Response startGame(String json) {
+
+        try {
+            Game game = Logic.startGame(new Gson().fromJson(json, Game.class));
+
+            if (game != null) {
+                return Response
+                        .status(201)
+                        .entity(new Gson().toJson(game))
+                        .header("Access-Control-Allow-Origin", "*")
+                        .build();
+            } else {
+                return Response
+                        .status(500)
+                        .entity("something went wrong")
+                        .build();
+            }
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Bad request\"}")
+                    .build();
+        }
 
     }
 
     @DELETE //DELETE-request fjernelse af data(spillet slettes)
-    @Path("/game/{gameid}")
+    @Path("/games/{gameid}")
     @Produces("appication/json")
-    public String deleteGame(@PathParam("gameid") int gameId) {
+    public Response deleteGame(@PathParam("gameid") int gameId) {
 
-        int deleteGame = Logic.deleteUser(gameId);
-        return new Gson().toJson(deleteGame);
+        int deleteGame = Logic.deleteGame(gameId);
+
+        if (deleteGame == 1) {
+            return Response
+                    .status(200)
+                    .entity("{\"message\":\"Game was deleted\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        } else {
+            return Response
+                    .status(400)
+                    .entity("{\"message\":\"Failed. Game was not deleted\"}")
+                    .header("Access-Control-Allow-Headers", "*")
+                    .build();
+        }
     }
 
     @GET //"GET-request"
@@ -244,9 +317,9 @@ public class Api {
     @GET //"GET-request"
     @Path("/games/{userid}/")
     @Produces("application/json")
-    public Response getGamesByUserID(@PathParam("userid") int userid) {
+    public Response getGamesByUserID(@PathParam("userid") int userId) {
 
-        ArrayList<Game> games = Logic.getGamesByID(userid);
+        ArrayList<Game> games = Logic.getGames(Logic.GAMES_BY_ID, userId);
 
         return Response
                 .status(201)
@@ -261,19 +334,19 @@ public class Api {
     @GET //"GET-request"
     @Path("/games/{status}/{userid}")
     @Produces("application/json")
-   public Response getGamesByStatusAndUserID(@PathParam("status") String status,@PathParam("userid") int userid) {
+    public Response getGamesByStatusAndUserID(@PathParam("status") String status, @PathParam("userid") int userId) {
 
-        ArrayList<Game> games = new ArrayList<>();
-
-        switch (status){
+        ArrayList<Game> games = null;
+        System.out.println("test");
+        switch (status) {
             case "pending":
-                games = Logic.getPendingGamesByID(userid);
+                games = Logic.getGames(Logic.PENDING_BY_ID, userId);
                 break;
             case "open":
-                games = Logic.getOpenGamesByID(userid);
+                games = Logic.getGames(Logic.OPEN_BY_ID, userId);
                 break;
             case "finished":
-                games = Logic.getCompletedGamesByID(userid);
+                games = Logic.getGames(Logic.COMPLETED_BY_ID, userId);
                 break;
         }
 
@@ -286,11 +359,11 @@ public class Api {
 
     //Gets all games where the user is invited
     @GET
-    @Path("/games/guest/{userid}/")
+    @Path("/games/opponent/{userid}/")
     @Produces("application/json")
-    public Response getGamesInvitedByID(@PathParam("userid") int userid){
+    public Response getGamesInvitedByID(@PathParam("userid") int userId) {
 
-        ArrayList<Game> games = Logic.getGamesInvitedByID(userid);
+        ArrayList<Game> games = Logic.getGames(Logic.PENDING_INVITED_BY_ID, userId);
 
         return Response
                 .status(201)
@@ -298,14 +371,15 @@ public class Api {
                 .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
+
 
     //Gets all games hosted by the user
     @GET
     @Path("/games/host/{userid}/")
     @Produces("application/json")
-    public Response getGamesHostedByID(@PathParam("userid") int userid){
+    public Response getGamesHostedByID(@PathParam("userid") int userId) {
 
-        ArrayList<Game> games = Logic.getGamesHostedByID(userid);
+        ArrayList<Game> games = Logic.getGames(Logic.PENDING_HOSTED_BY_ID, userId);
 
         return Response
                 .status(201)
@@ -313,7 +387,6 @@ public class Api {
                 .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
-
 
     /*
     Getting a list of all open games
@@ -323,7 +396,8 @@ public class Api {
     @Produces("application/json")
     public Response getOpenGames() {
 
-        ArrayList<Game> games = Logic.getOpenGames();
+
+        ArrayList<Game> games = Logic.getGames(Logic.OPEN_GAMES, 0);
 
         return Response
                 .status(201)
@@ -350,22 +424,4 @@ public class Api {
                 .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
-
-    public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServerFactory.create("http://localhost:9998/");
-
-        Config.init();
-        server.start();
-
-        System.out.println("Server running");
-        System.out.println("Visit: http://localhost:9998/api");
-        System.out.println("Hit return to stop...");
-        System.in.read();
-        System.out.println("Stopping server");
-        server.stop(0);
-        System.out.println("Server stopped");
-
-        System.out.println();
-    }
-
 }

@@ -4,7 +4,6 @@ import model.Config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -20,6 +19,10 @@ public class DatabaseDriver {
     private static String sqlPassword = Config.getPassword();
 
     private Connection connection = null;
+
+    //used for switch in updateGame
+    public static final int JOIN = 0;
+    public static final int FINISHED = 1;
 
     /**
      * Connects to the database with the specified Url, User and Password.
@@ -135,9 +138,14 @@ public class DatabaseDriver {
      * Querybuilder with seven parameters, which, when specified will update the value of the shown columns in the 'games' table
      * @return SqlStatement
      */
-    public String updateSqlGame(){
-        return "UPDATE Games SET name = ?, status = ?, winner = ?, host_controls = ?, " +
-                "opponent_controls = ? WHERE id = ?";
+    public String updateSqlGame(int type){
+        switch (type){
+            case JOIN:
+                return "UPDATE Games SET status = ?, opponent = ? WHERE id = ?";
+            case FINISHED:
+                return "UPDATE Games SET status = ?, winner = ?, opponent_controls = ? WHERE id = ?";
+        }
+        return null;
     }
 
     public String createSqlUser() {
@@ -155,12 +163,8 @@ public class DatabaseDriver {
                 "values (?, ?, ?, ?)";
     }
 
-    public String deleteSqlUser() {
-        return "UPDATE Users SET status = ? WHERE id = ?";
-    }
-
-    public String deleteSqlGame() {
-        return "UPDATE Games SET status = ? WHERE id = ?";
+    public String deleteSql(String table) {
+        return "UPDATE " + table + " SET status = ? WHERE id = ?";
     }
 
     public String getSQLAllGamesByUserID() {

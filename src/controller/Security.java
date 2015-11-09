@@ -2,6 +2,7 @@ package controller;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import sun.misc.BASE64Encoder;
 import sun.misc.BASE64Decoder;
 /**
@@ -18,7 +19,7 @@ public class Security {
      * @param input
      * @return String
      */
-    public String hashing(String input) {
+    public static String hashing(String input) {
 
         MessageDigest digester = null;
         //TODO: Replace with Config.
@@ -88,26 +89,28 @@ public class Security {
      * @param key
      * @return
      */
-        public String decrypt(String message, String key){
-            try {
-                if (message==null || key==null ) return null;
-                BASE64Decoder decoder = new BASE64Decoder();
-                char[] keys=key.toCharArray();
-                message = new String(decoder.decodeBuffer(message));
-                char[] mesg=message.toCharArray();
+    public String decrypt(String message, String key){
+        try {
+            if (message==null || key==null ) return null;
+            BASE64Decoder decoder = new BASE64Decoder();
+            char[] keys=key.toCharArray();
+            message = new String(decoder.decodeBuffer(message));
+            char[] mesg=message.toCharArray();
 
-                int ml=mesg.length;
-                int kl=keys.length;
-                char[] newmsg=new char[ml];
+            int ml=mesg.length;
+            int kl=keys.length;
+            char[] newmsg=new char[ml];
 
-                for (int i=0; i<ml; i++){
-                    newmsg[i]=(char)(mesg[i]^keys[i%kl]);
-                }
-                mesg=null; keys=null;
-                return new String(newmsg);
+            for (int i=0; i<ml; i++){
+                newmsg[i]=(char)(mesg[i]^keys[i%kl]);
             }
-            catch ( Exception e ) {
-                return null;
-            }
-        }}
+            mesg=null; keys=null;
+            return new String(newmsg);
+        }
+        catch ( Exception e ) {
+            return null;
+        }
+    }
+
+}
 
