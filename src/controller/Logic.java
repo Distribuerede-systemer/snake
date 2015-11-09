@@ -1,14 +1,17 @@
 package controller;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
+import com.sun.xml.bind.v2.TODO;
 import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
 import model.Score;
 import model.User;
+import tui.Tui;
 
 
 /**
@@ -18,8 +21,33 @@ import model.User;
  */
 public class Logic {
 
-
     static DatabaseWrapper db = new DatabaseWrapper();
+    static Tui tui = new Tui();
+    public static boolean adminIsAuthenticated = false;
+
+
+    public static void serverController() {
+        Scanner input = new Scanner(System.in);
+        boolean serverRunning = true;
+        while (serverRunning) {
+
+            Tui.miscOut("\n***Welcome to the Snake server***\n");
+            Tui.miscOut("What do you want to do?");
+            Tui.miscOut("1) Login as admin");
+            Tui.miscOut("2) Stop server");
+
+            switch (input.nextInt()) {
+                case 1:
+                    tui.login();
+                    break;
+                case 2:
+                    serverRunning = false;
+                    break;
+                default:
+                    Tui.miscOut("Unassigned key.");
+            }
+        }
+    }
 
     /**
      * Get all users
@@ -27,8 +55,6 @@ public class Logic {
      * @return ArrayList of users
      */
     public static ArrayList<User> getUsers() {
-
-        // Define ArrayList to be used to add users and return them.
         return db.getUsers();
     }
 
@@ -41,11 +67,7 @@ public class Logic {
     public static boolean createUser(User user) {
         user.setPassword(Security.hashing(user.getPassword()));
 
-        if (db.createUser(user))
-            return true;
-        else {
-            return false;
-        }
+        return db.createUser(user);
     }
 
     /**
@@ -71,34 +93,34 @@ public class Logic {
     /**
      * Authenticates user
      * The method use 2 parameters: username and password which it authenticates as the correct credentials of an existing user.
-     * Key 1: User type (0 = admin), (1 = user)
-     * Key 2: Error/Succes code (0 = user doesnt exists), (1 = password is wrong), (2 = successful login)
-     * Key 3: Contain the authenticated users id
+     * Index 0: User type (0 = admin), (1 = user)
+     * Index 1: Error/Succes code (0 = user doesnt exists), (1 = password is wrong), (2 = successful login)
+     * Index 2: Contain the authenticated users id
      *
      * @param username
      * @param password
-     * @return hashMap with user type, error/succes code, userid
+     * @return int[] with user type, error/succes code, userid
      */
-    public static HashMap authenticateUser(String username, String password) {
+    public static int[] authenticateUser(String username, String password) {
         User user;
-        HashMap <String, Integer> hashMap = new HashMap();
+        int[] result = new int[3];
         user = db.getUserByUsername(username);
         if (user == null) {
             // User does not exists.
-            hashMap.put("code", 0);
+            result[1] = 0;
         } else {
-            hashMap.put("usertype", user.getType());
+            result[0] = user.getType();
             if (password.equals(user.getPassword())) {
                 // Return 2 if user exists and password is correct. Success.
-                hashMap.put("code", 2);
-                hashMap.put("userid", user.getId());
+                result[1] = 2;
+                result[2] = user.getId();
 
             } else {
                 //Return 1 if user exists but password is wrong.
-                hashMap.put("code", 1);
+                result[1] = 1;
             }
         }
-        return hashMap;
+        return result;
     }
 
 
@@ -183,10 +205,7 @@ public class Logic {
 
     public static boolean joinGame(Game game) {
 
-        if (db.updateGame(game, DatabaseWrapper.JOIN_GAME) == 1)
-            return true;
-        else
-            return false;
+        return db.updateGame(game, DatabaseWrapper.JOIN_GAME) == 1;
     }
 
 
