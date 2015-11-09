@@ -4,6 +4,7 @@ import java.util.*;
 
 import controller.Logic;
 import controller.Security;
+import database.DatabaseWrapper;
 import model.Game;
 import model.User;
 
@@ -42,7 +43,7 @@ public class Tui {
             switch (menu) {
                 case 1:
                     miscOut("Game List: ");
-                    ArrayList<Game> gameList = Logic.getGames(Logic.ALL_GAMES, 0);
+                    ArrayList<Game> gameList = Logic.getGames(DatabaseWrapper.ALL_GAMES, 0);
                     listGames(gameList);
                     break;
                 case 2:

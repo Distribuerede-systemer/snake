@@ -20,14 +20,6 @@ import tui.Tui;
  * @author Henrik Thorn
  */
 public class Logic {
-    public static final int GAMES_BY_ID = 0;
-    public static final int PENDING_BY_ID = 1;
-    public static final int PENDING_INVITED_BY_ID = 2;
-    public static final int PENDING_HOSTED_BY_ID = 3;
-    public static final int COMPLETED_BY_ID = 4;
-    public static final int OPEN_BY_ID = 5;
-    public static final int OPEN_GAMES = 6;
-    public static final int ALL_GAMES = 7;
 
     static DatabaseWrapper db = new DatabaseWrapper();
     static Tui tui = new Tui();
@@ -75,11 +67,7 @@ public class Logic {
     public static boolean createUser(User user) {
         user.setPassword(Security.hashing(user.getPassword()));
 
-        if (db.createUser(user))
-            return true;
-        else {
-            return false;
-        }
+        return db.createUser(user);
     }
 
     /**
@@ -157,39 +145,39 @@ public class Logic {
         ArrayList<Game> games = null;
 
         switch (type) {
-            case GAMES_BY_ID:
+            case DatabaseWrapper.GAMES_BY_ID:
                 //Used for showing a user's games
-                games = db.getGames(db.GAMES_BY_ID, userId);
+                games = db.getGames(DatabaseWrapper.GAMES_BY_ID, userId);
                 break;
-            case PENDING_BY_ID:
+            case DatabaseWrapper.PENDING_BY_ID:
                 //Used for showing all pending games the user has as host or opponent
-                games = db.getGames(db.PENDING_BY_ID, userId);
+                games = db.getGames(DatabaseWrapper.PENDING_BY_ID, userId);
                 break;
-            case PENDING_INVITED_BY_ID:
+            case DatabaseWrapper.PENDING_INVITED_BY_ID:
                 //Used for showing all pending games the user has been invited to play
-                games = db.getGames(db.PENDING_INVITED_BY_ID, userId);
+                games = db.getGames(DatabaseWrapper.PENDING_INVITED_BY_ID, userId);
                 break;
-            case PENDING_HOSTED_BY_ID:
+            case DatabaseWrapper.PENDING_HOSTED_BY_ID:
                 //Used for showing the open games created by the user
-                games = db.getGames(db.PENDING_HOSTED_BY_ID, userId);
+                games = db.getGames(DatabaseWrapper.PENDING_HOSTED_BY_ID, userId);
                 break;
-            case OPEN_BY_ID:
+            case DatabaseWrapper.OPEN_BY_ID:
                 //Used for showing the open games created by the user
-                games = db.getGames(db.OPEN_BY_ID, userId);
+                games = db.getGames(DatabaseWrapper.OPEN_BY_ID, userId);
                 break;
-            case COMPLETED_BY_ID:
+            case DatabaseWrapper.COMPLETED_BY_ID:
                 //Shows all completed games for the user
-                games = db.getGames(db.COMPLETED_BY_ID, userId);
+                games = db.getGames(DatabaseWrapper.COMPLETED_BY_ID, userId);
                 break;
-            case OPEN_GAMES:
+            case DatabaseWrapper.OPEN_GAMES:
                 //Used for showing all open games, when a user wants to join a game
                 //Is getting set to 0 in API class because this method doesn't return games by user ID
-                games = db.getGames(db.OPEN_GAMES, userId);
+                games = db.getGames(DatabaseWrapper.OPEN_GAMES, userId);
                 break;
-            case ALL_GAMES:
+            case DatabaseWrapper.ALL_GAMES:
                 //Used for showing all open games, when a user wants to join a game
                 //Is getting set to 0 in TUI class because this method doesn't return games by user ID
-                games = db.getGames(db.ALL_GAMES, userId);
+                games = db.getGames(DatabaseWrapper.ALL_GAMES, userId);
                 break;
         }
         return games;
@@ -217,10 +205,7 @@ public class Logic {
 
     public static boolean joinGame(Game game) {
 
-        if (db.updateGame(game, DatabaseWrapper.JOIN_GAME) == 1)
-            return true;
-        else
-            return false;
+        return db.updateGame(game, DatabaseWrapper.JOIN_GAME) == 1;
     }
 
 
