@@ -111,7 +111,7 @@ public class DatabaseDriver {
 
     public String getSqlRecord(String table) {
 
-        return "select * from " + table + " WHERE id = ?";
+        return "select * from " + table + " WHERE id = ? AND status <> 'deleted'";
     }
 
     /**

@@ -122,6 +122,7 @@ public class Logic {
         } else {
             if (password.equals(user.getPassword())) {
                 // Return 2 if user exists and password is correct. Success.
+                System.out.println(user.getType());
                 result[0] = user.getType();
                 result[1] = 2;
                 result[2] = user.getId();

@@ -33,10 +33,13 @@ public class Api {
         try {
 
             User user = new Gson().fromJson(data, User.class);
-            //user.setPassword(Security.hashing(user.getPassword()));
+            user.setPassword(Security.hashing(user.getPassword()));
 
+            System.out.println(user.getUsername() + user.getPassword());
             int[] result = Logic.authenticateUser(user.getUsername(), user.getPassword());
             //Sets index 0 to 0, so user cannot login as admin
+
+            System.out.println(result[0]);
             if (result[0] == 0) {
                 result[1] = 0;
             }
@@ -161,12 +164,22 @@ public class Api {
 
         User user = Logic.getUser(userId);
         //udprint/hent/identificer af data omkring spillere
+        if(user != null){
+            return Response
+                    .status(200)
+                    .entity(new Gson().toJson(user))
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
+        }
+        else{
+            return Response
+                    .status(200)
+                    .entity("{\"message\":\"User was not found\"}")
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
+        }
 
-        return Response
-                .status(200)
-                .entity(new Gson().toJson(user))
-                .header("Access-Control-Allow-Origin", "*")
-                .build();
+
     }
 
 //    @GET //"GET-request"
@@ -180,7 +193,7 @@ public class Api {
 //    }
 
     @POST //POST-request: Nyt data; nyt spil oprettes
-    @Path("/game/")
+    @Path("/games/")
     @Produces("application/json")
     public Response createGame(String json) {
 
