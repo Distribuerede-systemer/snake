@@ -52,7 +52,7 @@ public class Config {
             setEncryptionkey((String) jsonObject.get("encryptionkey"));
             setHashingSalt((String) jsonObject.get("hashingSalt"));
 
-            setServerPort((int)(long) jsonObject.get("serverport"));
+            setServerPort(Integer.parseInt(jsonObject.get("serverport").toString()));
 
         } catch (IOException e) {
             e.printStackTrace();
