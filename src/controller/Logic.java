@@ -21,9 +21,9 @@ import tui.Tui;
  */
 public class Logic {
 
+
     static DatabaseWrapper db = new DatabaseWrapper();
     static Tui tui = new Tui();
-    public static boolean adminIsAuthenticated = false;
 
 
     public static void serverController() {
@@ -57,7 +57,7 @@ public class Logic {
     public static ArrayList<User> getUsers() {
 
         // Define ArrayList to be used to add users and return them.
-         return db.getUsers();
+        return db.getUsers();
     }
 
     /**
@@ -69,7 +69,11 @@ public class Logic {
     public static boolean createUser(User user) {
         user.setPassword(Security.hashing(user.getPassword()));
 
-        return db.createUser(user);
+        if (db.createUser(user))
+            return true;
+        else {
+            return false;
+        }
     }
 
     /**
@@ -207,7 +211,10 @@ public class Logic {
 
     public static boolean joinGame(Game game) {
 
-        return db.updateGame(game, DatabaseWrapper.JOIN_GAME) == 1;
+        if (db.updateGame(game, DatabaseWrapper.JOIN_GAME) == 1)
+            return true;
+        else
+            return false;
     }
 
 
