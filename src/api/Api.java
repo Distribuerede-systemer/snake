@@ -1,27 +1,17 @@
 package api;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 import com.sun.net.httpserver.HttpServer;
 import controller.Logic;
-import model.Config;
-import model.Game;
-import model.Gamer;
-import model.Score;
-import model.User;
-import org.codehaus.jettison.json.JSONException;
-//TODO: Can't parse with this import. Maybe because the parser and object needs to be from same lib
-//import org.codehaus.jettison.json.JSONObject;
+import model.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import java.io.FileReader;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Path("/api")
