@@ -20,7 +20,7 @@ public class Main {
         server.start();
         System.out.println("Server running");
         System.out.println("Visit: http://localhost:" + Config.getServerPort() + "/api");
-        Logic.serverController();
+        Tui.serverMenu();
         System.out.println("Hit return to confirm to stop...");
         System.in.read();
         System.out.println("Stopping server");

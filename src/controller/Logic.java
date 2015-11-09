@@ -1,17 +1,14 @@
 package controller;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
-import com.sun.xml.bind.v2.TODO;
 import database.DatabaseWrapper;
 import model.Game;
 import model.Gamer;
 import model.Score;
 import model.User;
-import tui.Tui;
 
 
 /**
@@ -20,42 +17,9 @@ import tui.Tui;
  * @author Henrik Thorn
  */
 public class Logic {
-    public static final int GAMES_BY_ID = 0;
-    public static final int PENDING_BY_ID = 1;
-    public static final int PENDING_INVITED_BY_ID = 2;
-    public static final int PENDING_HOSTED_BY_ID = 3;
-    public static final int COMPLETED_BY_ID = 4;
-    public static final int OPEN_BY_ID = 5;
-    public static final int OPEN_GAMES = 6;
-    public static final int ALL_GAMES = 7;
 
     static DatabaseWrapper db = new DatabaseWrapper();
-    static Tui tui = new Tui();
-    public static boolean adminIsAuthenticated = false;
 
-
-    public static void serverController() {
-        Scanner input = new Scanner(System.in);
-        boolean serverRunning = true;
-        while (serverRunning) {
-
-            Tui.miscOut("\n***Welcome to the Snake server***\n");
-            Tui.miscOut("What do you want to do?");
-            Tui.miscOut("1) Login as admin");
-            Tui.miscOut("2) Stop server");
-
-            switch (input.nextInt()) {
-                case 1:
-                    tui.login();
-                    break;
-                case 2:
-                    serverRunning = false;
-                    break;
-                default:
-                    Tui.miscOut("Unassigned key.");
-            }
-        }
-    }
 
     /**
      * Get all users
@@ -105,34 +69,34 @@ public class Logic {
     /**
      * Authenticates user
      * The method use 2 parameters: username and password which it authenticates as the correct credentials of an existing user.
-     * Index 0: User type (0 = admin), (1 = user)
-     * Index 1: Error/Succes code (0 = user doesnt exists), (1 = password is wrong), (2 = successful login)
-     * Index 2: Contain the authenticated users id
+     * Key 1: User type (0 = admin), (1 = user)
+     * Key 2: Error/Succes code (0 = user doesnt exists), (1 = password is wrong), (2 = successful login)
+     * Key 3: Contain the authenticated users id
      *
      * @param username
      * @param password
-     * @return int[] with user type, error/succes code, userid
+     * @return hashMap with user type, error/succes code, userid
      */
-    public static int[] authenticateUser(String username, String password) {
+    public static HashMap authenticateUser(String username, String password) {
         User user;
-        int[] result = new int[3];
+        HashMap <String, Integer> hashMap = new HashMap();
         user = db.getUserByUsername(username);
         if (user == null) {
             // User does not exists.
-            result[1] = 0;
+            hashMap.put("code", 0);
         } else {
-            result[0] = user.getType();
+            hashMap.put("usertype", user.getType());
             if (password.equals(user.getPassword())) {
                 // Return 2 if user exists and password is correct. Success.
-                result[1] = 2;
-                result[2] = user.getId();
+                hashMap.put("code", 2);
+                hashMap.put("userid", user.getId());
 
             } else {
                 //Return 1 if user exists but password is wrong.
-                result[1] = 1;
+                hashMap.put("code", 1);
             }
         }
-        return result;
+        return hashMap;
     }
 
 
@@ -157,36 +121,36 @@ public class Logic {
         ArrayList<Game> games = null;
 
         switch (type) {
-            case GAMES_BY_ID:
+            case DatabaseWrapper.GAMES_BY_ID:
                 //Used for showing a user's games
                 games = db.getGames(db.GAMES_BY_ID, userId);
                 break;
-            case PENDING_BY_ID:
+            case DatabaseWrapper.PENDING_BY_ID:
                 //Used for showing all pending games the user has as host or opponent
                 games = db.getGames(db.PENDING_BY_ID, userId);
                 break;
-            case PENDING_INVITED_BY_ID:
+            case DatabaseWrapper.PENDING_INVITED_BY_ID:
                 //Used for showing all pending games the user has been invited to play
                 games = db.getGames(db.PENDING_INVITED_BY_ID, userId);
                 break;
-            case PENDING_HOSTED_BY_ID:
+            case DatabaseWrapper.PENDING_HOSTED_BY_ID:
                 //Used for showing the open games created by the user
                 games = db.getGames(db.PENDING_HOSTED_BY_ID, userId);
                 break;
-            case OPEN_BY_ID:
+            case DatabaseWrapper.OPEN_BY_ID:
                 //Used for showing the open games created by the user
                 games = db.getGames(db.OPEN_BY_ID, userId);
                 break;
-            case COMPLETED_BY_ID:
+            case DatabaseWrapper.COMPLETED_BY_ID:
                 //Shows all completed games for the user
                 games = db.getGames(db.COMPLETED_BY_ID, userId);
                 break;
-            case OPEN_GAMES:
+            case DatabaseWrapper.OPEN_GAMES:
                 //Used for showing all open games, when a user wants to join a game
                 //Is getting set to 0 in API class because this method doesn't return games by user ID
                 games = db.getGames(db.OPEN_GAMES, userId);
                 break;
-            case ALL_GAMES:
+            case DatabaseWrapper.ALL_GAMES:
                 //Used for showing all open games, when a user wants to join a game
                 //Is getting set to 0 in TUI class because this method doesn't return games by user ID
                 games = db.getGames(db.ALL_GAMES, userId);
