@@ -18,6 +18,7 @@ public class Config {
     private static String dbname;
     private static String hashingSalt;
     private static String encryptionkey;
+    private static int serverPort;
 
     // Create init-method to read from the config.json.dist file
     // and parse it to the variables in the class.
@@ -50,6 +51,8 @@ public class Config {
             setPassword((String) jsonObject.get("password"));
             setEncryptionkey((String) jsonObject.get("encryptionkey"));
             setHashingSalt((String) jsonObject.get("hashingSalt"));
+
+            setServerPort(Integer.parseInt(jsonObject.get("serverport").toString()));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,5 +110,13 @@ public class Config {
 
     public static void setHashingSalt(String hashingalt) {
         Config.hashingSalt = hashingSalt;
+    }
+
+    public static void setServerPort(int serverPort) {
+        Config.serverPort = serverPort;
+    }
+
+    public static int getServerPort() {
+        return serverPort;
     }
 }

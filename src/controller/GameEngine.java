@@ -2,6 +2,8 @@ package controller;
 import javafx.util.Pair;
 import java.util.HashMap;
 import java.util.Map;
+
+import model.Game;
 import model.Gamer;
 
 /**
@@ -11,7 +13,9 @@ import model.Gamer;
 public class GameEngine {
 
 
-    public static Map playGame(int mapSize, Gamer host, Gamer opponent){
+    public static Map playGame(Game game){
+        Gamer host = game.getHost();
+        Gamer opponent = game.getOpponent();
         Map gamers = new HashMap();
         String hostControls = host.getControls();
         String opponentControls = opponent.getControls();
@@ -37,7 +41,7 @@ public class GameEngine {
         int opponentKills = 0;
 
         // Playing field options:
-        int boundary = mapSize;
+        int boundary = game.getMapSize();
 
         // Total amount of moves:
         int movesCount = hostControls.length() < opponentControls.length() ? opponentControls.length() : hostControls.length();

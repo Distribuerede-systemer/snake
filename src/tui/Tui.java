@@ -1,51 +1,73 @@
 package tui;
+
 import java.util.*;
 
 import controller.Logic;
+import controller.Security;
+import database.DatabaseWrapper;
 import model.Game;
 import model.User;
 
 public class Tui {
 
-
-    //TODO: Make this class use static methods - DONE
     private static Scanner input = new Scanner(System.in);
-    private static boolean isAuthenticated = false;
+    private static boolean adminIsAuthenticated = false;
 
+    public static void serverMenu(){
+        boolean serverRunning = true;
+        while (serverRunning) {
 
-    public Tui(){
+            Tui.miscOut("\n***Welcome to the Snake server***\n");
+            Tui.miscOut("What do you want to do?");
+            Tui.miscOut("1) Login as admin");
+            Tui.miscOut("2) Stop server");
+
+            switch (input.nextInt()) {
+                case 1:
+                    login();
+                    break;
+                case 2:
+                    serverRunning = false;
+
+                    break;
+                default:
+                    Tui.miscOut("Unassigned key.");
+            }
+        }
     }
 
-    public void login(){
+    public static void login() {
         miscOut("Please log in.");
 
-       int answer = Logic.userLogin(enterUsername(),enterPassword());
-        if(answer == 0)
-            miscOut("User does not exist.");
-        else if(answer == 1) {
-            miscOut("Success.");
-            isAuthenticated = true;
+        HashMap <String, Integer> hashMap = Logic.authenticateUser(enterUsername(), Security.hashing(enterPassword()));
+
+        if (hashMap.get("usertype") == 1) {
+            hashMap.put("code", 0);
         }
-        else if(answer == 2)
+
+        int code = hashMap.get("code");
+        if (code == 0)
+            miscOut("User does not exist.");
+        else if (code == 1) {
             miscOut("Wrong password.");
+        } else if (code == 2) {
+            miscOut("Success.");
+            adminIsAuthenticated = true;
+            userMenu();
+        }
 
     }
 
-    public static boolean isUserAuthenticated() {
-        return isAuthenticated;
-    }
+    public static void userMenu() {
 
-    public static void userMenu(){
-
-        while(isAuthenticated) {
+        while (adminIsAuthenticated) {
 
             int menu = userMenuScreen();
 
             switch (menu) {
-
                 case 1:
                     miscOut("Game List: ");
-                    ArrayList<Game> gameList = Logic.getGames();
+                    ArrayList<Game> gameList = Logic.getGames(DatabaseWrapper.ALL_GAMES, 0);
                     listGames(gameList);
                     break;
                 case 2:
@@ -55,15 +77,15 @@ public class Tui {
                     break;
                 case 3:
                     miscOut("Create User: ");
-                    createUser(); // TODO: param efter db-wrap - DONE
+                    Logic.createUser(createUser());
                     break;
                 case 4:
                     miscOut("Delete User: ");
-                    Logic.deleteUser(Integer.parseInt(deleteUserScreen()));
+                    Logic.deleteUser(deleteUserScreen());
                     break;
                 case 5:
                     miscOut("You Logged Out.");
-                    isAuthenticated = false;
+                    adminIsAuthenticated = false;
                     break;
                 default:
                     miscOut("Unassigned key.");
@@ -72,8 +94,10 @@ public class Tui {
             }
         }
     }
-    public static int userMenuScreen(){
 
+    public static int userMenuScreen() {
+
+        System.out.println("Please make a choice");
         System.out.println("\n1: List all games");
         System.out.println("2: List all users");
         System.out.println("3: Create user");
@@ -82,30 +106,44 @@ public class Tui {
 
         return input.nextInt();
     }
-    public static void listUsers(ArrayList<User> userList){
 
-        for(User usr : userList){
-            System.out.println("User: " + usr.getUserName());
+    public static void listUsers(ArrayList<User> userList) {
+
+        for (User user : userList) {
+            System.out.println("Id: " + user.getId() + "\tUser: " + user.getUsername() + "\tStatus: " + user.getStatus());
         }
     }
 
-    public static void listGames(ArrayList<Game> gameList){
+    public static void listGames(ArrayList<Game> gameList) {
 
-        for(Game gm : gameList){
-            System.out.println("Game: " + gm.getGameId() + " Host: " + gm.getHost() + " Opponent: " + gm.getOpponent() + " Winner: " /*+gm.getResult()*/);
+        for (Game game : gameList) {
+            System.out.println("GameId: " + game.getGameId() + "\tHostId: " + game.getHost().getId() + "\tOpponentId: " + game.getOpponent().getId() + "\tWinner: " + game.getWinner().getId());
         }
     }
 
-    public static String deleteUserScreen(){
-       // listUsers();
+    public static User createUser() {
 
-        System.out.print("Type username you wish to delete: ");
-        String username = input.next();
+        //TODO: This should work! - DONE
+        User usr = new User();
+        usr.setFirstName(enterFirstName());
+        usr.setLastName(enterLastName());
+        usr.setEmail(enterEmail());
+        usr.setUsername(enterUsername());
+        usr.setPassword(enterPassword());
+        usr.setType(enterUserType());
 
-        return username;
+        return usr;
     }
 
-    public static String enterUsername(){
+
+    public static int deleteUserScreen() {
+        listUsers(Logic.getUsers());
+        System.out.print("Type id on the user you wish to delete: ");
+
+        return input.nextInt();
+    }
+
+    public static String enterUsername() {
 
         System.out.print("Please enter username: "); // Brugeren bliver spurgt om username
         String username = input.next();
@@ -113,7 +151,7 @@ public class Tui {
         return username;
     }
 
-    public static String enterPassword(){
+    public static String enterPassword() {
 
         System.out.print("Please enter password: "); // Brugeren bliver spurgt om password
         String password = input.next();
@@ -121,55 +159,46 @@ public class Tui {
         return password;
     }
 
-    public static String enterFirstName(){
+    public static String enterFirstName() {
         System.out.print("Please enter first name: "); // Brugeren bliver spurgt om fornavn
         String firstName = input.next();
 
         return firstName;
     }
 
-    public static String enterLastName(){
+    public static String enterLastName() {
         System.out.print("Please enter last name: "); // Brugeren bliver spurgt om efternavn
         String lastName = input.next();
 
         return lastName;
     }
 
-    public static String enterEmail(){
+    public static String enterEmail() {
         System.out.print("Please enter email: "); // Brugeren bliver spurgt om email
         String email = input.next();
 
         return email;
     }
 
-    public static String enterUserType(){
-        System.out.print("Please enter user type; admin or user.");
-        String userType = input.next();
+    public static int enterUserType() {
+        boolean userTypeApproved = false;
+        System.out.print("Please enter user type (1 or 2) \n1) Admin\n2) User\n");
+        int userType = input.nextInt();
 
-        if(!userType.equals("admin") && !userType.equals("user")){
+        do {
+            if (userType != 1 && userType != 2)
+                System.out.println("Type must be either admin or user. P try again");
+            else{
+                userTypeApproved = true;
+            }
 
-            System.out.println("Type must be either admin or user. P try again");
-            enterUsername();
-        }
-        return userType;
+
+        } while (!userTypeApproved);
+
+        return userType-1;
     }
 
-    public static void createUser(){
-
-        //TODO: This should work! - DONE
-        User usr = new User();
-        usr.setFirstName(enterFirstName());
-        usr.setLastName(enterLastName());
-        usr.setEmail(enterEmail());
-        usr.setPassword(enterPassword());
-        usr.setUserName(enterUsername());
-        usr.setPassword(enterPassword());
-        usr.setType(enterUserType());
-
-        Logic.createUser(usr);
-    }
-
-    public static void miscOut(String s){
+    public static void miscOut(String s) {
         System.out.println(s);
     }
 }

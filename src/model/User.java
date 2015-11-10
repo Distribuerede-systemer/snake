@@ -14,26 +14,12 @@ public class User {
     private int id;
     private String firstName;
     private String lastName;
-    private String userName;
+    private String username;
     private String password;
     private Date created;
     private String status;
     private String email;
-    private String type;
-
-    //TODO: Kan slettes?! Bruges ikke i wrapperen længere
-    public User (int id, String firstName, String lastName, String email, String userName, String password, Date created, String status, String type ) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.userName = userName;
-        this.password = password;
-        this.created = created;
-        this.status = status;
-        this.type = type;
-    }
-
+    private int type;
     public User () {}
 
     //creating get and set method for all the variables, so they can be used by other classes
@@ -63,12 +49,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -103,11 +89,11 @@ public class User {
         this.email = email;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 }
