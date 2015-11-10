@@ -26,7 +26,7 @@ public class Api {
     }
 
     @POST //"POST-request" er ny data vi kan indtaste for at logge ind.
-    @Path("/login/")git
+    @Path("/login/")
     @Produces("application/json")
     public Response login(String data) {
 
